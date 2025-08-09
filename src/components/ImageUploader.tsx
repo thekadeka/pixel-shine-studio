@@ -147,12 +147,17 @@ export const ImageUploader = ({ onImageUpload, isProcessing }: ImageUploaderProp
             </Button>
           </div>
 
-          <div className="relative rounded-lg overflow-hidden bg-muted">
+          <div className="relative rounded-lg overflow-hidden bg-muted min-h-[200px] flex items-center justify-center">
             {previewUrl && (
               <img
                 src={previewUrl}
                 alt="Preview"
-                className="w-full max-h-96 object-contain"
+                className="max-w-full max-h-96 object-contain"
+                onLoad={() => console.log('Image loaded successfully')}
+                onError={(e) => {
+                  console.error('Image failed to load:', e);
+                  console.error('Preview URL:', previewUrl);
+                }}
               />
             )}
           </div>
