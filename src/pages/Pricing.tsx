@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
-import { Check, Zap, Crown, Sparkles, Star } from 'lucide-react';
+import { Check, Zap, Crown, Sparkles, Building2 } from 'lucide-react';
 import { EnhpixLogo } from '@/components/ui/enhpix-logo';
 
 const Pricing = () => {
@@ -15,7 +15,8 @@ const Pricing = () => {
       monthlyPrice: 9,
       yearlyPrice: 90,
       features: ['50 images/month', 'Basic quality', '4x upscaling', 'Email support'],
-      popular: false
+      popular: false,
+      isEnterprise: false
     },
     {
       name: 'Pro',
@@ -23,7 +24,8 @@ const Pricing = () => {
       monthlyPrice: 37,
       yearlyPrice: 370,
       features: ['400 images/month', 'Premium quality', 'Priority support', '8x upscaling', 'Batch processing'],
-      popular: true
+      popular: true,
+      isEnterprise: false
     },
     {
       name: 'Premium',
@@ -31,15 +33,17 @@ const Pricing = () => {
       monthlyPrice: 90,
       yearlyPrice: 900,
       features: ['1,500 images/month', 'Ultra quality', '24/7 support', '16x upscaling', 'API access'],
-      popular: false
+      popular: false,
+      isEnterprise: false
     },
     {
       name: 'Enterprise',
-      icon: Star,
-      monthlyPrice: 200,
-      yearlyPrice: 2000,
-      features: ['Unlimited images', 'Custom quality', 'Dedicated support', '32x upscaling', 'White label'],
-      popular: false
+      icon: Building2,
+      monthlyPrice: null,
+      yearlyPrice: null,
+      features: ['Unlimited images', 'Custom solutions', 'Dedicated account manager', 'Priority processing', 'Custom integrations', 'White label options'],
+      popular: false,
+      isEnterprise: true
     }
   ];
 
@@ -121,12 +125,21 @@ const Pricing = () => {
                     </div>
                     <h3 className="text-2xl font-bold text-white mb-2">{plan.name}</h3>
                     <div className="mb-2">
-                      <span className="text-4xl font-bold text-white">
-                        ${isYearly ? Math.round(plan.yearlyPrice / 12) : plan.monthlyPrice}
-                      </span>
-                      <span className="text-gray-400">/month</span>
+                      {plan.isEnterprise ? (
+                        <div>
+                          <span className="text-3xl font-bold text-white">Custom</span>
+                          <p className="text-gray-400 text-sm">Contact for pricing</p>
+                        </div>
+                      ) : (
+                        <>
+                          <span className="text-4xl font-bold text-white">
+                            ${isYearly ? Math.round(plan.yearlyPrice / 12) : plan.monthlyPrice}
+                          </span>
+                          <span className="text-gray-400">/month</span>
+                        </>
+                      )}
                     </div>
-                    {isYearly && (
+                    {isYearly && !plan.isEnterprise && (
                       <p className="text-sm text-gray-400">
                         Billed annually
                       </p>
@@ -148,9 +161,16 @@ const Pricing = () => {
                         ? 'bg-blue-500 hover:bg-blue-600 text-white' 
                         : 'bg-gray-700 hover:bg-gray-600 text-white'
                     }`}
-                    onClick={() => navigate('/login')}
+                    onClick={() => {
+                      if (plan.isEnterprise) {
+                        // Open email or contact form for Enterprise
+                        window.open('mailto:contact@enhpix.com?subject=Enterprise Plan Inquiry', '_blank');
+                      } else {
+                        navigate('/login');
+                      }
+                    }}
                   >
-                    Get Started
+                    {plan.isEnterprise ? 'Contact Us' : 'Get Started'}
                   </Button>
                 </div>
               );
