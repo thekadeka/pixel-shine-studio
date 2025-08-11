@@ -10,13 +10,15 @@ interface ResultsDisplayProps {
   enhancedImage: string;
   originalFile: File;
   onStartOver: () => void;
+  planType?: string;
 }
 
 export const ResultsDisplay = ({ 
   originalImage, 
   enhancedImage, 
   originalFile, 
-  onStartOver 
+  onStartOver,
+  planType = 'trial'
 }: ResultsDisplayProps) => {
   const [comparison, setComparison] = useState(50);
   const [isDownloading, setIsDownloading] = useState(false);
@@ -168,18 +170,58 @@ export const ResultsDisplay = ({
         <h4 className="font-medium text-foreground mb-4">Enhancement Details</h4>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <div className="text-center p-4 bg-muted rounded-lg">
-            <div className="text-2xl font-bold text-primary mb-1">4x</div>
+            <div className="text-2xl font-bold text-primary mb-1">
+              {planType === 'premium' ? '16x' : planType === 'pro' ? '8x' : '4x'}
+            </div>
             <div className="text-sm text-muted-foreground">Resolution Increase</div>
           </div>
           <div className="text-center p-4 bg-muted rounded-lg">
-            <div className="text-2xl font-bold text-accent mb-1">AI</div>
-            <div className="text-sm text-muted-foreground">Enhanced Details</div>
+            <div className="text-2xl font-bold text-accent mb-1">
+              {planType === 'premium' ? 'Ultra' : planType === 'pro' ? 'Premium' : 'Basic'}
+            </div>
+            <div className="text-sm text-muted-foreground">AI Quality</div>
           </div>
           <div className="text-center p-4 bg-muted rounded-lg">
-            <div className="text-2xl font-bold text-foreground mb-1">95%</div>
+            <div className="text-2xl font-bold text-foreground mb-1">
+              {planType === 'premium' ? '99%' : planType === 'pro' ? '97%' : '95%'}
+            </div>
             <div className="text-sm text-muted-foreground">Quality Retained</div>
           </div>
         </div>
+        
+        {/* Premium Features */}
+        {(planType === 'pro' || planType === 'premium') && (
+          <div className="mt-6 p-4 bg-gradient-to-r from-primary/5 to-accent/5 rounded-lg border border-primary/20">
+            <div className="flex items-center gap-2 mb-3">
+              <div className="w-2 h-2 bg-primary rounded-full"></div>
+              <span className="font-medium text-foreground">
+                {planType === 'premium' ? 'Premium' : 'Pro'} Features Applied
+              </span>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-2 text-sm">
+              <div className="flex items-center gap-2 text-muted-foreground">
+                <div className="w-1 h-1 bg-accent rounded-full"></div>
+                <span>Advanced noise reduction</span>
+              </div>
+              <div className="flex items-center gap-2 text-muted-foreground">
+                <div className="w-1 h-1 bg-accent rounded-full"></div>
+                <span>Enhanced edge preservation</span>
+              </div>
+              {planType === 'premium' && (
+                <>
+                  <div className="flex items-center gap-2 text-muted-foreground">
+                    <div className="w-1 h-1 bg-accent rounded-full"></div>
+                    <span>Color depth optimization</span>
+                  </div>
+                  <div className="flex items-center gap-2 text-muted-foreground">
+                    <div className="w-1 h-1 bg-accent rounded-full"></div>
+                    <span>Texture enhancement</span>
+                  </div>
+                </>
+              )}
+            </div>
+          </div>
+        )}
       </Card>
     </div>
   );

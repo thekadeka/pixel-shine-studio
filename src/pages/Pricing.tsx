@@ -179,7 +179,9 @@ const Pricing = () => {
                         // Open email or contact form for Enterprise
                         window.open('mailto:contact@enhpix.com?subject=Enterprise Plan Inquiry', '_blank');
                       } else {
-                        navigate('/login');
+                        // Navigate to checkout with plan details
+                        const planKey = plan.name.toLowerCase();
+                        navigate(`/checkout?plan=${planKey}&billing=${isYearly ? 'yearly' : 'monthly'}`);
                       }
                     }}
                   >
