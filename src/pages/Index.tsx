@@ -4,8 +4,6 @@ import { ImageUploader } from '@/components/ImageUploader';
 import { ProcessingStatus } from '@/components/ProcessingStatus';
 import { ResultsDisplay } from '@/components/ResultsDisplay';
 import { Button } from '@/components/ui/button';
-import { EnhpixLogo } from '@/components/ui/enhpix-logo';
-import { TestComponent } from '@/components/TestComponent';
 import heroBackground from '@/assets/hero-bg.jpg';
 
 type AppState = 'upload' | 'processing' | 'results';
@@ -50,8 +48,6 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <TestComponent />
-      {/* Temporary test component - remove when build works */}
       {/* Hero Section */}
       <div 
         className="relative bg-cover bg-center bg-no-repeat"
@@ -63,7 +59,9 @@ const Index = () => {
           <header className="p-6">
             <nav className="max-w-7xl mx-auto flex items-center justify-between">
               <div className="flex items-center gap-3">
-                <EnhpixLogo size="lg" />
+                <div className="p-2 bg-gradient-primary rounded-lg">
+                  <Wand2 className="w-8 h-8 text-background" />
+                </div>
                 <span className="text-xl font-bold text-foreground">Enhpix</span>
               </div>
               <div className="flex items-center gap-3">
@@ -190,7 +188,9 @@ const Index = () => {
       <footer className="px-6 py-8 border-t border-border">
         <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-2">
-            <EnhpixLogo size="sm" />
+            <div className="p-1 bg-gradient-primary rounded">
+              <Wand2 className="w-4 h-4 text-background" />
+            </div>
             <span className="font-medium text-foreground">Enhpix</span>
           </div>
           <div className="flex items-center gap-6 text-sm text-muted-foreground">
