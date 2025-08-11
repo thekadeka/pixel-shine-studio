@@ -221,9 +221,12 @@ const Checkout = () => {
                       id="cardNumber"
                       value={formData.cardNumber}
                       onChange={(e) => handleInputChange('cardNumber', e.target.value)}
-                      placeholder="1234 5678 9012 3456"
+                      placeholder="4242 4242 4242 4242 (Test Card)"
                       required
                     />
+                    <p className="text-xs text-muted-foreground">
+                      Test card: 4242 4242 4242 4242 | Expiry: 12/25 | CVV: 123
+                    </p>
                   </div>
 
                   <div className="grid grid-cols-2 gap-4">
@@ -233,7 +236,7 @@ const Checkout = () => {
                         id="expiryDate"
                         value={formData.expiryDate}
                         onChange={(e) => handleInputChange('expiryDate', e.target.value)}
-                        placeholder="MM/YY"
+                        placeholder="12/25"
                         required
                       />
                     </div>
