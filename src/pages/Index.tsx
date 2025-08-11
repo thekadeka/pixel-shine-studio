@@ -5,6 +5,7 @@ import { ProcessingStatus } from '@/components/ProcessingStatus';
 import { ResultsDisplay } from '@/components/ResultsDisplay';
 import { Button } from '@/components/ui/button';
 import { EnhpixLogo } from '@/components/ui/enhpix-logo';
+import { TestComponent } from '@/components/TestComponent';
 import heroBackground from '@/assets/hero-bg.jpg';
 
 type AppState = 'upload' | 'processing' | 'results';
@@ -49,6 +50,8 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-background">
+      <TestComponent />
+      {/* Temporary test component - remove when build works */}
       {/* Hero Section */}
       <div 
         className="relative bg-cover bg-center bg-no-repeat"
