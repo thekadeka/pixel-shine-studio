@@ -19,7 +19,10 @@ import {
   History,
   Star,
   Gift,
-  Sparkles
+  Sparkles,
+  MessageSquare,
+  Send,
+  Mic
 } from 'lucide-react';
 
 interface UserData {
@@ -44,6 +47,8 @@ const Dashboard = () => {
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [enhancedUrl, setEnhancedUrl] = useState<string | null>(null);
   const [showWelcome, setShowWelcome] = useState(false);
+  const [showSettings, setShowSettings] = useState(false);
+  const [chatMessage, setChatMessage] = useState('');
 
   useEffect(() => {
     const userData = localStorage.getItem('enhpix_user');
@@ -202,8 +207,43 @@ const Dashboard = () => {
         </div>
       )}
 
+      {/* Settings Modal */}
+      {showSettings && (
+        <div className="fixed inset-0 bg-background/80 backdrop-blur-sm z-50 flex items-center justify-center p-6">
+          <Card className="w-full max-w-lg">
+            <CardHeader>
+              <CardTitle>Account Settings</CardTitle>
+              <CardDescription>Manage your account and subscription</CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="space-y-2">
+                <label className="text-sm font-medium">Email</label>
+                <p className="text-sm text-muted-foreground">{user.email}</p>
+              </div>
+              <div className="space-y-2">
+                <label className="text-sm font-medium">Current Plan</label>
+                <p className="text-sm text-muted-foreground">{planDetails.name} ({user.billing})</p>
+              </div>
+              <div className="space-y-2">
+                <label className="text-sm font-medium">Member Since</label>
+                <p className="text-sm text-muted-foreground">{new Date(user.createdAt).toLocaleDateString()}</p>
+              </div>
+              <Separator />
+              <div className="flex gap-2">
+                <Button onClick={() => navigate('/pricing')} variant="outline" className="flex-1">
+                  Manage Subscription
+                </Button>
+                <Button onClick={() => setShowSettings(false)} className="flex-1">
+                  Close
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+      )}
+
       {/* Header */}
-      <header className="p-6 border-b border-border bg-card/50 backdrop-blur-sm sticky top-0 z-40">
+      <header className="p-4 border-b border-border bg-card/50 backdrop-blur-sm sticky top-0 z-40">
         <nav className="max-w-7xl mx-auto flex items-center justify-between">
           <div className="flex items-center gap-3">
             <div className="p-2 bg-white rounded-lg">
@@ -218,7 +258,7 @@ const Dashboard = () => {
               {planDetails.name}
             </Badge>
             
-            <Button variant="ghost" size="sm">
+            <Button variant="ghost" size="sm" onClick={() => setShowSettings(true)}>
               <Settings className="w-4 h-4 mr-2" />
               Settings
             </Button>
@@ -313,7 +353,49 @@ const Dashboard = () => {
           </div>
 
           {/* Main Content */}
-          <div className="lg:col-span-3">
+          <div className="lg:col-span-3 space-y-6">
+            {/* AI Chat Bar */}
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <MessageSquare className="w-5 h-5" />
+                  AI Assistant
+                </CardTitle>
+                <CardDescription>
+                  Describe what you want to do with your image
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="flex gap-2">
+                  <div className="flex-1 relative">
+                    <input
+                      type="text"
+                      value={chatMessage}
+                      onChange={(e) => setChatMessage(e.target.value)}
+                      placeholder="e.g. 'Enhance this portrait photo', 'Make this logo crisp', 'Upscale for printing'..."
+                      className="w-full px-4 py-3 pr-12 rounded-lg border border-border bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary"
+                      onKeyPress={(e) => e.key === 'Enter' && chatMessage.trim() && setChatMessage('')}
+                    />
+                    <Mic className="absolute right-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-muted-foreground hover:text-foreground cursor-pointer" />
+                  </div>
+                  <Button 
+                    onClick={() => chatMessage.trim() && setChatMessage('')}
+                    disabled={!chatMessage.trim()}
+                  >
+                    <Send className="w-4 h-4" />
+                  </Button>
+                </div>
+                {chatMessage.trim() && (
+                  <div className="mt-3 p-3 bg-primary/5 rounded-lg border border-primary/20">
+                    <p className="text-sm text-muted-foreground">
+                      💡 AI will optimize enhancement settings based on your description
+                    </p>
+                  </div>
+                )}
+              </CardContent>
+            </Card>
+
+            {/* Image Enhancement */}
             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">

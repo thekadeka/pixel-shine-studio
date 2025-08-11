@@ -7,26 +7,26 @@ interface EnhpixLogoProps {
 export const EnhpixLogo: React.FC<EnhpixLogoProps> = ({ className = "w-8 h-8" }) => {
   return (
     <svg
-      viewBox="0 0 120 80"
+      viewBox="0 0 100 100"
       className={className}
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
     >
-      {/* Cross shape on left */}
+      {/* Cross shape */}
       <path
-        d="M15 10 L15 30 L5 30 L5 50 L15 50 L15 70 L25 70 L25 50 L35 50 L35 30 L25 30 L25 10 Z"
+        d="M30 10 L30 35 L10 35 L10 65 L30 65 L30 90 L40 90 L40 65 L65 65 L65 35 L40 35 L40 10 Z"
         fill="#5DADE2"
       />
       
-      {/* Diamond shape on right */}
+      {/* Diamond shape */}
       <path
-        d="M60 15 L85 40 L60 65 L35 40 Z"
+        d="M50 20 L80 50 L50 80 L20 50 Z"
         fill="#5DADE2"
       />
       
-      {/* White diamond cutout inside the diamond */}
+      {/* White diamond cutout */}
       <path
-        d="M60 25 L75 40 L60 55 L45 40 Z"
+        d="M50 30 L70 50 L50 70 L30 50 Z"
         fill="white"
       />
     </svg>
