@@ -48,9 +48,9 @@ const Pricing = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-slate-800">
+    <div className="min-h-screen bg-background">
       {/* Header */}
-      <header className="p-6 border-b border-slate-700">
+      <header className="p-6 border-b border-border">
         <nav className="max-w-7xl mx-auto flex items-center justify-between">
           <div className="flex items-center gap-3 cursor-pointer" onClick={() => navigate('/')}>
             <div className="p-2 bg-white rounded-lg">
@@ -58,7 +58,7 @@ const Pricing = () => {
             </div>
             <span className="text-xl font-bold text-white">Enhpix</span>
           </div>
-          <Button variant="outline" size="sm" onClick={() => navigate('/login')} className="border-slate-600 text-white hover:bg-slate-700">
+          <Button variant="outline" size="sm" onClick={() => navigate('/login')}>
             Sign In
           </Button>
         </nav>
@@ -68,21 +68,21 @@ const Pricing = () => {
       <div className="px-6 py-20">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
-            <h1 className="text-5xl font-bold mb-4">
-              Choose Your <span className="text-blue-400">AI Enhancement Plan</span>
+            <h1 className="text-5xl font-bold mb-4 text-foreground">
+              Choose Your <span className="text-primary">AI Enhancement Plan</span>
             </h1>
-            <p className="text-xl text-gray-300 mb-8 max-w-3xl mx-auto">
+            <p className="text-xl text-muted-foreground mb-8 max-w-3xl mx-auto">
               Unlock professional-grade image enhancement with our AI-powered upscaling technology. Start with a free trial, then choose the plan that fits your needs.
             </p>
 
             {/* Toggle */}
             <div className="flex items-center justify-center gap-4 mb-8">
-              <span className={`text-lg ${!isYearly ? 'text-white font-medium' : 'text-slate-400'}`}>
+              <span className={`text-lg ${!isYearly ? 'text-foreground font-medium' : 'text-muted-foreground'}`}>
                 Monthly
               </span>
               <button
                 onClick={() => setIsYearly(!isYearly)}
-                className={`relative w-14 h-7 rounded-full transition-colors ${isYearly ? 'bg-blue-500' : 'bg-slate-600'}`}
+                className={`relative w-14 h-7 rounded-full transition-colors ${isYearly ? 'bg-primary' : 'bg-muted'}`}
               >
                 <div
                   className={`absolute w-5 h-5 bg-white rounded-full top-1 transition-transform ${
@@ -90,8 +90,8 @@ const Pricing = () => {
                   }`}
                 />
               </button>
-              <span className={`text-lg ${isYearly ? 'text-white font-medium' : 'text-slate-400'}`}>
-                Yearly <span className="text-sm text-yellow-400 ml-1">Save 17%</span>
+              <span className={`text-lg ${isYearly ? 'text-foreground font-medium' : 'text-muted-foreground'}`}>
+                Yearly <span className="text-sm text-accent ml-1">Save 17%</span>
               </span>
             </div>
           </div>
@@ -105,13 +105,13 @@ const Pricing = () => {
                   key={plan.name}
                   className={`relative p-6 rounded-2xl transition-all hover:scale-105 ${
                     plan.popular
-                      ? 'bg-slate-700/80 border-2 border-cyan-400 shadow-2xl shadow-cyan-400/30 ring-2 ring-cyan-400/50'
-                      : 'bg-slate-700/50 border border-slate-600 hover:border-slate-500'
+                      ? 'bg-card border-2 border-accent shadow-2xl shadow-accent/30 ring-2 ring-accent/50'
+                      : 'bg-card border border-border hover:border-accent/50'
                   }`}
                 >
                   {plan.popular && (
                     <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
-                      <div className="bg-blue-500 text-white px-4 py-1 rounded-full text-sm font-medium">
+                      <div className="bg-primary text-primary-foreground px-4 py-1 rounded-full text-sm font-medium">
                         Most Popular
                       </div>
                     </div>
@@ -119,28 +119,28 @@ const Pricing = () => {
 
                   <div className="text-center mb-6">
                     <div className={`w-16 h-16 mx-auto mb-4 rounded-2xl flex items-center justify-center ${
-                      plan.popular ? 'bg-white' : 'bg-slate-600/50'
+                      plan.popular ? 'bg-primary-foreground' : 'bg-muted'
                     }`}>
-                      <IconComponent className={`w-8 h-8 ${plan.popular ? 'text-purple-500' : 'text-slate-300'}`} />
+                      <IconComponent className={`w-8 h-8 ${plan.popular ? 'text-primary' : 'text-muted-foreground'}`} />
                     </div>
-                    <h3 className="text-2xl font-bold text-white mb-2">{plan.name}</h3>
+                    <h3 className="text-2xl font-bold text-foreground mb-2">{plan.name}</h3>
                     <div className="mb-2">
                       {plan.isEnterprise ? (
                         <div>
-                          <span className="text-3xl font-bold text-white">Custom</span>
-                          <p className="text-slate-400 text-sm">Contact for pricing</p>
+                          <span className="text-3xl font-bold text-foreground">Custom</span>
+                          <p className="text-muted-foreground text-sm">Contact for pricing</p>
                         </div>
                       ) : (
                         <>
-                          <span className="text-4xl font-bold text-white">
+                          <span className="text-4xl font-bold text-foreground">
                             ${isYearly ? Math.round(plan.yearlyPrice / 12) : plan.monthlyPrice}
                           </span>
-                          <span className="text-slate-400">/month</span>
+                          <span className="text-muted-foreground">/month</span>
                         </>
                       )}
                     </div>
                     {isYearly && !plan.isEnterprise && (
-                      <p className="text-sm text-slate-400">
+                      <p className="text-sm text-muted-foreground">
                         Billed annually
                       </p>
                     )}
@@ -149,18 +149,15 @@ const Pricing = () => {
                   <ul className="space-y-3 mb-8">
                     {plan.features.map((feature) => (
                       <li key={feature} className="flex items-center gap-3">
-                        <Check className="w-5 h-5 text-green-400 flex-shrink-0" />
-                        <span className="text-slate-300 text-sm">{feature}</span>
+                        <Check className="w-5 h-5 text-accent flex-shrink-0" />
+                        <span className="text-muted-foreground text-sm">{feature}</span>
                       </li>
                     ))}
                   </ul>
 
                   <Button
-                    className={`w-full ${
-                      plan.popular 
-                        ? 'bg-blue-500 hover:bg-blue-600 text-white' 
-                        : 'bg-slate-600 hover:bg-slate-500 text-white'
-                    }`}
+                    className="w-full"
+                    variant={plan.popular ? 'default' : 'outline'}
                     onClick={() => {
                       if (plan.isEnterprise) {
                         // Open email or contact form for Enterprise
@@ -179,13 +176,12 @@ const Pricing = () => {
 
           {/* Free Trial */}
           <div className="text-center mt-12">
-            <p className="text-slate-400 mb-4">
+            <p className="text-muted-foreground mb-4">
               Try Enhpix free with 1 image enhancement
             </p>
             <Button 
               variant="outline" 
               onClick={() => navigate('/')}
-              className="border-slate-600 text-white hover:bg-slate-700"
             >
               Start Free Trial
             </Button>
