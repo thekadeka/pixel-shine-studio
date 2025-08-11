@@ -48,9 +48,9 @@ const Pricing = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-gray-900">
+    <div className="min-h-screen bg-slate-800">
       {/* Header */}
-      <header className="p-6 border-b border-gray-800">
+      <header className="p-6 border-b border-slate-700">
         <nav className="max-w-7xl mx-auto flex items-center justify-between">
           <div className="flex items-center gap-3 cursor-pointer" onClick={() => navigate('/')}>
             <div className="p-2 bg-white rounded-lg">
@@ -58,7 +58,7 @@ const Pricing = () => {
             </div>
             <span className="text-xl font-bold text-white">Enhpix</span>
           </div>
-          <Button variant="outline" size="sm" onClick={() => navigate('/login')} className="border-gray-600 text-white hover:bg-gray-800">
+          <Button variant="outline" size="sm" onClick={() => navigate('/login')} className="border-slate-600 text-white hover:bg-slate-700">
             Sign In
           </Button>
         </nav>
@@ -77,12 +77,12 @@ const Pricing = () => {
 
             {/* Toggle */}
             <div className="flex items-center justify-center gap-4 mb-8">
-              <span className={`text-lg ${!isYearly ? 'text-white font-medium' : 'text-gray-400'}`}>
+              <span className={`text-lg ${!isYearly ? 'text-white font-medium' : 'text-slate-400'}`}>
                 Monthly
               </span>
               <button
                 onClick={() => setIsYearly(!isYearly)}
-                className={`relative w-14 h-7 rounded-full transition-colors ${isYearly ? 'bg-blue-500' : 'bg-gray-600'}`}
+                className={`relative w-14 h-7 rounded-full transition-colors ${isYearly ? 'bg-blue-500' : 'bg-slate-600'}`}
               >
                 <div
                   className={`absolute w-5 h-5 bg-white rounded-full top-1 transition-transform ${
@@ -90,7 +90,7 @@ const Pricing = () => {
                   }`}
                 />
               </button>
-              <span className={`text-lg ${isYearly ? 'text-white font-medium' : 'text-gray-400'}`}>
+              <span className={`text-lg ${isYearly ? 'text-white font-medium' : 'text-slate-400'}`}>
                 Yearly <span className="text-sm text-yellow-400 ml-1">Save 17%</span>
               </span>
             </div>
@@ -103,10 +103,10 @@ const Pricing = () => {
               return (
                 <div
                   key={plan.name}
-                  className={`relative p-6 rounded-2xl border-2 transition-all hover:scale-105 ${
+                  className={`relative p-6 rounded-2xl transition-all hover:scale-105 ${
                     plan.popular
-                      ? 'border-blue-500 bg-gray-800/50 shadow-2xl shadow-blue-500/20'
-                      : 'border-gray-700 bg-gray-800/30 hover:border-gray-600'
+                      ? 'bg-slate-700/80 border-2 border-cyan-400 shadow-2xl shadow-cyan-400/30 ring-2 ring-cyan-400/50'
+                      : 'bg-slate-700/50 border border-slate-600 hover:border-slate-500'
                   }`}
                 >
                   {plan.popular && (
@@ -119,28 +119,28 @@ const Pricing = () => {
 
                   <div className="text-center mb-6">
                     <div className={`w-16 h-16 mx-auto mb-4 rounded-2xl flex items-center justify-center ${
-                      plan.popular ? 'bg-blue-500/20' : 'bg-gray-700/50'
+                      plan.popular ? 'bg-white' : 'bg-slate-600/50'
                     }`}>
-                      <IconComponent className={`w-8 h-8 ${plan.popular ? 'text-blue-400' : 'text-gray-300'}`} />
+                      <IconComponent className={`w-8 h-8 ${plan.popular ? 'text-purple-500' : 'text-slate-300'}`} />
                     </div>
                     <h3 className="text-2xl font-bold text-white mb-2">{plan.name}</h3>
                     <div className="mb-2">
                       {plan.isEnterprise ? (
                         <div>
                           <span className="text-3xl font-bold text-white">Custom</span>
-                          <p className="text-gray-400 text-sm">Contact for pricing</p>
+                          <p className="text-slate-400 text-sm">Contact for pricing</p>
                         </div>
                       ) : (
                         <>
                           <span className="text-4xl font-bold text-white">
                             ${isYearly ? Math.round(plan.yearlyPrice / 12) : plan.monthlyPrice}
                           </span>
-                          <span className="text-gray-400">/month</span>
+                          <span className="text-slate-400">/month</span>
                         </>
                       )}
                     </div>
                     {isYearly && !plan.isEnterprise && (
-                      <p className="text-sm text-gray-400">
+                      <p className="text-sm text-slate-400">
                         Billed annually
                       </p>
                     )}
@@ -150,7 +150,7 @@ const Pricing = () => {
                     {plan.features.map((feature) => (
                       <li key={feature} className="flex items-center gap-3">
                         <Check className="w-5 h-5 text-green-400 flex-shrink-0" />
-                        <span className="text-gray-300 text-sm">{feature}</span>
+                        <span className="text-slate-300 text-sm">{feature}</span>
                       </li>
                     ))}
                   </ul>
@@ -159,7 +159,7 @@ const Pricing = () => {
                     className={`w-full ${
                       plan.popular 
                         ? 'bg-blue-500 hover:bg-blue-600 text-white' 
-                        : 'bg-gray-700 hover:bg-gray-600 text-white'
+                        : 'bg-slate-600 hover:bg-slate-500 text-white'
                     }`}
                     onClick={() => {
                       if (plan.isEnterprise) {
@@ -179,13 +179,13 @@ const Pricing = () => {
 
           {/* Free Trial */}
           <div className="text-center mt-12">
-            <p className="text-gray-400 mb-4">
+            <p className="text-slate-400 mb-4">
               Try Enhpix free with 1 image enhancement
             </p>
             <Button 
               variant="outline" 
               onClick={() => navigate('/')}
-              className="border-gray-600 text-white hover:bg-gray-800"
+              className="border-slate-600 text-white hover:bg-slate-700"
             >
               Start Free Trial
             </Button>
