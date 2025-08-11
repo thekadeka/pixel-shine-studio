@@ -1,5 +1,7 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Sparkles, Wand2, Zap } from 'lucide-react';
+import { EnhpixLogo } from '@/components/ui/enhpix-logo';
 import { ImageUploader } from '@/components/ImageUploader';
 import { ProcessingStatus } from '@/components/ProcessingStatus';
 import { ResultsDisplay } from '@/components/ResultsDisplay';
@@ -9,7 +11,17 @@ import heroBackground from '@/assets/hero-bg.jpg';
 type AppState = 'upload' | 'processing' | 'results';
 
 const Index = () => {
+  const navigate = useNavigate();
   const [appState, setAppState] = useState<AppState>('upload');
+  
+  const handleNavigation = (path: string) => {
+    try {
+      console.log(`Navigating to: ${path}`);
+      navigate(path);
+    } catch (error) {
+      console.error('Navigation error:', error);
+    }
+  };
   const [uploadedFile, setUploadedFile] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [enhancedUrl, setEnhancedUrl] = useState<string | null>(null);
@@ -56,20 +68,30 @@ const Index = () => {
         <div className="absolute inset-0 bg-background/90" />
         <div className="relative z-10">
           {/* Header */}
-          <header className="p-6">
+          <header className="p-6 relative z-50">
             <nav className="max-w-7xl mx-auto flex items-center justify-between">
-              <div className="flex items-center gap-3">
-                <div className="p-2 bg-gradient-primary rounded-lg">
-                  <Wand2 className="w-8 h-8 text-background" />
+              <div className="flex items-center gap-3 cursor-pointer" onClick={() => handleNavigation('/')}>
+                <div className="p-2 bg-white rounded-lg">
+                  <EnhpixLogo className="w-8 h-8" />
                 </div>
                 <span className="text-xl font-bold text-foreground">Enhpix</span>
               </div>
-              <div className="flex items-center gap-3">
-                <div className="hidden sm:flex items-center gap-4">
-                  <Button variant="ghost" size="sm">About</Button>
-                  <Button variant="ghost" size="sm">Pricing</Button>
-                </div>
-                <Button variant="outline" size="sm">Sign In</Button>
+              <div className="flex items-center gap-3 relative z-50">
+                <button 
+                  className="px-3 py-1 text-sm text-foreground hover:text-primary transition-colors cursor-pointer"
+                  onClick={() => handleNavigation('/about')}
+                >
+                  About
+                </button>
+                <button 
+                  className="px-3 py-1 text-sm text-foreground hover:text-primary transition-colors cursor-pointer"
+                  onClick={() => handleNavigation('/pricing')}
+                >
+                  Pricing
+                </button>
+                <Button variant="outline" size="sm" onClick={() => handleNavigation('/login')}>
+                  Sign In
+                </Button>
               </div>
             </nav>
           </header>
@@ -188,8 +210,8 @@ const Index = () => {
       <footer className="px-6 py-8 border-t border-border">
         <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-2">
-            <div className="p-1 bg-gradient-primary rounded">
-              <Wand2 className="w-4 h-4 text-background" />
+            <div className="p-1 bg-white rounded">
+              <EnhpixLogo className="w-4 h-4" />
             </div>
             <span className="font-medium text-foreground">Enhpix</span>
           </div>
