@@ -13,23 +13,16 @@ export const EnhpixLogo = ({ className = '', size = 'md' }: EnhpixLogoProps) => 
   return (
     <div className={`${sizeClasses[size]} ${className}`}>
       <svg viewBox="0 0 100 100" className="w-full h-full">
-        <defs>
-          <linearGradient id="enhpixGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stopColor="#60A5FA" />
-            <stop offset="100%" stopColor="#3B82F6" />
-          </linearGradient>
-        </defs>
-        
         {/* Cross part */}
-        <rect x="15" y="35" width="25" height="10" fill="url(#enhpixGradient)" />
-        <rect x="15" y="55" width="25" height="10" fill="url(#enhpixGradient)" />
-        <rect x="30" y="20" width="10" height="60" fill="url(#enhpixGradient)" />
+        <rect x="15" y="35" width="25" height="10" fill="#60A5FA" />
+        <rect x="15" y="55" width="25" height="10" fill="#60A5FA" />
+        <rect x="30" y="20" width="10" height="60" fill="#60A5FA" />
         
         {/* Diamond part */}
         <polygon 
           points="50,30 70,50 50,70 30,50" 
           fill="none" 
-          stroke="url(#enhpixGradient)" 
+          stroke="#3B82F6" 
           strokeWidth="8"
         />
         
