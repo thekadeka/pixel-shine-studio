@@ -4,6 +4,7 @@ import { ImageUploader } from '@/components/ImageUploader';
 import { ProcessingStatus } from '@/components/ProcessingStatus';
 import { ResultsDisplay } from '@/components/ResultsDisplay';
 import { Button } from '@/components/ui/button';
+import { EnhpixLogo } from '@/components/ui/enhpix-logo';
 import heroBackground from '@/assets/hero-bg.jpg';
 
 type AppState = 'upload' | 'processing' | 'results';
@@ -58,15 +59,15 @@ const Index = () => {
           {/* Header */}
           <header className="p-6">
             <nav className="max-w-7xl mx-auto flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <div className="p-2 bg-gradient-primary rounded-lg">
-                  <Wand2 className="w-6 h-6 text-background" />
-                </div>
-                <span className="text-xl font-bold text-foreground">AI Upscaler</span>
+              <div className="flex items-center gap-3">
+                <EnhpixLogo size="lg" />
+                <span className="text-xl font-bold text-foreground">Enhpix</span>
               </div>
-              <div className="hidden md:flex items-center gap-6">
-                <Button variant="ghost" size="sm">About</Button>
-                <Button variant="ghost" size="sm">Pricing</Button>
+              <div className="flex items-center gap-3">
+                <div className="hidden sm:flex items-center gap-4">
+                  <Button variant="ghost" size="sm">About</Button>
+                  <Button variant="ghost" size="sm">Pricing</Button>
+                </div>
                 <Button variant="outline" size="sm">Sign In</Button>
               </div>
             </nav>
@@ -80,7 +81,7 @@ const Index = () => {
                   <h1 className="text-5xl md:text-6xl font-bold text-foreground leading-tight">
                     Enhance Your Images with{' '}
                     <span className="bg-gradient-primary bg-clip-text text-transparent">
-                      AI Power
+                      Enhpix AI
                     </span>
                   </h1>
                   <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
@@ -140,7 +141,7 @@ const Index = () => {
           <div className="max-w-6xl mx-auto">
             <div className="text-center mb-16">
               <h2 className="text-3xl font-bold text-foreground mb-4">
-                Why Choose AI Upscaler?
+                Why Choose Enhpix?
               </h2>
               <p className="text-lg text-muted-foreground">
                 Advanced technology meets simple, intuitive design
@@ -186,10 +187,8 @@ const Index = () => {
       <footer className="px-6 py-8 border-t border-border">
         <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-2">
-            <div className="p-1 bg-gradient-primary rounded">
-              <Wand2 className="w-4 h-4 text-background" />
-            </div>
-            <span className="font-medium text-foreground">AI Upscaler</span>
+            <EnhpixLogo size="sm" />
+            <span className="font-medium text-foreground">Enhpix</span>
           </div>
           <div className="flex items-center gap-6 text-sm text-muted-foreground">
             <a href="#" className="hover:text-foreground transition-colors">Privacy</a>
