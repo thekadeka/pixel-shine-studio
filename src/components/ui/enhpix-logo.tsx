@@ -12,21 +12,21 @@ export const EnhpixLogo: React.FC<EnhpixLogoProps> = ({ className = "w-8 h-8" })
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
     >
-      {/* Cross shape */}
+      {/* Cross shape - left side */}
       <path
-        d="M30 10 L30 35 L10 35 L10 65 L30 65 L30 90 L40 90 L40 65 L65 65 L65 35 L40 35 L40 10 Z"
+        d="M10 20 L10 40 L0 40 L0 60 L10 60 L10 80 L20 80 L20 60 L30 60 L30 40 L20 40 L20 20 Z"
         fill="#5DADE2"
       />
       
-      {/* Diamond shape */}
+      {/* Diamond shape - right side overlapping */}
       <path
-        d="M50 20 L80 50 L50 80 L20 50 Z"
+        d="M65 10 L90 35 L90 65 L65 90 L35 65 L35 35 Z"
         fill="#5DADE2"
       />
       
-      {/* White diamond cutout */}
+      {/* White diamond cutout inside */}
       <path
-        d="M50 30 L70 50 L50 70 L30 50 Z"
+        d="M65 25 L80 40 L80 60 L65 75 L45 60 L45 40 Z"
         fill="white"
       />
     </svg>
