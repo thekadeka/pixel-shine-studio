@@ -77,18 +77,30 @@ const Index = () => {
                 <span className="text-xl font-bold text-foreground">Enhpix</span>
               </div>
               <div className="flex items-center gap-3 relative z-50">
-                <button 
-                  className="px-3 py-1 text-sm text-foreground hover:text-primary transition-colors cursor-pointer"
+                <Button 
+                  variant="default" 
+                  size="sm" 
+                  onClick={() => handleNavigation('/')}
+                  className="bg-primary text-primary-foreground"
+                >
+                  Home
+                </Button>
+                <Button 
+                  variant="ghost" 
+                  size="sm" 
                   onClick={() => handleNavigation('/about')}
+                  className="text-foreground hover:text-primary"
                 >
                   About
-                </button>
-                <button 
-                  className="px-3 py-1 text-sm text-foreground hover:text-primary transition-colors cursor-pointer"
+                </Button>
+                <Button 
+                  variant="ghost" 
+                  size="sm" 
                   onClick={() => handleNavigation('/pricing')}
+                  className="text-foreground hover:text-primary"
                 >
                   Pricing
-                </button>
+                </Button>
                 <Button variant="outline" size="sm" onClick={() => handleNavigation('/login')}>
                   Sign In
                 </Button>

@@ -65,6 +65,14 @@ const Pricing = () => {
             <Button variant="ghost" size="sm" onClick={() => navigate('/about')}>
               About
             </Button>
+            <Button 
+              variant="default" 
+              size="sm" 
+              onClick={() => navigate('/pricing')}
+              className="bg-primary text-primary-foreground"
+            >
+              Pricing
+            </Button>
             <Button variant="outline" size="sm" onClick={() => navigate('/login')}>
               Sign In
             </Button>
