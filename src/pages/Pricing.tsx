@@ -58,9 +58,17 @@ const Pricing = () => {
             </div>
             <span className="text-xl font-bold text-white">Enhpix</span>
           </div>
-          <Button variant="outline" size="sm" onClick={() => navigate('/login')}>
-            Sign In
-          </Button>
+          <div className="flex items-center gap-3">
+            <Button variant="ghost" size="sm" onClick={() => navigate('/')}>
+              Home
+            </Button>
+            <Button variant="ghost" size="sm" onClick={() => navigate('/about')}>
+              About
+            </Button>
+            <Button variant="outline" size="sm" onClick={() => navigate('/login')}>
+              Sign In
+            </Button>
+          </div>
         </nav>
       </header>
 

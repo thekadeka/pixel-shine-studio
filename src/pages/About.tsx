@@ -18,6 +18,9 @@ const About = () => {
             <span className="text-xl font-bold text-foreground">Enhpix</span>
           </div>
           <div className="flex items-center gap-3">
+            <Button variant="ghost" size="sm" onClick={() => navigate('/')}>
+              Home
+            </Button>
             <Button variant="ghost" size="sm" onClick={() => navigate('/pricing')}>
               Pricing
             </Button>

@@ -22,9 +22,14 @@ const Login = () => {
         <div className="space-y-4">
           <div className="text-center p-8 border border-border rounded-lg">
             <p className="text-muted-foreground mb-4">Authentication coming soon</p>
-            <Button onClick={() => navigate('/')} variant="outline">
-              Back to Home
-            </Button>
+            <div className="flex flex-col sm:flex-row gap-3">
+              <Button onClick={() => navigate('/')} variant="outline">
+                Back to Home
+              </Button>
+              <Button onClick={() => navigate('/pricing')} variant="default">
+                View Pricing
+              </Button>
+            </div>
           </div>
         </div>
       </div>

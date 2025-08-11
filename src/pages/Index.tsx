@@ -216,9 +216,24 @@ const Index = () => {
             <span className="font-medium text-foreground">Enhpix</span>
           </div>
           <div className="flex items-center gap-6 text-sm text-muted-foreground">
-            <a href="#" className="hover:text-foreground transition-colors">Privacy</a>
-            <a href="#" className="hover:text-foreground transition-colors">Terms</a>
-            <a href="#" className="hover:text-foreground transition-colors">Support</a>
+            <button 
+              onClick={() => handleNavigation('/privacy')} 
+              className="hover:text-foreground transition-colors cursor-pointer"
+            >
+              Privacy
+            </button>
+            <button 
+              onClick={() => handleNavigation('/terms')} 
+              className="hover:text-foreground transition-colors cursor-pointer"
+            >
+              Terms
+            </button>
+            <button 
+              onClick={() => handleNavigation('/support')} 
+              className="hover:text-foreground transition-colors cursor-pointer"
+            >
+              Support
+            </button>
           </div>
         </div>
       </footer>
