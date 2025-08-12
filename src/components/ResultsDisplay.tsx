@@ -56,9 +56,9 @@ export const ResultsDisplay = ({
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-3 sm:space-y-4 md:space-y-6 overflow-x-hidden max-w-full">
       {/* Results Header */}
-      <Card className="p-6 bg-card shadow-card border-border">
+      <Card className="p-2 sm:p-4 md:p-6 bg-card shadow-card border-border overflow-x-hidden max-w-full">
         <div className="flex items-center justify-between">
           <div>
             <h3 className="text-xl font-semibold text-foreground mb-2">
