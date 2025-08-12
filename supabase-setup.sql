@@ -7,7 +7,7 @@ ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL ON TABLES TO postgres, anon,
 -- 1. Create profiles table
 CREATE TABLE IF NOT EXISTS profiles (
   id UUID REFERENCES auth.users(id) PRIMARY KEY,
-  email TEXT,
+  email TEXT UNIQUE NOT NULL, -- Ensure one email per account
   plan TEXT DEFAULT 'free' CHECK (plan IN ('free', 'starter', 'pro', 'premium')),
   credits_remaining INTEGER DEFAULT 3,
   total_uploads INTEGER DEFAULT 0,
