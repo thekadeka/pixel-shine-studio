@@ -97,33 +97,33 @@ const Pricing = () => {
       </header>
 
       {/* Pricing Content */}
-      <div className="px-4 md:px-6 py-8 md:py-20">
+      <div className="px-3 md:px-6 py-6 md:py-20">
         <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-8 md:mb-16">
-            <h1 className="text-2xl md:text-3xl lg:text-5xl font-bold mb-4 text-foreground px-4">
+          <div className="text-center mb-6 md:mb-16">
+            <h1 className="text-lg sm:text-xl md:text-3xl lg:text-5xl font-bold mb-3 md:mb-4 text-foreground px-2">
               Choose Your <span className="text-primary">AI Enhancement Plan</span>
             </h1>
-            <p className="text-base md:text-lg lg:text-xl text-muted-foreground mb-6 md:mb-8 max-w-3xl mx-auto px-4">
+            <p className="text-sm sm:text-base md:text-lg lg:text-xl text-muted-foreground mb-4 md:mb-8 max-w-3xl mx-auto px-2">
               Unlock professional-grade image enhancement with our AI-powered upscaling technology. Start with a free trial, then choose the plan that fits your needs.
             </p>
 
             {/* Toggle */}
-            <div className="flex items-center justify-center gap-2 md:gap-4 mb-6 md:mb-8 px-4">
-              <span className={`text-sm md:text-lg ${!isYearly ? 'text-foreground font-medium' : 'text-muted-foreground'}`}>
+            <div className="flex items-center justify-center gap-2 md:gap-4 mb-4 md:mb-8 px-2">
+              <span className={`text-xs sm:text-sm md:text-lg ${!isYearly ? 'text-foreground font-medium' : 'text-muted-foreground'}`}>
                 Monthly
               </span>
               <button
                 onClick={() => setIsYearly(!isYearly)}
-                className={`relative w-12 h-6 md:w-14 md:h-7 rounded-full transition-colors ${isYearly ? 'bg-primary' : 'bg-muted'}`}
+                className={`relative w-10 h-5 sm:w-12 sm:h-6 md:w-14 md:h-7 rounded-full transition-colors ${isYearly ? 'bg-primary' : 'bg-muted'}`}
               >
                 <div
-                  className={`absolute w-4 h-4 md:w-5 md:h-5 bg-white rounded-full top-1 transition-transform ${
-                    isYearly ? 'translate-x-7 md:translate-x-8' : 'translate-x-1'
+                  className={`absolute w-3 h-3 sm:w-4 sm:h-4 md:w-5 md:h-5 bg-white rounded-full top-1 transition-transform ${
+                    isYearly ? 'translate-x-6 sm:translate-x-7 md:translate-x-8' : 'translate-x-1'
                   }`}
                 />
               </button>
-              <span className={`text-sm md:text-lg ${isYearly ? 'text-foreground font-medium' : 'text-muted-foreground'}`}>
-                Yearly <span className="text-xs md:text-sm text-accent ml-1">Save 17%</span>
+              <span className={`text-xs sm:text-sm md:text-lg ${isYearly ? 'text-foreground font-medium' : 'text-muted-foreground'}`}>
+                Yearly <span className="text-xs text-accent ml-1">Save 17%</span>
               </span>
             </div>
           </div>

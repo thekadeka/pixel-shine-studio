@@ -101,18 +101,18 @@ const Support = () => {
       </header>
 
       {/* Support Content */}
-      <div className="px-4 md:px-6 py-8 md:py-20">
+      <div className="px-3 md:px-6 py-6 md:py-20">
         <div className="max-w-4xl mx-auto">
-          <div className="text-center mb-8 md:mb-16 px-4">
-            <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold text-foreground mb-4">
+          <div className="text-center mb-6 md:mb-16 px-2">
+            <h1 className="text-lg sm:text-xl md:text-3xl lg:text-4xl font-bold text-foreground mb-3 md:mb-4">
               Support Center
             </h1>
-            <p className="text-base md:text-lg lg:text-xl text-muted-foreground">
+            <p className="text-sm sm:text-base md:text-lg lg:text-xl text-muted-foreground">
               We're here to help you get the most out of Enhpix
             </p>
           </div>
 
-          <div className="grid sm:grid-cols-1 md:grid-cols-3 gap-6 md:gap-8 mb-8 md:mb-16 px-4">
+          <div className="grid sm:grid-cols-1 md:grid-cols-3 gap-4 md:gap-8 mb-6 md:mb-16 px-2">
             <div className="text-center p-6 bg-card rounded-xl border border-border">
               <div className="w-16 h-16 bg-primary/10 rounded-2xl flex items-center justify-center mx-auto mb-4">
                 <Mail className="w-8 h-8 text-primary" />

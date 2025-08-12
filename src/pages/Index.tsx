@@ -166,32 +166,32 @@ const Index = () => {
 
           {/* Hero Content */}
           {appState === 'upload' && (
-            <div className="px-4 md:px-6 pb-12 md:pb-20 pt-8 md:pt-12">
-              <div className="max-w-4xl mx-auto text-center space-y-6 md:space-y-8">
-                <div className="space-y-4">
-                  <h1 className="text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold text-foreground leading-tight px-2">
+            <div className="px-3 md:px-6 pb-8 md:pb-20 pt-6 md:pt-12">
+              <div className="max-w-4xl mx-auto text-center space-y-4 md:space-y-8">
+                <div className="space-y-3 md:space-y-4">
+                  <h1 className="text-xl sm:text-2xl md:text-4xl lg:text-5xl xl:text-6xl font-bold text-foreground leading-tight px-2">
                     Enhance Your Images with{' '}
                     <span className="bg-gradient-primary bg-clip-text text-transparent">
                       Enhpix AI
                     </span>
                   </h1>
-                  <p className="text-base md:text-lg lg:text-xl text-muted-foreground max-w-3xl mx-auto px-4">
+                  <p className="text-sm sm:text-base md:text-lg lg:text-xl text-muted-foreground max-w-3xl mx-auto px-2">
                     Transform low-resolution images into stunning high-quality masterpieces. 
                     Our advanced AI upscales your photos up to 4x while preserving every detail.
                   </p>
                 </div>
 
-                <div className="flex flex-col sm:flex-row items-center justify-center gap-4 text-sm text-muted-foreground">
-                  <div className="flex items-center gap-2">
-                    <Sparkles className="w-4 h-4 text-primary" />
+                <div className="flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-4 text-xs sm:text-sm text-muted-foreground px-2">
+                  <div className="flex items-center gap-1 sm:gap-2">
+                    <Sparkles className="w-3 h-3 sm:w-4 sm:h-4 text-primary" />
                     <span>AI-Powered Enhancement</span>
                   </div>
-                  <div className="flex items-center gap-2">
-                    <Zap className="w-4 h-4 text-accent" />
+                  <div className="flex items-center gap-1 sm:gap-2">
+                    <Zap className="w-3 h-3 sm:w-4 sm:h-4 text-accent" />
                     <span>Lightning Fast</span>
                   </div>
-                  <div className="flex items-center gap-2">
-                    <Wand2 className="w-4 h-4 text-primary" />
+                  <div className="flex items-center gap-1 sm:gap-2">
+                    <Wand2 className="w-3 h-3 sm:w-4 sm:h-4 text-primary" />
                     <span>Professional Quality</span>
                   </div>
                 </div>
@@ -202,7 +202,7 @@ const Index = () => {
       </div>
 
       {/* Main Content */}
-      <div className="px-4 md:px-6 py-8 md:py-12">
+      <div className="px-3 md:px-6 py-6 md:py-12">
         <div className="max-w-4xl mx-auto">
           {appState === 'upload' && (
             <ImageUploader onImageUpload={handleImageUpload} />
