@@ -15,7 +15,7 @@ type AppState = 'upload' | 'processing' | 'results';
 
 const Index = () => {
   const navigate = useNavigate();
-  // const { user, isAuthenticated, profile } = useAuth();
+  const { user, isAuthenticated, profile } = useAuth();
   const { toast } = useToast();
   const [appState, setAppState] = useState<AppState>('upload');
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -33,8 +33,57 @@ const Index = () => {
   const [enhancedUrl, setEnhancedUrl] = useState<string | null>(null);
 
   const handleImageUpload = async (file: File) => {
-    // Temporary: redirect to signup for now
-    navigate('/login?tab=signup');
+    // Check if user is authenticated
+    if (!isAuthenticated || !user || !profile) {
+      navigate('/login?tab=signup');
+      return;
+    }
+
+    // Check if user has credits
+    if (profile.credits_remaining <= 0) {
+      toast({
+        title: "No credits remaining",
+        description: "Please upgrade your plan to continue enhancing images.",
+        variant: "destructive",
+      });
+      navigate('/pricing');
+      return;
+    }
+
+    // Start processing
+    setAppState('processing');
+    setUploadedFile(file);
+    setPreviewUrl(URL.createObjectURL(file));
+
+    try {
+      const result = await processImage({
+        file,
+        userId: user.id,
+        plan: profile.plan
+      });
+
+      if (result.success && result.enhancedUrl) {
+        setEnhancedUrl(result.enhancedUrl);
+        setAppState('results');
+        
+        toast({
+          title: "Enhancement complete!",
+          description: "Your image has been successfully enhanced.",
+        });
+      } else {
+        throw new Error(result.error || 'Enhancement failed');
+      }
+    } catch (error) {
+      console.error('Enhancement error:', error);
+      
+      toast({
+        title: "Enhancement failed",
+        description: error instanceof Error ? error.message : "Please try again.",
+        variant: "destructive",
+      });
+      
+      setAppState('upload');
+    }
   };
 
   const handleStartOver = () => {
