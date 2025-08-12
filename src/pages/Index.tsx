@@ -59,7 +59,7 @@ const Index = () => {
         <div className="absolute inset-0 bg-background/90" />
         <div className="relative z-10">
           {/* Header */}
-          <header className="p-6 relative z-50">
+          <header className="p-4 md:p-6 relative">
             <nav className="max-w-7xl mx-auto flex items-center justify-between">
               <div className="flex items-center gap-3 cursor-pointer" onClick={() => handleNavigation('/')}>
                 <div className="p-2 bg-white rounded-lg">
@@ -68,7 +68,7 @@ const Index = () => {
                 <span className="text-xl font-bold text-foreground">Enhpix</span>
               </div>
               {/* Desktop Navigation */}
-              <div className="hidden md:flex items-center gap-3 relative z-50">
+              <div className="hidden md:flex items-center gap-3">
                 <Button 
                   variant="default" 
                   size="sm" 
@@ -99,7 +99,7 @@ const Index = () => {
               </div>
 
               {/* Mobile Menu Button */}
-              <div className="md:hidden relative z-50">
+              <div className="md:hidden">
                 <Button 
                   variant="ghost" 
                   size="sm"
@@ -113,7 +113,7 @@ const Index = () => {
 
             {/* Mobile Menu */}
             {mobileMenuOpen && (
-              <div className="md:hidden absolute top-full left-0 right-0 bg-background/95 backdrop-blur-sm border-b border-border z-40">
+              <div className="md:hidden absolute top-full left-0 right-0 bg-background/95 backdrop-blur-sm border-b border-border z-50">
                 <div className="flex flex-col p-4 space-y-2">
                   <Button 
                     variant="default" 

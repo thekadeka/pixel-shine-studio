@@ -1,15 +1,17 @@
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
-import { Sparkles, Zap, Wand2, Heart } from 'lucide-react';
+import { Sparkles, Zap, Wand2, Heart, Menu, X } from 'lucide-react';
 import { EnhpixLogo } from '@/components/ui/enhpix-logo';
 
 const About = () => {
   const navigate = useNavigate();
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   return (
     <div className="min-h-screen bg-background">
       {/* Header */}
-      <header className="p-6 border-b border-border">
+      <header className="p-4 md:p-6 border-b border-border">
         <nav className="max-w-7xl mx-auto flex items-center justify-between">
           <div className="flex items-center gap-3 cursor-pointer" onClick={() => navigate('/')}>
             <div className="p-2 bg-white rounded-lg">
@@ -17,7 +19,8 @@ const About = () => {
             </div>
             <span className="text-xl font-bold text-foreground">Enhpix</span>
           </div>
-          <div className="flex items-center gap-3">
+          {/* Desktop Navigation */}
+          <div className="hidden md:flex items-center gap-3">
             <Button variant="ghost" size="sm" onClick={() => navigate('/')}>
               Home
             </Button>
@@ -36,7 +39,71 @@ const About = () => {
               Sign In
             </Button>
           </div>
+
+          {/* Mobile Menu Button */}
+          <div className="md:hidden">
+            <Button 
+              variant="ghost" 
+              size="sm"
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              className="text-foreground"
+            >
+              {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+            </Button>
+          </div>
         </nav>
+
+        {/* Mobile Menu */}
+        {mobileMenuOpen && (
+          <div className="md:hidden absolute top-full left-0 right-0 bg-background/95 backdrop-blur-sm border-b border-border z-40">
+            <div className="flex flex-col p-4 space-y-2">
+              <Button 
+                variant="ghost" 
+                size="sm" 
+                onClick={() => {
+                  navigate('/');
+                  setMobileMenuOpen(false);
+                }}
+                className="w-full justify-start text-foreground"
+              >
+                Home
+              </Button>
+              <Button 
+                variant="default" 
+                size="sm" 
+                onClick={() => {
+                  navigate('/about');
+                  setMobileMenuOpen(false);
+                }}
+                className="w-full justify-start bg-primary text-primary-foreground"
+              >
+                About
+              </Button>
+              <Button 
+                variant="ghost" 
+                size="sm" 
+                onClick={() => {
+                  navigate('/pricing');
+                  setMobileMenuOpen(false);
+                }}
+                className="w-full justify-start text-foreground"
+              >
+                Pricing
+              </Button>
+              <Button 
+                variant="outline" 
+                size="sm" 
+                onClick={() => {
+                  navigate('/login');
+                  setMobileMenuOpen(false);
+                }}
+                className="w-full justify-start"
+              >
+                Sign In
+              </Button>
+            </div>
+          </div>
+        )}
       </header>
 
       {/* About Content */}

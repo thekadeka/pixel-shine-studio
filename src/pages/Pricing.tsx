@@ -51,7 +51,7 @@ const Pricing = () => {
   return (
     <div className="min-h-screen bg-background">
       {/* Header */}
-      <header className="p-6 border-b border-border">
+      <header className="p-4 md:p-6 border-b border-border">
         <nav className="max-w-7xl mx-auto flex items-center justify-between">
           <div className="flex items-center gap-3 cursor-pointer" onClick={() => navigate('/')}>
             <div className="p-2 bg-white rounded-lg">
