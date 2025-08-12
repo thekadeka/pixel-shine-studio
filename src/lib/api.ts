@@ -132,7 +132,7 @@ function getScaleForPlan(plan: string): number {
   switch (plan) {
     case 'premium': return 16
     case 'pro': return 8
-    case 'starter': return 4
+    case 'basic': return 4
     default: return 4
   }
 }

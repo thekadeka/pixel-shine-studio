@@ -60,9 +60,9 @@ export const addCredits = async (userId: string, amount: number): Promise<boolea
 
 export const getPlanCredits = (plan: string): number => {
   switch (plan) {
-    case 'starter': return 50
+    case 'basic': return 150
     case 'pro': return 400
-    case 'premium': return 1500
+    case 'premium': return 1300
     default: return 3 // free plan
   }
 }

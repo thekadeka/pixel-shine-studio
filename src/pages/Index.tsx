@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-// import { useAuth } from '@/hooks/useAuth';
-// import { processImage } from '@/lib/api';
+import { useAuth } from '@/hooks/useAuth';
+import { processImage } from '@/lib/api';
 import { useToast } from '@/hooks/use-toast';
 import { Sparkles, Wand2, Zap, Menu, X } from 'lucide-react';
 import { EnhpixLogo } from '@/components/ui/enhpix-logo';

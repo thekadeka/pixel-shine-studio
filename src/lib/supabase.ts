@@ -9,7 +9,7 @@ export const supabase = createClient(supabaseUrl, supabaseAnonKey)
 export interface Profile {
   id: string
   email: string
-  plan: 'free' | 'starter' | 'pro' | 'premium'
+  plan: 'free' | 'basic' | 'pro' | 'premium'
   credits_remaining: number
   total_uploads: number
   created_at: string

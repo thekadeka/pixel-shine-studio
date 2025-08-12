@@ -10,11 +10,11 @@ const Pricing = () => {
 
   const plans = [
     {
-      name: 'Starter',
+      name: 'Basic',
       icon: Sparkles,
-      monthlyPrice: 9,
-      yearlyPrice: 90,
-      features: ['50 images/month', 'Basic quality', '4x upscaling', 'Email support'],
+      monthlyPrice: 19,
+      yearlyPrice: 190,
+      features: ['150 images/month', 'Basic quality', '4x upscaling', 'Email support'],
       popular: false,
       isEnterprise: false
     },
@@ -32,7 +32,7 @@ const Pricing = () => {
       icon: Crown,
       monthlyPrice: 90,
       yearlyPrice: 900,
-      features: ['1,500 images/month', 'Ultra quality', '24/7 support', '16x upscaling', 'API access'],
+      features: ['1,300 images/month', 'Ultra quality', '24/7 support', '16x upscaling', 'API access'],
       popular: false,
       isEnterprise: false
     },
@@ -165,9 +165,14 @@ const Pricing = () => {
                       ) : (
                         <>
                           <span className="text-4xl font-bold text-foreground">
-                            ${isYearly ? Math.round(plan.yearlyPrice / 12) : plan.monthlyPrice}
+                            ${isYearly ? plan.yearlyPrice : plan.monthlyPrice}
                           </span>
-                          <span className="text-muted-foreground">/month</span>
+                          <span className="text-muted-foreground">/{isYearly ? 'year' : 'month'}</span>
+                          {isYearly && (
+                            <div className="text-sm text-muted-foreground mt-1">
+                              (${plan.monthlyPrice}/month)
+                            </div>
+                          )}
                         </>
                       )}
                     </div>
