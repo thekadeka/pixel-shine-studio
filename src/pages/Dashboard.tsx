@@ -20,9 +20,14 @@ import {
   Star,
   Gift,
   Sparkles,
-  MessageSquare,
-  Send,
-  Mic
+  Image,
+  Palette,
+  Camera,
+  Layers,
+  Wand2,
+  Gauge,
+  TrendingUp,
+  Eye
 } from 'lucide-react';
 
 interface UserData {
