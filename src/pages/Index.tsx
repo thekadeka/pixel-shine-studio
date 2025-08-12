@@ -228,44 +228,44 @@ const Index = () => {
 
       {/* Features Section */}
       {appState === 'upload' && (
-        <div className="px-6 py-20 bg-gradient-subtle">
-          <div className="max-w-6xl mx-auto">
-            <div className="text-center mb-16">
-              <h2 className="text-3xl font-bold text-foreground mb-4">
+        <div className="px-2 sm:px-3 md:px-6 py-4 sm:py-6 md:py-20 bg-gradient-subtle overflow-x-hidden max-w-full">
+          <div className="max-w-6xl mx-auto overflow-x-hidden w-full">
+            <div className="text-center mb-4 sm:mb-6 md:mb-16 px-1 sm:px-2">
+              <h2 className="text-base sm:text-lg md:text-3xl font-bold text-foreground mb-2 sm:mb-3 md:mb-4 break-words overflow-wrap-anywhere max-w-full">
                 Why Choose Enhpix?
               </h2>
-              <p className="text-lg text-muted-foreground">
+              <p className="text-xs sm:text-sm md:text-lg text-muted-foreground break-words overflow-wrap-anywhere max-w-full">
                 Advanced technology meets simple, intuitive design
               </p>
             </div>
 
-            <div className="grid md:grid-cols-3 gap-8">
-              <div className="text-center p-6 bg-card rounded-xl shadow-card border border-border">
-                <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mx-auto mb-4">
-                  <Sparkles className="w-6 h-6 text-primary" />
+            <div className="grid sm:grid-cols-1 md:grid-cols-3 gap-3 sm:gap-4 md:gap-8 px-1 sm:px-2">
+              <div className="text-center p-3 sm:p-4 md:p-6 bg-card rounded-lg sm:rounded-xl shadow-card border border-border">
+                <div className="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 bg-primary/10 rounded-md sm:rounded-lg flex items-center justify-center mx-auto mb-2 sm:mb-3 md:mb-4">
+                  <Sparkles className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 text-primary" />
                 </div>
-                <h3 className="text-xl font-semibold text-foreground mb-2">AI Enhancement</h3>
-                <p className="text-muted-foreground">
+                <h3 className="text-sm sm:text-base md:text-xl font-semibold text-foreground mb-1 sm:mb-2 break-words overflow-wrap-anywhere max-w-full">AI Enhancement</h3>
+                <p className="text-xs sm:text-sm md:text-base text-muted-foreground break-words overflow-wrap-anywhere max-w-full">
                   State-of-the-art neural networks analyze and enhance every pixel for maximum quality.
                 </p>
               </div>
 
-              <div className="text-center p-6 bg-card rounded-xl shadow-card border border-border">
-                <div className="w-12 h-12 bg-accent/10 rounded-lg flex items-center justify-center mx-auto mb-4">
-                  <Zap className="w-6 h-6 text-accent" />
+              <div className="text-center p-3 sm:p-4 md:p-6 bg-card rounded-lg sm:rounded-xl shadow-card border border-border">
+                <div className="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 bg-accent/10 rounded-md sm:rounded-lg flex items-center justify-center mx-auto mb-2 sm:mb-3 md:mb-4">
+                  <Zap className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 text-accent" />
                 </div>
-                <h3 className="text-xl font-semibold text-foreground mb-2">Lightning Fast</h3>
-                <p className="text-muted-foreground">
+                <h3 className="text-sm sm:text-base md:text-xl font-semibold text-foreground mb-1 sm:mb-2 break-words overflow-wrap-anywhere max-w-full">Lightning Fast</h3>
+                <p className="text-xs sm:text-sm md:text-base text-muted-foreground break-words overflow-wrap-anywhere max-w-full">
                   Process your images in seconds, not minutes. Optimized for speed without compromising quality.
                 </p>
               </div>
 
-              <div className="text-center p-6 bg-card rounded-xl shadow-card border border-border">
-                <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mx-auto mb-4">
-                  <Wand2 className="w-6 h-6 text-primary" />
+              <div className="text-center p-3 sm:p-4 md:p-6 bg-card rounded-lg sm:rounded-xl shadow-card border border-border">
+                <div className="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 bg-primary/10 rounded-md sm:rounded-lg flex items-center justify-center mx-auto mb-2 sm:mb-3 md:mb-4">
+                  <Wand2 className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 text-primary" />
                 </div>
-                <h3 className="text-xl font-semibold text-foreground mb-2">Professional Results</h3>
-                <p className="text-muted-foreground">
+                <h3 className="text-sm sm:text-base md:text-xl font-semibold text-foreground mb-1 sm:mb-2 break-words overflow-wrap-anywhere max-w-full">Professional Results</h3>
+                <p className="text-xs sm:text-sm md:text-base text-muted-foreground break-words overflow-wrap-anywhere max-w-full">
                   Get print-ready, high-resolution images suitable for professional use and large displays.
                 </p>
               </div>
@@ -275,30 +275,30 @@ const Index = () => {
       )}
 
       {/* Footer */}
-      <footer className="px-6 py-8 border-t border-border">
-        <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
-          <div className="flex items-center gap-2">
+      <footer className="px-2 sm:px-3 md:px-6 py-4 sm:py-6 md:py-8 border-t border-border overflow-x-hidden max-w-full">
+        <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-2 sm:gap-3 md:gap-4 overflow-x-hidden w-full">
+          <div className="flex items-center gap-1 sm:gap-2">
             <div className="p-1 bg-white rounded">
-              <EnhpixLogo className="w-4 h-4" />
+              <EnhpixLogo className="w-3 h-3 sm:w-4 sm:h-4" />
             </div>
-            <span className="font-medium text-foreground">Enhpix</span>
+            <span className="text-sm sm:text-base font-medium text-foreground">Enhpix</span>
           </div>
-          <div className="flex items-center gap-6 text-sm text-muted-foreground">
+          <div className="flex items-center gap-3 sm:gap-4 md:gap-6 text-xs sm:text-sm text-muted-foreground overflow-x-hidden">
             <button 
               onClick={() => handleNavigation('/privacy')} 
-              className="hover:text-foreground transition-colors cursor-pointer"
+              className="hover:text-foreground transition-colors cursor-pointer whitespace-nowrap"
             >
               Privacy
             </button>
             <button 
               onClick={() => handleNavigation('/terms')} 
-              className="hover:text-foreground transition-colors cursor-pointer"
+              className="hover:text-foreground transition-colors cursor-pointer whitespace-nowrap"
             >
               Terms
             </button>
             <button 
               onClick={() => handleNavigation('/support')} 
-              className="hover:text-foreground transition-colors cursor-pointer"
+              className="hover:text-foreground transition-colors cursor-pointer whitespace-nowrap"
             >
               Support
             </button>

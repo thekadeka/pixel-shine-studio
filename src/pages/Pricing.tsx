@@ -209,12 +209,14 @@ const Pricing = () => {
           </div>
 
           {/* Free Trial */}
-          <div className="text-center mt-12">
-            <p className="text-muted-foreground mb-4">
+          <div className="text-center mt-4 sm:mt-6 md:mt-12 px-1 sm:px-2">
+            <p className="text-xs sm:text-sm md:text-base text-muted-foreground mb-3 sm:mb-4 break-words overflow-wrap-anywhere max-w-full">
               Try Enhpix free with 1 image enhancement
             </p>
             <Button 
-              variant="outline" 
+              variant="outline"
+              size="sm"
+              className="sm:size-default"
               onClick={() => navigate('/')}
             >
               Start Free Trial
