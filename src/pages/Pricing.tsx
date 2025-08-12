@@ -170,7 +170,7 @@ const Pricing = () => {
                           <span className="text-muted-foreground">/{isYearly ? 'year' : 'month'}</span>
                           {isYearly && (
                             <div className="text-sm text-muted-foreground mt-1">
-                              (${plan.monthlyPrice}/month)
+                              (${(plan.yearlyPrice / 12).toFixed(2)}/month)
                             </div>
                           )}
                         </>
