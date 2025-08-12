@@ -7,26 +7,32 @@ interface EnhpixLogoProps {
 export const EnhpixLogo: React.FC<EnhpixLogoProps> = ({ className = "w-8 h-8" }) => {
   return (
     <svg
-      viewBox="0 0 120 80"
+      viewBox="0 0 100 60"
       className={className}
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
     >
-      {/* Cross shape with stepped edges - exactly like the image */}
+      {/* Cross made of simple rectangles */}
+      {/* Top arm */}
+      <rect x="15" y="10" width="20" height="10" fill="#5DADE2" />
+      {/* Left arm */}
+      <rect x="5" y="20" width="20" height="10" fill="#5DADE2" />
+      {/* Center vertical */}
+      <rect x="20" y="10" width="10" height="40" fill="#5DADE2" />
+      {/* Right arm */}
+      <rect x="30" y="20" width="20" height="10" fill="#5DADE2" />
+      {/* Bottom arm */}
+      <rect x="15" y="40" width="20" height="10" fill="#5DADE2" />
+      
+      {/* Diamond shape */}
       <path
-        d="M20 20 L30 20 L30 10 L50 10 L50 20 L60 20 L60 30 L70 30 L70 40 L60 40 L60 50 L70 50 L70 60 L60 60 L60 70 L50 70 L50 60 L30 60 L30 70 L20 70 L20 60 L10 60 L10 50 L20 50 L20 40 L10 40 L10 30 L20 30 Z"
+        d="M75 15 L90 30 L75 45 L60 30 Z"
         fill="#5DADE2"
       />
       
-      {/* Diamond shape on the right */}
+      {/* White diamond cutout */}
       <path
-        d="M85 15 L110 40 L85 65 L60 40 Z"
-        fill="#5DADE2"
-      />
-      
-      {/* White diamond cutout inside */}
-      <path
-        d="M85 25 L100 40 L85 55 L70 40 Z"
+        d="M75 22 L83 30 L75 38 L67 30 Z"
         fill="white"
       />
     </svg>
