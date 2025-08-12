@@ -82,7 +82,7 @@ const Login = () => {
         billing: 'trial',
         subscriptionId: `trial_${Date.now()}`,
         createdAt: new Date().toISOString(),
-        trialImages: 1,
+        trialImages: 3,
         usedImages: 0
       };
       
@@ -219,7 +219,7 @@ const Login = () => {
                     {isLoading ? 'Creating account...' : 'Start Free Trial'}
                   </Button>
                   <p className="text-xs text-muted-foreground text-center">
-                    Free trial includes 1 image enhancement. No credit card required.
+                    Free trial includes 3 image enhancements. No credit card required.
                   </p>
                 </form>
               </TabsContent>

@@ -74,7 +74,7 @@ const Dashboard = () => {
     const plans = {
       trial: { 
         name: 'Free Trial', 
-        maxImages: 1, 
+        maxImages: 3, 
         quality: 'Basic', 
         upscaling: '4x',
         color: 'bg-gray-500'
@@ -135,7 +135,7 @@ const Dashboard = () => {
       const updatedUser = {
         ...user,
         usedImages: usedImages + 1,
-        trialImages: user.plan === 'trial' ? Math.max(0, (user.trialImages || 1) - 1) : user.trialImages
+        trialImages: user.plan === 'trial' ? Math.max(0, (user.trialImages || 3) - 1) : user.trialImages
       };
       setUser(updatedUser);
       localStorage.setItem('enhpix_user', JSON.stringify(updatedUser));
@@ -174,7 +174,7 @@ const Dashboard = () => {
     ? (user.trialImages || 0) 
     : planDetails.maxImages - usedImages;
   const usagePercentage = user.plan === 'trial' 
-    ? ((1 - (user.trialImages || 0)) / 1) * 100
+    ? ((3 - (user.trialImages || 0)) / 3) * 100
     : (usedImages / planDetails.maxImages) * 100;
 
   return (
@@ -190,7 +190,7 @@ const Dashboard = () => {
               <CardTitle>Welcome to Enhpix! 🎉</CardTitle>
               <CardDescription>
                 {user.plan === 'trial' 
-                  ? `You're on a free trial with ${user.trialImages || 1} image enhancement included.`
+                  ? `You're on a free trial with ${user.trialImages || 3} image enhancements included.`
                   : `Your ${planDetails.name} subscription is now active!`
                 }
               </CardDescription>
@@ -325,7 +325,7 @@ const Dashboard = () => {
                 <div>
                   <div className="flex justify-between text-sm mb-2">
                     <span>Images Enhanced</span>
-                    <span>{user.plan === 'trial' ? (1 - (user.trialImages || 0)) : usedImages} / {user.plan === 'trial' ? 1 : planDetails.maxImages}</span>
+                    <span>{user.plan === 'trial' ? (3 - (user.trialImages || 0)) : usedImages} / {user.plan === 'trial' ? 3 : planDetails.maxImages}</span>
                   </div>
                   <Progress value={usagePercentage} className="h-2" />
                 </div>
@@ -354,87 +354,89 @@ const Dashboard = () => {
 
           {/* Main Content */}
           <div className="lg:col-span-3 space-y-6">
-            {/* AI Enhancement Studio */}
-            <Card className="bg-gradient-to-r from-primary/5 to-accent/5 border-primary/20">
+            {/* AI Tools Selection */}
+            <Card>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2 text-xl">
-                  <MessageSquare className="w-6 h-6 text-primary" />
-                  AI Enhancement Studio
+                  <Wand2 className="w-6 h-6 text-primary" />
+                  AI Enhancement Tools
                 </CardTitle>
                 <CardDescription className="text-base">
-                  Tell our AI how you want to enhance your image for the best results
+                  Choose the perfect enhancement method for your image type
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <div className="space-y-4">
-                  <div className="flex gap-3">
-                    <div className="flex-1 relative">
-                      <input
-                        type="text"
-                        value={chatMessage}
-                        onChange={(e) => setChatMessage(e.target.value)}
-                        placeholder="e.g. 'Enhance this portrait photo', 'Make this logo crisp and sharp', 'Upscale for large print'..."
-                        className="w-full px-4 py-4 pr-12 rounded-xl border-2 border-border bg-background/80 backdrop-blur-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition-all"
-                        onKeyPress={(e) => e.key === 'Enter' && chatMessage.trim() && setChatMessage('')}
-                      />
-                      <Mic className="absolute right-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-muted-foreground hover:text-primary cursor-pointer transition-colors" />
-                    </div>
-                    <Button 
-                      onClick={() => chatMessage.trim() && setChatMessage('')}
-                      disabled={!chatMessage.trim()}
-                      size="lg"
-                      className="px-6"
-                    >
-                      <Send className="w-5 h-5" />
-                    </Button>
-                  </div>
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                  <Card 
+                    className={`cursor-pointer transition-all hover:scale-105 ${selectedTool === 'universal' ? 'ring-2 ring-primary bg-primary/5' : 'hover:bg-muted/50'}`}
+                    onClick={() => setSelectedTool('universal')}
+                  >
+                    <CardContent className="p-4 text-center">
+                      <Image className="w-8 h-8 mx-auto mb-2 text-primary" />
+                      <h3 className="font-semibold text-sm">Universal</h3>
+                      <p className="text-xs text-muted-foreground">All image types</p>
+                    </CardContent>
+                  </Card>
                   
-                  {/* Quick Enhancement Options */}
-                  <div className="flex flex-wrap gap-2">
-                    <Badge 
-                      variant="secondary" 
-                      className="cursor-pointer hover:bg-primary/20 transition-colors"
-                      onClick={() => setChatMessage('Enhance portrait photo')}
-                    >
-                      🖼️ Portrait
-                    </Badge>
-                    <Badge 
-                      variant="secondary" 
-                      className="cursor-pointer hover:bg-primary/20 transition-colors"
-                      onClick={() => setChatMessage('Sharpen logo and text')}
-                    >
-                      🎨 Logo/Text
-                    </Badge>
-                    <Badge 
-                      variant="secondary" 
-                      className="cursor-pointer hover:bg-primary/20 transition-colors"
-                      onClick={() => setChatMessage('Upscale for printing')}
-                    >
-                      🖨️ Print Quality
-                    </Badge>
-                    <Badge 
-                      variant="secondary" 
-                      className="cursor-pointer hover:bg-primary/20 transition-colors"
-                      onClick={() => setChatMessage('Enhance old photo')}
-                    >
-                      📷 Old Photo
-                    </Badge>
-                  </div>
+                  <Card 
+                    className={`cursor-pointer transition-all hover:scale-105 ${selectedTool === 'photo' ? 'ring-2 ring-primary bg-primary/5' : 'hover:bg-muted/50'}`}
+                    onClick={() => setSelectedTool('photo')}
+                  >
+                    <CardContent className="p-4 text-center">
+                      <Camera className="w-8 h-8 mx-auto mb-2 text-primary" />
+                      <h3 className="font-semibold text-sm">Photo</h3>
+                      <p className="text-xs text-muted-foreground">Real photos</p>
+                    </CardContent>
+                  </Card>
                   
-                  {chatMessage.trim() && (
-                    <div className="p-4 bg-gradient-to-r from-primary/10 to-accent/10 rounded-xl border border-primary/30">
-                      <div className="flex items-start gap-3">
-                        <Sparkles className="w-5 h-5 text-primary mt-0.5 flex-shrink-0" />
-                        <div>
-                          <p className="font-medium text-foreground mb-1">AI Enhancement Ready</p>
-                          <p className="text-sm text-muted-foreground">
-                            Our AI will optimize settings based on: <span className="font-medium text-foreground">"{chatMessage}"</span>
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-                  )}
+                  <Card 
+                    className={`cursor-pointer transition-all hover:scale-105 ${selectedTool === 'artwork' ? 'ring-2 ring-primary bg-primary/5' : 'hover:bg-muted/50'}`}
+                    onClick={() => setSelectedTool('artwork')}
+                  >
+                    <CardContent className="p-4 text-center">
+                      <Palette className="w-8 h-8 mx-auto mb-2 text-primary" />
+                      <h3 className="font-semibold text-sm">Artwork</h3>
+                      <p className="text-xs text-muted-foreground">Digital art</p>
+                    </CardContent>
+                  </Card>
+                  
+                  <Card 
+                    className={`cursor-pointer transition-all hover:scale-105 ${selectedTool === 'logo' ? 'ring-2 ring-primary bg-primary/5' : 'hover:bg-muted/50'} ${user.plan === 'trial' ? 'opacity-50' : ''}`}
+                    onClick={() => user.plan !== 'trial' && setSelectedTool('logo')}
+                  >
+                    <CardContent className="p-4 text-center">
+                      <Layers className="w-8 h-8 mx-auto mb-2 text-primary" />
+                      <h3 className="font-semibold text-sm">Logo/Text</h3>
+                      <p className="text-xs text-muted-foreground">Sharp graphics</p>
+                      {user.plan === 'trial' && <Badge variant="secondary" className="text-xs mt-1">Pro+</Badge>}
+                    </CardContent>
+                  </Card>
                 </div>
+                
+                {/* Enhancement Methods for Paid Users */}
+                {user.plan !== 'trial' && planDetails.methods && (
+                  <div className="mt-6">
+                    <h4 className="font-medium mb-3 flex items-center gap-2">
+                      <Gauge className="w-4 h-4" />
+                      Enhancement Method
+                    </h4>
+                    <div className="flex flex-wrap gap-2">
+                      {planDetails.methods.map((method) => (
+                        <Badge 
+                          key={method}
+                          variant={selectedMethod === method.toLowerCase() ? "default" : "secondary"}
+                          className="cursor-pointer"
+                          onClick={() => setSelectedMethod(method.toLowerCase())}
+                        >
+                          {method}
+                        </Badge>
+                      ))}
+                    </div>
+                    <p className="text-xs text-muted-foreground mt-2">
+                      Different models optimized for various image types and quality levels
+                    </p>
+                  </div>
+                )}
               </CardContent>
             </Card>
 
@@ -506,17 +508,84 @@ const Dashboard = () => {
               </CardContent>
             </Card>
 
-            {/* Recent History Placeholder */}
+            {/* Enhancement Showcase */}
+            <Card className="mt-6">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <TrendingUp className="w-5 h-5" />
+                  Enhancement Showcase
+                </CardTitle>
+                <CardDescription>
+                  See the power of our AI enhancement tools
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                  <div className="group relative rounded-lg overflow-hidden bg-muted">
+                    <div className="aspect-square bg-gradient-to-br from-blue-100 to-blue-200 flex items-center justify-center">
+                      <Camera className="w-12 h-12 text-blue-600" />
+                    </div>
+                    <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                      <div className="text-center text-white">
+                        <Eye className="w-6 h-6 mx-auto mb-1" />
+                        <p className="text-sm">Portrait Enhancement</p>
+                        <p className="text-xs text-gray-300">4x → 16x upscale</p>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div className="group relative rounded-lg overflow-hidden bg-muted">
+                    <div className="aspect-square bg-gradient-to-br from-purple-100 to-purple-200 flex items-center justify-center">
+                      <Palette className="w-12 h-12 text-purple-600" />
+                    </div>
+                    <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                      <div className="text-center text-white">
+                        <Eye className="w-6 h-6 mx-auto mb-1" />
+                        <p className="text-sm">Digital Artwork</p>
+                        <p className="text-xs text-gray-300">Crisp details preserved</p>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div className="group relative rounded-lg overflow-hidden bg-muted">
+                    <div className="aspect-square bg-gradient-to-br from-green-100 to-green-200 flex items-center justify-center">
+                      <Layers className="w-12 h-12 text-green-600" />
+                    </div>
+                    <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                      <div className="text-center text-white">
+                        <Eye className="w-6 h-6 mx-auto mb-1" />
+                        <p className="text-sm">Logo & Graphics</p>
+                        <p className="text-xs text-gray-300">Sharp edges maintained</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                
+                <div className="mt-6 p-4 bg-gradient-to-r from-primary/5 to-accent/5 rounded-lg border border-primary/20">
+                  <div className="flex items-center gap-3">
+                    <Sparkles className="w-5 h-5 text-primary" />
+                    <div>
+                      <p className="font-medium text-foreground">Pro Tip</p>
+                      <p className="text-sm text-muted-foreground">
+                        Upload images with different enhancement tools selected to see varying results optimized for each image type.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+            
+            {/* Recent History */}
             <Card className="mt-6">
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <History className="w-5 h-5" />
-                  Recent Enhancements
+                  Your Recent Enhancements
                 </CardTitle>
               </CardHeader>
               <CardContent>
                 <p className="text-muted-foreground text-center py-8">
-                  Your recent image enhancements will appear here
+                  Your enhanced images will appear here after processing
                 </p>
               </CardContent>
             </Card>
