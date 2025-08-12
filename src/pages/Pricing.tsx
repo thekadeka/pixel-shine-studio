@@ -1,23 +1,12 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
-import { Check, Zap, Crown, Sparkles, Building2, Menu, X } from 'lucide-react';
+import { Check, Zap, Crown, Sparkles, Building2 } from 'lucide-react';
 import { EnhpixLogo } from '@/components/ui/enhpix-logo';
 
 const Pricing = () => {
   const navigate = useNavigate();
   const [isYearly, setIsYearly] = useState(false);
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  
-  const handleNavigation = (path: string) => {
-    try {
-      console.log(`Navigating to: ${path}`);
-      navigate(path);
-      setMobileMenuOpen(false);
-    } catch (error) {
-      console.error('Navigation error:', error);
-    }
-  };
 
   const plans = [
     {
@@ -90,58 +79,13 @@ const Pricing = () => {
             </Button>
           </div>
 
-          {/* Mobile Menu Button */}
+          {/* Mobile Back Button */}
           <div className="md:hidden">
-            <Button 
-              variant="ghost" 
-              size="sm"
-              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="text-white"
-            >
-              {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+            <Button variant="ghost" size="sm" onClick={() => navigate('/')}>
+              ← Back
             </Button>
           </div>
         </nav>
-
-        {/* Mobile Menu */}
-        {mobileMenuOpen && (
-          <div className="md:hidden absolute top-full left-0 right-0 bg-background/95 backdrop-blur-sm border-b border-border z-50">
-            <div className="flex flex-col p-4 space-y-2">
-              <Button 
-                variant="ghost" 
-                size="sm" 
-                onClick={() => handleNavigation('/')}
-                className="w-full justify-start text-foreground hover:text-primary"
-              >
-                Home
-              </Button>
-              <Button 
-                variant="ghost" 
-                size="sm" 
-                onClick={() => handleNavigation('/about')}
-                className="w-full justify-start text-foreground hover:text-primary"
-              >
-                About
-              </Button>
-              <Button 
-                variant="default" 
-                size="sm" 
-                onClick={() => handleNavigation('/pricing')}
-                className="w-full justify-start bg-primary text-primary-foreground"
-              >
-                Pricing
-              </Button>
-              <Button 
-                variant="outline" 
-                size="sm" 
-                onClick={() => handleNavigation('/login')}
-                className="w-full justify-start"
-              >
-                Sign In
-              </Button>
-            </div>
-          </div>
-        )}
       </header>
 
       {/* Pricing Content */}
