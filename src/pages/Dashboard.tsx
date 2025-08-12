@@ -354,59 +354,106 @@ const Dashboard = () => {
 
           {/* Main Content */}
           <div className="lg:col-span-3 space-y-6">
-            {/* AI Chat Bar */}
-            <Card>
+            {/* AI Enhancement Studio */}
+            <Card className="bg-gradient-to-r from-primary/5 to-accent/5 border-primary/20">
               <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <MessageSquare className="w-5 h-5" />
-                  AI Assistant
+                <CardTitle className="flex items-center gap-2 text-xl">
+                  <MessageSquare className="w-6 h-6 text-primary" />
+                  AI Enhancement Studio
                 </CardTitle>
-                <CardDescription>
-                  Describe what you want to do with your image
+                <CardDescription className="text-base">
+                  Tell our AI how you want to enhance your image for the best results
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <div className="flex gap-2">
-                  <div className="flex-1 relative">
-                    <input
-                      type="text"
-                      value={chatMessage}
-                      onChange={(e) => setChatMessage(e.target.value)}
-                      placeholder="e.g. 'Enhance this portrait photo', 'Make this logo crisp', 'Upscale for printing'..."
-                      className="w-full px-4 py-3 pr-12 rounded-lg border border-border bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary"
-                      onKeyPress={(e) => e.key === 'Enter' && chatMessage.trim() && setChatMessage('')}
-                    />
-                    <Mic className="absolute right-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-muted-foreground hover:text-foreground cursor-pointer" />
+                <div className="space-y-4">
+                  <div className="flex gap-3">
+                    <div className="flex-1 relative">
+                      <input
+                        type="text"
+                        value={chatMessage}
+                        onChange={(e) => setChatMessage(e.target.value)}
+                        placeholder="e.g. 'Enhance this portrait photo', 'Make this logo crisp and sharp', 'Upscale for large print'..."
+                        className="w-full px-4 py-4 pr-12 rounded-xl border-2 border-border bg-background/80 backdrop-blur-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition-all"
+                        onKeyPress={(e) => e.key === 'Enter' && chatMessage.trim() && setChatMessage('')}
+                      />
+                      <Mic className="absolute right-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-muted-foreground hover:text-primary cursor-pointer transition-colors" />
+                    </div>
+                    <Button 
+                      onClick={() => chatMessage.trim() && setChatMessage('')}
+                      disabled={!chatMessage.trim()}
+                      size="lg"
+                      className="px-6"
+                    >
+                      <Send className="w-5 h-5" />
+                    </Button>
                   </div>
-                  <Button 
-                    onClick={() => chatMessage.trim() && setChatMessage('')}
-                    disabled={!chatMessage.trim()}
-                  >
-                    <Send className="w-4 h-4" />
-                  </Button>
+                  
+                  {/* Quick Enhancement Options */}
+                  <div className="flex flex-wrap gap-2">
+                    <Badge 
+                      variant="secondary" 
+                      className="cursor-pointer hover:bg-primary/20 transition-colors"
+                      onClick={() => setChatMessage('Enhance portrait photo')}
+                    >
+                      🖼️ Portrait
+                    </Badge>
+                    <Badge 
+                      variant="secondary" 
+                      className="cursor-pointer hover:bg-primary/20 transition-colors"
+                      onClick={() => setChatMessage('Sharpen logo and text')}
+                    >
+                      🎨 Logo/Text
+                    </Badge>
+                    <Badge 
+                      variant="secondary" 
+                      className="cursor-pointer hover:bg-primary/20 transition-colors"
+                      onClick={() => setChatMessage('Upscale for printing')}
+                    >
+                      🖨️ Print Quality
+                    </Badge>
+                    <Badge 
+                      variant="secondary" 
+                      className="cursor-pointer hover:bg-primary/20 transition-colors"
+                      onClick={() => setChatMessage('Enhance old photo')}
+                    >
+                      📷 Old Photo
+                    </Badge>
+                  </div>
+                  
+                  {chatMessage.trim() && (
+                    <div className="p-4 bg-gradient-to-r from-primary/10 to-accent/10 rounded-xl border border-primary/30">
+                      <div className="flex items-start gap-3">
+                        <Sparkles className="w-5 h-5 text-primary mt-0.5 flex-shrink-0" />
+                        <div>
+                          <p className="font-medium text-foreground mb-1">AI Enhancement Ready</p>
+                          <p className="text-sm text-muted-foreground">
+                            Our AI will optimize settings based on: <span className="font-medium text-foreground">"{chatMessage}"</span>
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  )}
                 </div>
-                {chatMessage.trim() && (
-                  <div className="mt-3 p-3 bg-primary/5 rounded-lg border border-primary/20">
-                    <p className="text-sm text-muted-foreground">
-                      💡 AI will optimize enhancement settings based on your description
-                    </p>
-                  </div>
-                )}
               </CardContent>
             </Card>
 
             {/* Image Enhancement */}
-            <Card>
+            <Card className="border-2 border-dashed border-border hover:border-primary/50 transition-colors">
               <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Upload className="w-5 h-5" />
-                  AI Image Enhancer
+                <CardTitle className="flex items-center gap-2 text-xl">
+                  <Upload className="w-6 h-6 text-primary" />
+                  Upload & Enhance
                 </CardTitle>
-                <CardDescription>
-                  Upload your image to enhance it with AI-powered upscaling
-                  {availableImages <= 0 && (
-                    <span className="text-destructive ml-2">
+                <CardDescription className="text-base">
+                  Drag and drop your image or click to browse
+                  {availableImages <= 0 ? (
+                    <span className="text-destructive ml-2 font-medium">
                       • No images remaining - upgrade to continue
+                    </span>
+                  ) : (
+                    <span className="text-primary ml-2 font-medium">
+                      • {availableImages} enhancement{availableImages !== 1 ? 's' : ''} remaining
                     </span>
                   )}
                 </CardDescription>

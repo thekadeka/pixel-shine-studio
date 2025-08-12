@@ -29,12 +29,21 @@ const Login = () => {
       // Simulate login process
       await new Promise(resolve => setTimeout(resolve, 1000));
       
-      // Check if user exists (simplified check)
-      const existingUser = localStorage.getItem('enhpix_user');
-      if (existingUser) {
+      // Get all users from localStorage
+      const usersData = localStorage.getItem('enhpix_users');
+      const users = usersData ? JSON.parse(usersData) : [];
+      
+      // Find user with matching email and password
+      const user = users.find((u: any) => 
+        u.email === loginData.email && u.password === loginData.password
+      );
+      
+      if (user) {
+        // Set current user
+        localStorage.setItem('enhpix_user', JSON.stringify(user));
         navigate('/dashboard');
       } else {
-        alert('Account not found. Please sign up first or check your credentials.');
+        alert('Invalid email or password. Please check your credentials or sign up.');
       }
     } catch (error) {
       console.error('Login failed:', error);
@@ -52,16 +61,37 @@ const Login = () => {
       // Simulate signup process
       await new Promise(resolve => setTimeout(resolve, 1000));
       
-      // Create free trial user
-      localStorage.setItem('enhpix_user', JSON.stringify({
+      // Get existing users
+      const usersData = localStorage.getItem('enhpix_users');
+      const users = usersData ? JSON.parse(usersData) : [];
+      
+      // Check if email already exists
+      const existingUser = users.find((u: any) => u.email === signupData.email);
+      if (existingUser) {
+        alert('An account with this email already exists. Please sign in instead.');
+        setIsLoading(false);
+        return;
+      }
+      
+      // Create new user
+      const newUser = {
         email: signupData.email,
+        password: signupData.password,
         name: signupData.name,
         plan: 'trial',
         billing: 'trial',
         subscriptionId: `trial_${Date.now()}`,
         createdAt: new Date().toISOString(),
-        trialImages: 1 // Free trial with 1 image
-      }));
+        trialImages: 1,
+        usedImages: 0
+      };
+      
+      // Add to users array
+      users.push(newUser);
+      localStorage.setItem('enhpix_users', JSON.stringify(users));
+      
+      // Set current user
+      localStorage.setItem('enhpix_user', JSON.stringify(newUser));
 
       navigate('/dashboard?welcome=true');
     } catch (error) {

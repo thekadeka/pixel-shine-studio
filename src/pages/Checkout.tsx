@@ -74,13 +74,34 @@ const Checkout = () => {
       await new Promise(resolve => setTimeout(resolve, 2000));
       
       // Create user account and redirect to success
-      localStorage.setItem('enhpix_user', JSON.stringify({
+      const newUser = {
         email: formData.email,
+        password: 'checkout_user', // Default password for checkout users
+        name: formData.name,
         plan: planId,
         billing: isYearly ? 'yearly' : 'monthly',
         subscriptionId: `sub_${Date.now()}`,
-        createdAt: new Date().toISOString()
-      }));
+        createdAt: new Date().toISOString(),
+        usedImages: 0,
+        trialImages: 0
+      };
+      
+      // Get existing users and add new user
+      const usersData = localStorage.getItem('enhpix_users');
+      const users = usersData ? JSON.parse(usersData) : [];
+      
+      // Check if user already exists
+      const existingUserIndex = users.findIndex((u: any) => u.email === formData.email);
+      if (existingUserIndex !== -1) {
+        // Update existing user with new subscription
+        users[existingUserIndex] = { ...users[existingUserIndex], ...newUser };
+      } else {
+        // Add new user
+        users.push(newUser);
+      }
+      
+      localStorage.setItem('enhpix_users', JSON.stringify(users));
+      localStorage.setItem('enhpix_user', JSON.stringify(newUser));
 
       navigate('/dashboard?welcome=true');
     } catch (error) {
