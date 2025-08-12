@@ -51,7 +51,7 @@ const Support = () => {
 
         {/* Mobile Menu */}
         {mobileMenuOpen && (
-          <div className="md:hidden absolute top-full left-0 right-0 bg-background/95 backdrop-blur-sm border-b border-border z-40">
+          <div className="md:hidden absolute top-full left-0 right-0 bg-background/95 backdrop-blur-sm border-b border-border z-50">
             <div className="flex flex-col p-4 space-y-2">
               <Button 
                 variant="ghost" 
@@ -60,7 +60,7 @@ const Support = () => {
                   navigate('/');
                   setMobileMenuOpen(false);
                 }}
-                className="w-full justify-start text-foreground"
+                className="w-full justify-start text-foreground hover:text-primary"
               >
                 Home
               </Button>
@@ -71,7 +71,7 @@ const Support = () => {
                   navigate('/about');
                   setMobileMenuOpen(false);
                 }}
-                className="w-full justify-start text-foreground"
+                className="w-full justify-start text-foreground hover:text-primary"
               >
                 About
               </Button>
@@ -82,7 +82,7 @@ const Support = () => {
                   navigate('/pricing');
                   setMobileMenuOpen(false);
                 }}
-                className="w-full justify-start text-foreground"
+                className="w-full justify-start text-foreground hover:text-primary"
               >
                 Pricing
               </Button>

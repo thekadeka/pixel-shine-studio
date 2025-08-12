@@ -55,7 +55,7 @@ const About = () => {
 
         {/* Mobile Menu */}
         {mobileMenuOpen && (
-          <div className="md:hidden absolute top-full left-0 right-0 bg-background/95 backdrop-blur-sm border-b border-border z-40">
+          <div className="md:hidden absolute top-full left-0 right-0 bg-background/95 backdrop-blur-sm border-b border-border z-50">
             <div className="flex flex-col p-4 space-y-2">
               <Button 
                 variant="ghost" 
@@ -64,7 +64,7 @@ const About = () => {
                   navigate('/');
                   setMobileMenuOpen(false);
                 }}
-                className="w-full justify-start text-foreground"
+                className="w-full justify-start text-foreground hover:text-primary"
               >
                 Home
               </Button>
@@ -86,7 +86,7 @@ const About = () => {
                   navigate('/pricing');
                   setMobileMenuOpen(false);
                 }}
-                className="w-full justify-start text-foreground"
+                className="w-full justify-start text-foreground hover:text-primary"
               >
                 Pricing
               </Button>
