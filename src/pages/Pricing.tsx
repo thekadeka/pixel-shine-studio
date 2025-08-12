@@ -14,7 +14,7 @@ const Pricing = () => {
       icon: Sparkles,
       monthlyPrice: 19,
       yearlyPrice: 190,
-      features: ['150 images/month', 'Basic quality', '4x upscaling', 'Email support'],
+      features: ['150 images/month', 'Basic quality', '4x upscaling', 'Email support', 'Fast processing'],
       popular: false,
       isEnterprise: false
     },
