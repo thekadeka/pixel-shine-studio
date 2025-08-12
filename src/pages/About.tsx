@@ -56,22 +56,22 @@ const About = () => {
       </header>
 
       {/* About Content */}
-      <div className="px-3 md:px-6 py-6 md:py-20">
+      <div className="px-2 sm:px-3 md:px-6 py-4 sm:py-6 md:py-20">
         <div className="max-w-4xl mx-auto">
-          <div className="text-center mb-6 md:mb-16">
-            <h1 className="text-lg sm:text-xl md:text-3xl lg:text-4xl font-bold text-foreground mb-3 md:mb-4 px-2">
+          <div className="text-center mb-4 sm:mb-6 md:mb-16">
+            <h1 className="text-base sm:text-lg md:text-3xl lg:text-4xl font-bold text-foreground mb-2 sm:mb-3 md:mb-4 px-1 sm:px-2">
               About Enhpix
             </h1>
-            <p className="text-sm sm:text-base md:text-lg lg:text-xl text-muted-foreground px-2">
+            <p className="text-xs sm:text-sm md:text-lg lg:text-xl text-muted-foreground px-1 sm:px-2">
               Transforming the way you enhance images with cutting-edge AI technology
             </p>
           </div>
 
-          <div className="grid gap-6 md:gap-16">
+          <div className="grid gap-4 sm:gap-6 md:gap-16">
             {/* Mission */}
-            <div className="text-center px-2">
-              <h2 className="text-base sm:text-lg md:text-2xl lg:text-3xl font-bold text-foreground mb-3 md:mb-6">Our Mission</h2>
-              <p className="text-xs sm:text-sm md:text-base lg:text-lg text-muted-foreground leading-relaxed max-w-3xl mx-auto">
+            <div className="text-center px-1 sm:px-2">
+              <h2 className="text-sm sm:text-base md:text-2xl lg:text-3xl font-bold text-foreground mb-2 sm:mb-3 md:mb-6">Our Mission</h2>
+              <p className="text-xs leading-relaxed max-w-3xl mx-auto">
                 At Enhpix, we believe that every image has the potential to be extraordinary. 
                 Our mission is to make professional-grade image enhancement accessible to everyone, 
                 from photographers and designers to everyday users who want to bring their memories to life.
@@ -79,32 +79,32 @@ const About = () => {
             </div>
 
             {/* Features */}
-            <div className="px-2">
-              <h2 className="text-base sm:text-lg md:text-2xl lg:text-3xl font-bold text-foreground text-center mb-4 md:mb-12">
+            <div className="px-1 sm:px-2">
+              <h2 className="text-sm sm:text-base md:text-2xl lg:text-3xl font-bold text-foreground text-center mb-3 sm:mb-4 md:mb-12">
                 What Makes Us Different
               </h2>
-              <div className="grid md:grid-cols-2 gap-8">
-                <div className="p-6 bg-card rounded-xl border border-border">
-                  <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mb-4">
-                    <Sparkles className="w-6 h-6 text-primary" />
+              <div className="grid sm:grid-cols-2 gap-3 sm:gap-4 md:gap-8">
+                <div className="p-3 sm:p-4 md:p-6 bg-card rounded-lg sm:rounded-xl border border-border">
+                  <div className="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 bg-primary/10 rounded-md sm:rounded-lg flex items-center justify-center mb-2 sm:mb-3 md:mb-4">
+                    <Sparkles className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 text-primary" />
                   </div>
-                  <h3 className="text-xl font-semibold text-foreground mb-3">
+                  <h3 className="text-sm sm:text-base md:text-xl font-semibold text-foreground mb-2 sm:mb-3">
                     Advanced AI Technology
                   </h3>
-                  <p className="text-muted-foreground">
+                  <p className="text-xs sm:text-sm md:text-base text-muted-foreground">
                     Our proprietary neural networks are trained on millions of high-quality images 
                     to deliver unparalleled enhancement results.
                   </p>
                 </div>
 
-                <div className="p-6 bg-card rounded-xl border border-border">
-                  <div className="w-12 h-12 bg-accent/10 rounded-lg flex items-center justify-center mb-4">
-                    <Zap className="w-6 h-6 text-accent" />
+                <div className="p-3 sm:p-4 md:p-6 bg-card rounded-lg sm:rounded-xl border border-border">
+                  <div className="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 bg-accent/10 rounded-md sm:rounded-lg flex items-center justify-center mb-2 sm:mb-3 md:mb-4">
+                    <Zap className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 text-accent" />
                   </div>
-                  <h3 className="text-xl font-semibold text-foreground mb-3">
+                  <h3 className="text-sm sm:text-base md:text-xl font-semibold text-foreground mb-2 sm:mb-3">
                     Lightning Fast Processing
                   </h3>
-                  <p className="text-muted-foreground">
+                  <p className="text-xs sm:text-sm md:text-base text-muted-foreground">
                     Get professional results in seconds, not hours. Our optimized infrastructure 
                     ensures quick processing without compromising quality.
                   </p>

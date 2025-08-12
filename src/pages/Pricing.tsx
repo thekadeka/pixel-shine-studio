@@ -97,65 +97,65 @@ const Pricing = () => {
       </header>
 
       {/* Pricing Content */}
-      <div className="px-3 md:px-6 py-6 md:py-20">
+      <div className="px-2 sm:px-3 md:px-6 py-4 sm:py-6 md:py-20">
         <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-6 md:mb-16">
-            <h1 className="text-lg sm:text-xl md:text-3xl lg:text-5xl font-bold mb-3 md:mb-4 text-foreground px-2">
+          <div className="text-center mb-4 sm:mb-6 md:mb-16">
+            <h1 className="text-base sm:text-lg md:text-3xl lg:text-5xl font-bold mb-2 sm:mb-3 md:mb-4 text-foreground px-1 sm:px-2">
               Choose Your <span className="text-primary">AI Enhancement Plan</span>
             </h1>
-            <p className="text-sm sm:text-base md:text-lg lg:text-xl text-muted-foreground mb-4 md:mb-8 max-w-3xl mx-auto px-2">
+            <p className="text-xs sm:text-sm md:text-lg lg:text-xl text-muted-foreground mb-3 sm:mb-4 md:mb-8 max-w-3xl mx-auto px-1 sm:px-2">
               Unlock professional-grade image enhancement with our AI-powered upscaling technology. Start with a free trial, then choose the plan that fits your needs.
             </p>
 
             {/* Toggle */}
-            <div className="flex items-center justify-center gap-2 md:gap-4 mb-4 md:mb-8 px-2">
-              <span className={`text-xs sm:text-sm md:text-lg ${!isYearly ? 'text-foreground font-medium' : 'text-muted-foreground'}`}>
+            <div className="flex items-center justify-center gap-1 sm:gap-2 md:gap-4 mb-3 sm:mb-4 md:mb-8 px-1 sm:px-2">
+              <span className={`text-xs ${!isYearly ? 'text-foreground font-medium' : 'text-muted-foreground'}`}>
                 Monthly
               </span>
               <button
                 onClick={() => setIsYearly(!isYearly)}
-                className={`relative w-10 h-5 sm:w-12 sm:h-6 md:w-14 md:h-7 rounded-full transition-colors ${isYearly ? 'bg-primary' : 'bg-muted'}`}
+                className={`relative w-8 h-4 sm:w-10 sm:h-5 md:w-14 md:h-7 rounded-full transition-colors ${isYearly ? 'bg-primary' : 'bg-muted'}`}
               >
                 <div
-                  className={`absolute w-3 h-3 sm:w-4 sm:h-4 md:w-5 md:h-5 bg-white rounded-full top-1 transition-transform ${
-                    isYearly ? 'translate-x-6 sm:translate-x-7 md:translate-x-8' : 'translate-x-1'
+                  className={`absolute w-2 h-2 sm:w-3 sm:h-3 md:w-5 md:h-5 bg-white rounded-full top-1 transition-transform ${
+                    isYearly ? 'translate-x-5 sm:translate-x-6 md:translate-x-8' : 'translate-x-1'
                   }`}
                 />
               </button>
-              <span className={`text-xs sm:text-sm md:text-lg ${isYearly ? 'text-foreground font-medium' : 'text-muted-foreground'}`}>
+              <span className={`text-xs ${isYearly ? 'text-foreground font-medium' : 'text-muted-foreground'}`}>
                 Yearly <span className="text-xs text-accent ml-1">Save 17%</span>
               </span>
             </div>
           </div>
 
           {/* Plans */}
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 md:gap-6 px-1 sm:px-2">
             {plans.map((plan, index) => {
               const IconComponent = plan.icon;
               return (
                 <div
                   key={plan.name}
-                  className={`relative p-6 rounded-2xl transition-all hover:scale-105 ${
+                  className={`relative p-3 sm:p-4 md:p-6 rounded-xl md:rounded-2xl transition-all hover:scale-105 ${
                     plan.popular
                       ? 'bg-card border-2 border-accent shadow-2xl shadow-accent/30 ring-2 ring-accent/50'
                       : 'bg-card border border-border hover:border-accent/50'
                   }`}
                 >
                   {plan.popular && (
-                    <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
-                      <div className="bg-primary text-primary-foreground px-4 py-1 rounded-full text-sm font-medium">
+                    <div className="absolute -top-2 sm:-top-3 md:-top-4 left-1/2 transform -translate-x-1/2">
+                      <div className="bg-primary text-primary-foreground px-2 sm:px-3 md:px-4 py-1 rounded-full text-xs sm:text-sm font-medium">
                         Most Popular
                       </div>
                     </div>
                   )}
 
-                  <div className="text-center mb-6">
-                    <div className={`w-16 h-16 mx-auto mb-4 rounded-2xl flex items-center justify-center ${
+                  <div className="text-center mb-3 sm:mb-4 md:mb-6">
+                    <div className={`w-8 h-8 sm:w-12 sm:h-12 md:w-16 md:h-16 mx-auto mb-2 sm:mb-3 md:mb-4 rounded-lg sm:rounded-xl md:rounded-2xl flex items-center justify-center ${
                       plan.popular ? 'bg-primary-foreground' : 'bg-muted'
                     }`}>
-                      <IconComponent className={`w-8 h-8 ${plan.popular ? 'text-primary' : 'text-muted-foreground'}`} />
+                      <IconComponent className={`w-4 h-4 sm:w-6 sm:h-6 md:w-8 md:h-8 ${plan.popular ? 'text-primary' : 'text-muted-foreground'}`} />
                     </div>
-                    <h3 className="text-2xl font-bold text-foreground mb-2">{plan.name}</h3>
+                    <h3 className="text-sm sm:text-lg md:text-2xl font-bold text-foreground mb-1 sm:mb-2">{plan.name}</h3>
                     <div className="mb-2">
                       {plan.isEnterprise ? (
                         <div>
