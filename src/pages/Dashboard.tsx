@@ -243,7 +243,7 @@ const Dashboard = () => {
       )}
 
       {/* Header */}
-      <header className="p-4 border-b border-border bg-card/50 backdrop-blur-sm sticky top-0 z-40">
+      <header className="p-4 md:p-6 border-b border-border bg-card/50 backdrop-blur-sm sticky top-0 z-40">
         <nav className="max-w-7xl mx-auto flex items-center justify-between">
           <div className="flex items-center gap-3">
             <div className="p-2 bg-white rounded-lg">
@@ -258,21 +258,33 @@ const Dashboard = () => {
               {planDetails.name}
             </Badge>
             
-            <Button variant="ghost" size="sm" onClick={() => setShowSettings(true)}>
-              <Settings className="w-4 h-4 mr-2" />
-              Settings
-            </Button>
+            <div className="hidden md:flex items-center gap-2">
+              <Button variant="ghost" size="sm" onClick={() => setShowSettings(true)}>
+                <Settings className="w-4 h-4 mr-2" />
+                Settings
+              </Button>
+              
+              <Button variant="ghost" size="sm" onClick={handleLogout}>
+                <LogOut className="w-4 h-4 mr-2" />
+                Logout
+              </Button>
+            </div>
             
-            <Button variant="ghost" size="sm" onClick={handleLogout}>
-              <LogOut className="w-4 h-4 mr-2" />
-              Logout
-            </Button>
+            {/* Mobile menu */}
+            <div className="md:hidden flex items-center gap-2">
+              <Button variant="ghost" size="sm" onClick={() => setShowSettings(true)}>
+                <Settings className="w-4 h-4" />
+              </Button>
+              <Button variant="ghost" size="sm" onClick={handleLogout}>
+                <LogOut className="w-4 h-4" />
+              </Button>
+            </div>
           </div>
         </nav>
       </header>
 
-      <div className="max-w-7xl mx-auto px-6 py-8">
-        <div className="grid lg:grid-cols-4 gap-8">
+      <div className="max-w-7xl mx-auto px-4 md:px-6 py-6 md:py-8">
+        <div className="grid lg:grid-cols-4 gap-6 md:gap-8">
           {/* Sidebar */}
           <div className="lg:col-span-1 space-y-6">
             {/* User Profile */}

@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -9,17 +9,26 @@ import { EnhpixLogo } from '@/components/ui/enhpix-logo';
 
 const Login = () => {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const [isLoading, setIsLoading] = useState(false);
   const [loginData, setLoginData] = useState({ email: '', password: '' });
   const [signupData, setSignupData] = useState({ email: '', password: '', name: '' });
+  const [defaultTab, setDefaultTab] = useState('login');
 
   useEffect(() => {
     // Check if user is already logged in
     const user = localStorage.getItem('enhpix_user');
     if (user) {
       navigate('/dashboard');
+      return;
     }
-  }, [navigate]);
+
+    // Check for tab parameter
+    const tab = searchParams.get('tab');
+    if (tab === 'signup') {
+      setDefaultTab('signup');
+    }
+  }, [navigate, searchParams]);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -43,7 +52,20 @@ const Login = () => {
         localStorage.setItem('enhpix_user', JSON.stringify(user));
         navigate('/dashboard');
       } else {
-        alert('Invalid email or password. Please check your credentials or sign up.');
+        // Check if user exists but with different password (checkout users)
+        const existingUser = users.find((u: any) => u.email === loginData.email);
+        if (existingUser && existingUser.password === 'checkout_user') {
+          // Update password for checkout user
+          existingUser.password = loginData.password;
+          const updatedUsers = users.map((u: any) => 
+            u.email === loginData.email ? existingUser : u
+          );
+          localStorage.setItem('enhpix_users', JSON.stringify(updatedUsers));
+          localStorage.setItem('enhpix_user', JSON.stringify(existingUser));
+          navigate('/dashboard');
+        } else {
+          alert('Invalid email or password. Please check your credentials or sign up.');
+        }
       }
     } catch (error) {
       console.error('Login failed:', error);
@@ -105,7 +127,7 @@ const Login = () => {
   return (
     <div className="min-h-screen bg-background">
       {/* Header */}
-      <header className="p-6 border-b border-border">
+      <header className="p-4 md:p-6 border-b border-border">
         <nav className="max-w-7xl mx-auto flex items-center justify-between">
           <div className="flex items-center gap-3 cursor-pointer" onClick={() => navigate('/')}>
             <div className="p-2 bg-white rounded-lg">
@@ -113,7 +135,7 @@ const Login = () => {
             </div>
             <span className="text-xl font-bold text-foreground">Enhpix</span>
           </div>
-          <div className="flex items-center gap-3">
+          <div className="hidden md:flex items-center gap-3">
             <Button variant="ghost" size="sm" onClick={() => navigate('/')}>
               Home
             </Button>
@@ -132,23 +154,29 @@ const Login = () => {
               Sign In
             </Button>
           </div>
+          {/* Mobile menu button */}
+          <div className="md:hidden">
+            <Button variant="ghost" size="sm" onClick={() => navigate('/')}>
+              ← Back
+            </Button>
+          </div>
         </nav>
       </header>
 
       {/* Login/Signup Content */}
-      <div className="flex items-center justify-center px-6 py-20">
-        <Card className="w-full max-w-md">
-          <CardHeader className="text-center">
-            <CardTitle>Welcome to Enhpix</CardTitle>
-            <CardDescription>
+      <div className="flex items-center justify-center px-4 md:px-6 py-8 md:py-20">
+        <Card className="w-full max-w-md mx-4 md:mx-0">
+          <CardHeader className="text-center px-4 md:px-6">
+            <CardTitle className="text-xl md:text-2xl">Welcome to Enhpix</CardTitle>
+            <CardDescription className="text-sm md:text-base">
               Sign in to your account or create a new one
             </CardDescription>
           </CardHeader>
-          <CardContent>
-            <Tabs defaultValue="login" className="w-full">
-              <TabsList className="grid w-full grid-cols-2">
-                <TabsTrigger value="login">Sign In</TabsTrigger>
-                <TabsTrigger value="signup">Sign Up</TabsTrigger>
+          <CardContent className="px-4 md:px-6">
+            <Tabs defaultValue={defaultTab} className="w-full">
+              <TabsList className="grid w-full grid-cols-2 mb-6">
+                <TabsTrigger value="login" className="text-sm">Sign In</TabsTrigger>
+                <TabsTrigger value="signup" className="text-sm">Sign Up</TabsTrigger>
               </TabsList>
 
               <TabsContent value="login" className="space-y-4">

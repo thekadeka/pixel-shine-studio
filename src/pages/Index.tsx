@@ -27,18 +27,8 @@ const Index = () => {
   const [enhancedUrl, setEnhancedUrl] = useState<string | null>(null);
 
   const handleImageUpload = (file: File) => {
-    setUploadedFile(file);
-    const url = URL.createObjectURL(file);
-    setPreviewUrl(url);
-    
-    // Start processing simulation
-    setAppState('processing');
-    
-    // Simulate AI processing (3 seconds)
-    setTimeout(() => {
-      setEnhancedUrl(url); // In real app, this would be the enhanced image
-      setAppState('results');
-    }, 3000);
+    // Redirect to signup instead of processing
+    navigate('/login?tab=signup');
   };
 
   const handleStartOver = () => {
