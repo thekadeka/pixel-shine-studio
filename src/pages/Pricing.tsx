@@ -211,13 +211,13 @@ const Pricing = () => {
           {/* Free Trial */}
           <div className="text-center mt-4 sm:mt-6 md:mt-12 px-1 sm:px-2">
             <p className="text-xs sm:text-sm md:text-base text-muted-foreground mb-3 sm:mb-4 break-words overflow-wrap-anywhere max-w-full">
-              Try Enhpix free with 1 image enhancement
+              Try Enhpix free with 3 image enhancements
             </p>
             <Button 
               variant="outline"
               size="sm"
               className="sm:size-default"
-              onClick={() => navigate('/')}
+              onClick={() => navigate('/login?tab=signup')}
             >
               Start Free Trial
             </Button>
