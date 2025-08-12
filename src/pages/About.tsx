@@ -7,6 +7,16 @@ import { EnhpixLogo } from '@/components/ui/enhpix-logo';
 const About = () => {
   const navigate = useNavigate();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  
+  const handleNavigation = (path: string) => {
+    try {
+      console.log(`Navigating to: ${path}`);
+      navigate(path);
+      setMobileMenuOpen(false);
+    } catch (error) {
+      console.error('Navigation error:', error);
+    }
+  };
 
   return (
     <div className="min-h-screen bg-background">
@@ -60,10 +70,7 @@ const About = () => {
               <Button 
                 variant="ghost" 
                 size="sm" 
-                onClick={() => {
-                  navigate('/');
-                  setMobileMenuOpen(false);
-                }}
+                onClick={() => handleNavigation('/')}
                 className="w-full justify-start text-foreground hover:text-primary"
               >
                 Home
@@ -71,10 +78,7 @@ const About = () => {
               <Button 
                 variant="default" 
                 size="sm" 
-                onClick={() => {
-                  navigate('/about');
-                  setMobileMenuOpen(false);
-                }}
+                onClick={() => handleNavigation('/about')}
                 className="w-full justify-start bg-primary text-primary-foreground"
               >
                 About
@@ -82,10 +86,7 @@ const About = () => {
               <Button 
                 variant="ghost" 
                 size="sm" 
-                onClick={() => {
-                  navigate('/pricing');
-                  setMobileMenuOpen(false);
-                }}
+                onClick={() => handleNavigation('/pricing')}
                 className="w-full justify-start text-foreground hover:text-primary"
               >
                 Pricing
@@ -93,10 +94,7 @@ const About = () => {
               <Button 
                 variant="outline" 
                 size="sm" 
-                onClick={() => {
-                  navigate('/login');
-                  setMobileMenuOpen(false);
-                }}
+                onClick={() => handleNavigation('/login')}
                 className="w-full justify-start"
               >
                 Sign In
