@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Sparkles, Wand2, Zap } from 'lucide-react';
+import { Sparkles, Wand2, Zap, Menu, X } from 'lucide-react';
 import { EnhpixLogo } from '@/components/ui/enhpix-logo';
 import { ImageUploader } from '@/components/ImageUploader';
 import { ProcessingStatus } from '@/components/ProcessingStatus';
@@ -13,6 +13,7 @@ type AppState = 'upload' | 'processing' | 'results';
 const Index = () => {
   const navigate = useNavigate();
   const [appState, setAppState] = useState<AppState>('upload');
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   
   const handleNavigation = (path: string) => {
     try {
@@ -66,7 +67,8 @@ const Index = () => {
                 </div>
                 <span className="text-xl font-bold text-foreground">Enhpix</span>
               </div>
-              <div className="flex items-center gap-3 relative z-50">
+              {/* Desktop Navigation */}
+              <div className="hidden md:flex items-center gap-3 relative z-50">
                 <Button 
                   variant="default" 
                   size="sm" 
@@ -95,7 +97,71 @@ const Index = () => {
                   Sign In
                 </Button>
               </div>
+
+              {/* Mobile Menu Button */}
+              <div className="md:hidden relative z-50">
+                <Button 
+                  variant="ghost" 
+                  size="sm"
+                  onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                  className="text-foreground"
+                >
+                  {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+                </Button>
+              </div>
             </nav>
+
+            {/* Mobile Menu */}
+            {mobileMenuOpen && (
+              <div className="md:hidden absolute top-full left-0 right-0 bg-background/95 backdrop-blur-sm border-b border-border z-40">
+                <div className="flex flex-col p-4 space-y-2">
+                  <Button 
+                    variant="default" 
+                    size="sm" 
+                    onClick={() => {
+                      handleNavigation('/');
+                      setMobileMenuOpen(false);
+                    }}
+                    className="w-full justify-start bg-primary text-primary-foreground"
+                  >
+                    Home
+                  </Button>
+                  <Button 
+                    variant="ghost" 
+                    size="sm" 
+                    onClick={() => {
+                      handleNavigation('/about');
+                      setMobileMenuOpen(false);
+                    }}
+                    className="w-full justify-start text-foreground hover:text-primary"
+                  >
+                    About
+                  </Button>
+                  <Button 
+                    variant="ghost" 
+                    size="sm" 
+                    onClick={() => {
+                      handleNavigation('/pricing');
+                      setMobileMenuOpen(false);
+                    }}
+                    className="w-full justify-start text-foreground hover:text-primary"
+                  >
+                    Pricing
+                  </Button>
+                  <Button 
+                    variant="outline" 
+                    size="sm" 
+                    onClick={() => {
+                      handleNavigation('/login');
+                      setMobileMenuOpen(false);
+                    }}
+                    className="w-full justify-start"
+                  >
+                    Sign In
+                  </Button>
+                </div>
+              </div>
+            )}
           </header>
 
           {/* Hero Content */}

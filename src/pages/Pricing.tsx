@@ -1,12 +1,13 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
-import { Check, Zap, Crown, Sparkles, Building2 } from 'lucide-react';
+import { Check, Zap, Crown, Sparkles, Building2, Menu, X } from 'lucide-react';
 import { EnhpixLogo } from '@/components/ui/enhpix-logo';
 
 const Pricing = () => {
   const navigate = useNavigate();
   const [isYearly, setIsYearly] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const plans = [
     {
@@ -58,7 +59,8 @@ const Pricing = () => {
             </div>
             <span className="text-xl font-bold text-white">Enhpix</span>
           </div>
-          <div className="flex items-center gap-3">
+          {/* Desktop Navigation */}
+          <div className="hidden md:flex items-center gap-3">
             <Button variant="ghost" size="sm" onClick={() => navigate('/')}>
               Home
             </Button>
@@ -77,7 +79,71 @@ const Pricing = () => {
               Sign In
             </Button>
           </div>
+
+          {/* Mobile Menu Button */}
+          <div className="md:hidden">
+            <Button 
+              variant="ghost" 
+              size="sm"
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              className="text-white"
+            >
+              {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+            </Button>
+          </div>
         </nav>
+
+        {/* Mobile Menu */}
+        {mobileMenuOpen && (
+          <div className="md:hidden absolute top-full left-0 right-0 bg-background/95 backdrop-blur-sm border-b border-border z-40">
+            <div className="flex flex-col p-4 space-y-2">
+              <Button 
+                variant="ghost" 
+                size="sm" 
+                onClick={() => {
+                  navigate('/');
+                  setMobileMenuOpen(false);
+                }}
+                className="w-full justify-start text-white"
+              >
+                Home
+              </Button>
+              <Button 
+                variant="ghost" 
+                size="sm" 
+                onClick={() => {
+                  navigate('/about');
+                  setMobileMenuOpen(false);
+                }}
+                className="w-full justify-start text-white"
+              >
+                About
+              </Button>
+              <Button 
+                variant="default" 
+                size="sm" 
+                onClick={() => {
+                  navigate('/pricing');
+                  setMobileMenuOpen(false);
+                }}
+                className="w-full justify-start bg-primary text-primary-foreground"
+              >
+                Pricing
+              </Button>
+              <Button 
+                variant="outline" 
+                size="sm" 
+                onClick={() => {
+                  navigate('/login');
+                  setMobileMenuOpen(false);
+                }}
+                className="w-full justify-start"
+              >
+                Sign In
+              </Button>
+            </div>
+          </div>
+        )}
       </header>
 
       {/* Pricing Content */}
