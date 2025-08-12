@@ -48,10 +48,10 @@ const Pricing = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background overflow-x-hidden max-w-full">
       {/* Header */}
       <header className="p-4 md:p-6 border-b border-border">
-        <nav className="max-w-7xl mx-auto flex items-center justify-between">
+        <nav className="max-w-7xl mx-auto flex items-center justify-between overflow-x-hidden w-full">
           <div className="flex items-center gap-3 cursor-pointer" onClick={() => navigate('/')}>
             <div className="p-2 bg-white rounded-lg">
               <EnhpixLogo className="w-8 h-8" />
@@ -98,12 +98,12 @@ const Pricing = () => {
 
       {/* Pricing Content */}
       <div className="px-2 sm:px-3 md:px-6 py-4 sm:py-6 md:py-20">
-        <div className="max-w-7xl mx-auto">
+        <div className="max-w-7xl mx-auto overflow-x-hidden w-full">
           <div className="text-center mb-4 sm:mb-6 md:mb-16">
-            <h1 className="text-base sm:text-lg md:text-3xl lg:text-5xl font-bold mb-2 sm:mb-3 md:mb-4 text-foreground px-1 sm:px-2">
+            <h1 className="text-base sm:text-lg md:text-3xl lg:text-5xl font-bold mb-2 sm:mb-3 md:mb-4 text-foreground px-1 sm:px-2 break-words overflow-wrap-anywhere max-w-full">
               Choose Your <span className="text-primary">AI Enhancement Plan</span>
             </h1>
-            <p className="text-xs sm:text-sm md:text-lg lg:text-xl text-muted-foreground mb-3 sm:mb-4 md:mb-8 max-w-3xl mx-auto px-1 sm:px-2">
+            <p className="text-xs sm:text-sm md:text-lg lg:text-xl text-muted-foreground mb-3 sm:mb-4 md:mb-8 max-w-3xl mx-auto px-1 sm:px-2 break-words overflow-wrap-anywhere">
               Unlock professional-grade image enhancement with our AI-powered upscaling technology. Start with a free trial, then choose the plan that fits your needs.
             </p>
 

@@ -19,10 +19,10 @@ const Privacy = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background overflow-x-hidden max-w-full">
       {/* Header */}
       <header className="p-4 md:p-6 border-b border-border relative">
-        <nav className="max-w-7xl mx-auto flex items-center justify-between">
+        <nav className="max-w-7xl mx-auto flex items-center justify-between overflow-x-hidden w-full">
           <div className="flex items-center gap-3 cursor-pointer" onClick={() => navigate('/')}>
             <div className="p-2 bg-white rounded-lg">
               <EnhpixLogo className="w-8 h-8" />
@@ -101,21 +101,21 @@ const Privacy = () => {
       </header>
 
       {/* Privacy Content */}
-      <div className="px-3 md:px-6 py-6 md:py-20">
-        <div className="max-w-4xl mx-auto">
-          <div className="text-center mb-6 md:mb-12 px-2">
-            <h1 className="text-lg sm:text-xl md:text-3xl lg:text-4xl font-bold text-foreground mb-3 md:mb-4">
+      <div className="px-2 sm:px-3 md:px-6 py-4 sm:py-6 md:py-20">
+        <div className="max-w-4xl mx-auto overflow-x-hidden w-full">
+          <div className="text-center mb-4 sm:mb-6 md:mb-12 px-1 sm:px-2">
+            <h1 className="text-base sm:text-lg md:text-3xl lg:text-4xl font-bold text-foreground mb-2 sm:mb-3 md:mb-4 break-words overflow-wrap-anywhere max-w-full">
               Privacy Policy
             </h1>
-            <p className="text-muted-foreground">
+            <p className="text-xs sm:text-sm md:text-base text-muted-foreground break-words overflow-wrap-anywhere max-w-full">
               Last updated: {new Date().toLocaleDateString()}
             </p>
           </div>
 
-          <div className="prose prose-invert max-w-none space-y-8">
+          <div className="prose prose-invert max-w-none space-y-4 sm:space-y-6 md:space-y-8 overflow-x-hidden w-full">
             <div>
-              <h2 className="text-2xl font-semibold text-foreground mb-4">Information We Collect</h2>
-              <p className="text-muted-foreground leading-relaxed">
+              <h2 className="text-sm sm:text-base md:text-2xl font-semibold text-foreground mb-2 sm:mb-3 md:mb-4 break-words overflow-wrap-anywhere max-w-full">Information We Collect</h2>
+              <p className="text-xs sm:text-sm md:text-base text-muted-foreground leading-relaxed break-words overflow-wrap-anywhere max-w-full">
                 We collect information you provide directly to us, such as when you create an account, 
                 upload images for enhancement, or contact us for support. This may include your email 
                 address, account information, and the images you choose to enhance.
@@ -123,26 +123,26 @@ const Privacy = () => {
             </div>
 
             <div>
-              <h2 className="text-2xl font-semibold text-foreground mb-4">How We Use Your Information</h2>
-              <p className="text-muted-foreground leading-relaxed">
+              <h2 className="text-sm sm:text-base md:text-2xl font-semibold text-foreground mb-2 sm:mb-3 md:mb-4 break-words overflow-wrap-anywhere max-w-full">How We Use Your Information</h2>
+              <p className="text-xs sm:text-sm md:text-base text-muted-foreground leading-relaxed break-words overflow-wrap-anywhere max-w-full">
                 We use the information we collect to provide, maintain, and improve our image enhancement 
                 services, process your requests, and communicate with you about your account and our services.
               </p>
             </div>
 
             <div>
-              <h2 className="text-2xl font-semibold text-foreground mb-4">Data Security</h2>
-              <p className="text-muted-foreground leading-relaxed">
+              <h2 className="text-sm sm:text-base md:text-2xl font-semibold text-foreground mb-2 sm:mb-3 md:mb-4 break-words overflow-wrap-anywhere max-w-full">Data Security</h2>
+              <p className="text-xs sm:text-sm md:text-base text-muted-foreground leading-relaxed break-words overflow-wrap-anywhere max-w-full">
                 We implement appropriate technical and organizational measures to protect your personal 
                 information against unauthorized access, alteration, disclosure, or destruction.
               </p>
             </div>
 
             <div>
-              <h2 className="text-2xl font-semibold text-foreground mb-4">Contact Us</h2>
-              <p className="text-muted-foreground leading-relaxed">
+              <h2 className="text-sm sm:text-base md:text-2xl font-semibold text-foreground mb-2 sm:mb-3 md:mb-4 break-words overflow-wrap-anywhere max-w-full">Contact Us</h2>
+              <p className="text-xs sm:text-sm md:text-base text-muted-foreground leading-relaxed break-words overflow-wrap-anywhere max-w-full">
                 If you have any questions about this Privacy Policy, please contact us at{' '}
-                <a href="mailto:privacy@enhpix.com" className="text-primary hover:underline">
+                <a href="mailto:privacy@enhpix.com" className="text-primary hover:underline break-words overflow-wrap-anywhere">
                   privacy@enhpix.com
                 </a>
               </p>

@@ -7,7 +7,7 @@ const About = () => {
   const navigate = useNavigate();
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background overflow-x-hidden max-w-full">
       {/* Header */}
       <header className="p-4 md:p-6 border-b border-border">
         <nav className="max-w-7xl mx-auto flex items-center justify-between">
@@ -110,27 +110,27 @@ const About = () => {
                   </p>
                 </div>
 
-                <div className="p-6 bg-card rounded-xl border border-border">
-                  <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mb-4">
-                    <Wand2 className="w-6 h-6 text-primary" />
+                <div className="p-3 sm:p-4 md:p-6 bg-card rounded-lg sm:rounded-xl border border-border">
+                  <div className="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 bg-primary/10 rounded-md sm:rounded-lg flex items-center justify-center mb-2 sm:mb-3 md:mb-4">
+                    <Wand2 className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 text-primary" />
                   </div>
-                  <h3 className="text-xl font-semibold text-foreground mb-3">
+                  <h3 className="text-sm sm:text-base md:text-xl font-semibold text-foreground mb-2 sm:mb-3">
                     Simple Yet Powerful
                   </h3>
-                  <p className="text-muted-foreground">
+                  <p className="text-xs sm:text-sm md:text-base text-muted-foreground">
                     No complex settings or technical knowledge required. Upload, enhance, 
                     and download - it's that simple.
                   </p>
                 </div>
 
-                <div className="p-6 bg-card rounded-xl border border-border">
-                  <div className="w-12 h-12 bg-accent/10 rounded-lg flex items-center justify-center mb-4">
-                    <Heart className="w-6 h-6 text-accent" />
+                <div className="p-3 sm:p-4 md:p-6 bg-card rounded-lg sm:rounded-xl border border-border">
+                  <div className="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 bg-accent/10 rounded-md sm:rounded-lg flex items-center justify-center mb-2 sm:mb-3 md:mb-4">
+                    <Heart className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 text-accent" />
                   </div>
-                  <h3 className="text-xl font-semibold text-foreground mb-3">
+                  <h3 className="text-sm sm:text-base md:text-xl font-semibold text-foreground mb-2 sm:mb-3">
                     Made with Care
                   </h3>
-                  <p className="text-muted-foreground">
+                  <p className="text-xs sm:text-sm md:text-base text-muted-foreground">
                     Every pixel matters to us. We're constantly improving our algorithms 
                     to deliver the best possible results for your images.
                   </p>
@@ -139,18 +139,18 @@ const About = () => {
             </div>
 
             {/* CTA */}
-            <div className="text-center bg-gradient-subtle p-12 rounded-2xl">
-              <h2 className="text-3xl font-bold text-foreground mb-4">
+            <div className="text-center bg-gradient-subtle p-3 sm:p-4 md:p-12 rounded-xl md:rounded-2xl px-1 sm:px-2">
+              <h2 className="text-sm sm:text-base md:text-3xl font-bold text-foreground mb-2 sm:mb-3 md:mb-4 break-words overflow-wrap-anywhere max-w-full">
                 Ready to enhance your images?
               </h2>
-              <p className="text-lg text-muted-foreground mb-8">
+              <p className="text-xs sm:text-sm md:text-lg text-muted-foreground mb-3 sm:mb-4 md:mb-8 break-words overflow-wrap-anywhere max-w-full">
                 Join thousands of users who trust Enhpix for their image enhancement needs.
               </p>
-              <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-                <Button size="lg" onClick={() => navigate('/')}>
+              <div className="flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-3 md:gap-4 overflow-x-hidden w-full">
+                <Button size="sm" className="sm:size-default md:size-lg" onClick={() => navigate('/')}>
                   Try Free Now
                 </Button>
-                <Button variant="outline" size="lg" onClick={() => navigate('/pricing')}>
+                <Button variant="outline" size="sm" className="sm:size-default md:size-lg" onClick={() => navigate('/pricing')}>
                   View Pricing
                 </Button>
               </div>

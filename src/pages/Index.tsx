@@ -50,17 +50,17 @@ const Index = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background overflow-x-hidden max-w-full">
       {/* Hero Section */}
       <div 
-        className="relative bg-cover bg-center bg-no-repeat"
+        className="relative bg-cover bg-center bg-no-repeat overflow-x-hidden max-w-full"
         style={{ backgroundImage: `url(${heroBackground})` }}
       >
         <div className="absolute inset-0 bg-background/90" />
-        <div className="relative z-10">
+        <div className="relative z-10 overflow-x-hidden max-w-full">
           {/* Header */}
           <header className="p-4 md:p-6 relative">
-            <nav className="max-w-7xl mx-auto flex items-center justify-between">
+            <nav className="max-w-7xl mx-auto flex items-center justify-between overflow-x-hidden w-full">
               <div className="flex items-center gap-3 cursor-pointer" onClick={() => handleNavigation('/')}>
                 <div className="p-2 bg-white rounded-lg">
                   <EnhpixLogo className="w-8 h-8" />
@@ -167,21 +167,21 @@ const Index = () => {
           {/* Hero Content */}
           {appState === 'upload' && (
             <div className="px-2 sm:px-3 md:px-6 pb-6 sm:pb-8 md:pb-20 pt-4 sm:pt-6 md:pt-12">
-              <div className="max-w-4xl mx-auto text-center space-y-3 sm:space-y-4 md:space-y-8">
+              <div className="max-w-4xl mx-auto text-center space-y-3 sm:space-y-4 md:space-y-8 overflow-x-hidden w-full">
                 <div className="space-y-2 sm:space-y-3 md:space-y-4">
-                  <h1 className="text-lg sm:text-xl md:text-4xl lg:text-5xl xl:text-6xl font-bold text-foreground leading-tight px-1 sm:px-2">
+                  <h1 className="text-lg sm:text-xl md:text-4xl lg:text-5xl xl:text-6xl font-bold text-foreground leading-tight px-1 sm:px-2 break-words overflow-wrap-anywhere max-w-full">
                     Enhance Your Images with{' '}
                     <span className="bg-gradient-primary bg-clip-text text-transparent">
                       Enhpix AI
                     </span>
                   </h1>
-                  <p className="text-xs sm:text-sm md:text-lg lg:text-xl text-muted-foreground max-w-3xl mx-auto px-1 sm:px-2">
+                  <p className="text-xs sm:text-sm md:text-lg lg:text-xl text-muted-foreground max-w-3xl mx-auto px-1 sm:px-2 break-words overflow-wrap-anywhere">
                     Transform low-resolution images into stunning high-quality masterpieces. 
                     Our advanced AI upscales your photos up to 4x while preserving every detail.
                   </p>
                 </div>
 
-                <div className="flex flex-col sm:flex-row items-center justify-center gap-1 sm:gap-2 md:gap-4 text-xs text-muted-foreground px-1 sm:px-2">
+                <div className="flex flex-col sm:flex-row items-center justify-center gap-1 sm:gap-2 md:gap-4 text-xs text-muted-foreground px-1 sm:px-2 overflow-x-hidden w-full">
                   <div className="flex items-center gap-1">
                     <Sparkles className="w-2 h-2 sm:w-3 sm:h-3 md:w-4 md:h-4 text-primary" />
                     <span className="text-xs sm:text-sm">AI-Powered Enhancement</span>

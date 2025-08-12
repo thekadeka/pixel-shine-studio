@@ -19,10 +19,10 @@ const Terms = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background overflow-x-hidden max-w-full">
       {/* Header */}
       <header className="p-4 md:p-6 border-b border-border relative">
-        <nav className="max-w-7xl mx-auto flex items-center justify-between">
+        <nav className="max-w-7xl mx-auto flex items-center justify-between overflow-x-hidden w-full">
           <div className="flex items-center gap-3 cursor-pointer" onClick={() => navigate('/')}>
             <div className="p-2 bg-white rounded-lg">
               <EnhpixLogo className="w-8 h-8" />
@@ -101,55 +101,55 @@ const Terms = () => {
       </header>
 
       {/* Terms Content */}
-      <div className="px-3 md:px-6 py-6 md:py-20">
-        <div className="max-w-4xl mx-auto">
-          <div className="text-center mb-6 md:mb-12 px-2">
-            <h1 className="text-lg sm:text-xl md:text-3xl lg:text-4xl font-bold text-foreground mb-3 md:mb-4">
+      <div className="px-2 sm:px-3 md:px-6 py-4 sm:py-6 md:py-20">
+        <div className="max-w-4xl mx-auto overflow-x-hidden w-full">
+          <div className="text-center mb-4 sm:mb-6 md:mb-12 px-1 sm:px-2">
+            <h1 className="text-base sm:text-lg md:text-3xl lg:text-4xl font-bold text-foreground mb-2 sm:mb-3 md:mb-4 break-words overflow-wrap-anywhere max-w-full">
               Terms of Service
             </h1>
-            <p className="text-muted-foreground">
+            <p className="text-xs sm:text-sm md:text-base text-muted-foreground break-words overflow-wrap-anywhere max-w-full">
               Last updated: {new Date().toLocaleDateString()}
             </p>
           </div>
 
-          <div className="prose prose-invert max-w-none space-y-8">
+          <div className="prose prose-invert max-w-none space-y-4 sm:space-y-6 md:space-y-8 overflow-x-hidden w-full">
             <div>
-              <h2 className="text-2xl font-semibold text-foreground mb-4">Acceptance of Terms</h2>
-              <p className="text-muted-foreground leading-relaxed">
+              <h2 className="text-sm sm:text-base md:text-2xl font-semibold text-foreground mb-2 sm:mb-3 md:mb-4 break-words overflow-wrap-anywhere max-w-full">Acceptance of Terms</h2>
+              <p className="text-xs sm:text-sm md:text-base text-muted-foreground leading-relaxed break-words overflow-wrap-anywhere max-w-full">
                 By accessing and using Enhpix, you accept and agree to be bound by the terms and 
                 provision of this agreement.
               </p>
             </div>
 
             <div>
-              <h2 className="text-2xl font-semibold text-foreground mb-4">Use License</h2>
-              <p className="text-muted-foreground leading-relaxed">
+              <h2 className="text-sm sm:text-base md:text-2xl font-semibold text-foreground mb-2 sm:mb-3 md:mb-4 break-words overflow-wrap-anywhere max-w-full">Use License</h2>
+              <p className="text-xs sm:text-sm md:text-base text-muted-foreground leading-relaxed break-words overflow-wrap-anywhere max-w-full">
                 Permission is granted to use our image enhancement service for personal and commercial 
                 purposes, subject to the restrictions outlined in these terms.
               </p>
             </div>
 
             <div>
-              <h2 className="text-2xl font-semibold text-foreground mb-4">User Content</h2>
-              <p className="text-muted-foreground leading-relaxed">
+              <h2 className="text-sm sm:text-base md:text-2xl font-semibold text-foreground mb-2 sm:mb-3 md:mb-4 break-words overflow-wrap-anywhere max-w-full">User Content</h2>
+              <p className="text-xs sm:text-sm md:text-base text-muted-foreground leading-relaxed break-words overflow-wrap-anywhere max-w-full">
                 You retain ownership of the images you upload. By using our service, you grant us 
                 permission to process your images for the purpose of providing enhancement services.
               </p>
             </div>
 
             <div>
-              <h2 className="text-2xl font-semibold text-foreground mb-4">Service Availability</h2>
-              <p className="text-muted-foreground leading-relaxed">
+              <h2 className="text-sm sm:text-base md:text-2xl font-semibold text-foreground mb-2 sm:mb-3 md:mb-4 break-words overflow-wrap-anywhere max-w-full">Service Availability</h2>
+              <p className="text-xs sm:text-sm md:text-base text-muted-foreground leading-relaxed break-words overflow-wrap-anywhere max-w-full">
                 We strive to maintain service availability but cannot guarantee uninterrupted access. 
                 We reserve the right to modify or discontinue services with notice.
               </p>
             </div>
 
             <div>
-              <h2 className="text-2xl font-semibold text-foreground mb-4">Contact Us</h2>
-              <p className="text-muted-foreground leading-relaxed">
+              <h2 className="text-sm sm:text-base md:text-2xl font-semibold text-foreground mb-2 sm:mb-3 md:mb-4 break-words overflow-wrap-anywhere max-w-full">Contact Us</h2>
+              <p className="text-xs sm:text-sm md:text-base text-muted-foreground leading-relaxed break-words overflow-wrap-anywhere max-w-full">
                 If you have any questions about these Terms, please contact us at{' '}
-                <a href="mailto:legal@enhpix.com" className="text-primary hover:underline">
+                <a href="mailto:legal@enhpix.com" className="text-primary hover:underline break-words overflow-wrap-anywhere">
                   legal@enhpix.com
                 </a>
               </p>
