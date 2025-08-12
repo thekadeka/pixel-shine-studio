@@ -166,16 +166,16 @@ const Index = () => {
 
           {/* Hero Content */}
           {appState === 'upload' && (
-            <div className="px-6 pb-20 pt-12">
-              <div className="max-w-4xl mx-auto text-center space-y-8">
+            <div className="px-4 md:px-6 pb-12 md:pb-20 pt-8 md:pt-12">
+              <div className="max-w-4xl mx-auto text-center space-y-6 md:space-y-8">
                 <div className="space-y-4">
-                  <h1 className="text-5xl md:text-6xl font-bold text-foreground leading-tight">
+                  <h1 className="text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold text-foreground leading-tight px-2">
                     Enhance Your Images with{' '}
                     <span className="bg-gradient-primary bg-clip-text text-transparent">
                       Enhpix AI
                     </span>
                   </h1>
-                  <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
+                  <p className="text-base md:text-lg lg:text-xl text-muted-foreground max-w-3xl mx-auto px-4">
                     Transform low-resolution images into stunning high-quality masterpieces. 
                     Our advanced AI upscales your photos up to 4x while preserving every detail.
                   </p>
@@ -202,7 +202,7 @@ const Index = () => {
       </div>
 
       {/* Main Content */}
-      <div className="px-6 py-12">
+      <div className="px-4 md:px-6 py-8 md:py-12">
         <div className="max-w-4xl mx-auto">
           {appState === 'upload' && (
             <ImageUploader onImageUpload={handleImageUpload} />

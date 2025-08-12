@@ -56,22 +56,22 @@ const About = () => {
       </header>
 
       {/* About Content */}
-      <div className="px-6 py-20">
+      <div className="px-4 md:px-6 py-8 md:py-20">
         <div className="max-w-4xl mx-auto">
-          <div className="text-center mb-16">
-            <h1 className="text-4xl font-bold text-foreground mb-4">
+          <div className="text-center mb-8 md:mb-16">
+            <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold text-foreground mb-4 px-4">
               About Enhpix
             </h1>
-            <p className="text-xl text-muted-foreground">
+            <p className="text-base md:text-lg lg:text-xl text-muted-foreground px-4">
               Transforming the way you enhance images with cutting-edge AI technology
             </p>
           </div>
 
-          <div className="grid gap-16">
+          <div className="grid gap-8 md:gap-16">
             {/* Mission */}
-            <div className="text-center">
-              <h2 className="text-3xl font-bold text-foreground mb-6">Our Mission</h2>
-              <p className="text-lg text-muted-foreground leading-relaxed max-w-3xl mx-auto">
+            <div className="text-center px-4">
+              <h2 className="text-xl md:text-2xl lg:text-3xl font-bold text-foreground mb-4 md:mb-6">Our Mission</h2>
+              <p className="text-sm md:text-base lg:text-lg text-muted-foreground leading-relaxed max-w-3xl mx-auto">
                 At Enhpix, we believe that every image has the potential to be extraordinary. 
                 Our mission is to make professional-grade image enhancement accessible to everyone, 
                 from photographers and designers to everyday users who want to bring their memories to life.
@@ -79,8 +79,8 @@ const About = () => {
             </div>
 
             {/* Features */}
-            <div>
-              <h2 className="text-3xl font-bold text-foreground text-center mb-12">
+            <div className="px-4">
+              <h2 className="text-xl md:text-2xl lg:text-3xl font-bold text-foreground text-center mb-6 md:mb-12">
                 What Makes Us Different
               </h2>
               <div className="grid md:grid-cols-2 gap-8">

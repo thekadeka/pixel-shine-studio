@@ -101,10 +101,10 @@ const Terms = () => {
       </header>
 
       {/* Terms Content */}
-      <div className="px-6 py-20">
+      <div className="px-4 md:px-6 py-8 md:py-20">
         <div className="max-w-4xl mx-auto">
-          <div className="text-center mb-12">
-            <h1 className="text-4xl font-bold text-foreground mb-4">
+          <div className="text-center mb-8 md:mb-12 px-4">
+            <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold text-foreground mb-4">
               Terms of Service
             </h1>
             <p className="text-muted-foreground">
