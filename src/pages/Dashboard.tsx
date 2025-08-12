@@ -48,25 +48,36 @@ const Dashboard = () => {
   const [enhancedUrl, setEnhancedUrl] = useState<string | null>(null);
   const [showWelcome, setShowWelcome] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
-  const [chatMessage, setChatMessage] = useState('');
+  const [selectedTool, setSelectedTool] = useState('universal');
+  const [selectedMethod, setSelectedMethod] = useState('auto');
 
   useEffect(() => {
+    console.log('Dashboard loading, checking user data...');
     const userData = localStorage.getItem('enhpix_user');
+    
     if (!userData) {
+      console.log('No user data found, redirecting to login');
       navigate('/login');
       return;
     }
 
-    const parsedUser = JSON.parse(userData);
-    setUser(parsedUser);
+    try {
+      const parsedUser = JSON.parse(userData);
+      console.log('User data loaded:', parsedUser);
+      setUser(parsedUser);
 
-    // Show welcome message for new users
-    if (searchParams.get('welcome') === 'true') {
-      setShowWelcome(true);
-      // Remove welcome param from URL
-      const newParams = new URLSearchParams(searchParams);
-      newParams.delete('welcome');
-      navigate(`/dashboard?${newParams.toString()}`, { replace: true });
+      // Show welcome message for new users
+      if (searchParams.get('welcome') === 'true') {
+        setShowWelcome(true);
+        // Remove welcome param from URL
+        const newParams = new URLSearchParams(searchParams);
+        newParams.delete('welcome');
+        navigate(`/dashboard?${newParams.toString()}`, { replace: true });
+      }
+    } catch (error) {
+      console.error('Error parsing user data:', error);
+      localStorage.removeItem('enhpix_user');
+      navigate('/login');
     }
   }, [navigate, searchParams]);
 
@@ -165,7 +176,11 @@ const Dashboard = () => {
   };
 
   if (!user) {
-    return <div>Loading...</div>;
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center" style={{ backgroundColor: 'hsl(250, 30%, 8%)' }}>
+        <div className="text-foreground text-lg">Loading...</div>
+      </div>
+    );
   }
 
   const planDetails = getPlanDetails(user.plan);
@@ -178,7 +193,7 @@ const Dashboard = () => {
     : (usedImages / planDetails.maxImages) * 100;
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background" style={{ backgroundColor: 'hsl(250, 30%, 8%)' }}>
       {/* Welcome Modal */}
       {showWelcome && (
         <div className="fixed inset-0 bg-background/80 backdrop-blur-sm z-50 flex items-center justify-center p-6">
@@ -283,7 +298,7 @@ const Dashboard = () => {
         </nav>
       </header>
 
-      <div className="max-w-7xl mx-auto px-4 md:px-6 py-6 md:py-8">
+      <div className="max-w-7xl mx-auto px-4 md:px-6 py-6 md:py-8" style={{ color: 'hsl(0, 0%, 98%)' }}>
         <div className="grid lg:grid-cols-4 gap-6 md:gap-8">
           {/* Sidebar */}
           <div className="lg:col-span-1 space-y-6">
