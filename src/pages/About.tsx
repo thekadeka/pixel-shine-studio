@@ -40,7 +40,15 @@ const About = () => {
 
           {/* Mobile Back Button */}
           <div className="md:hidden">
-            <Button variant="ghost" size="sm" onClick={() => navigate('/')}>
+            <Button 
+              variant="outline" 
+              size="sm" 
+              onClick={() => {
+                console.log('Mobile back button clicked - About');
+                navigate('/');
+              }}
+              className="text-foreground bg-background hover:bg-muted min-h-[44px] px-4"
+            >
               ← Back
             </Button>
           </div>
