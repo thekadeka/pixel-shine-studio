@@ -11,7 +11,7 @@ const Pricing = () => {
   const [isYearly, setIsYearly] = useState(false);
 
   const handlePlanSelect = (plan: string, billing: string) => {
-    navigate(`/login?redirect=checkout&plan=${plan}&billing=${billing}`);
+    navigate(`/checkout?plan=${plan}&billing=${billing}`);
   };
 
   return (
