@@ -85,8 +85,12 @@ const Pricing = () => {
                 ${isYearly ? '190' : '19'}
                 <span className="text-sm font-normal text-muted-foreground">
                   /{isYearly ? 'year' : 'month'}
-                  {isYearly && <span className="block text-xs mt-1">($15.83/month)</span>}
                 </span>
+                {isYearly && (
+                  <div className="text-xs text-muted-foreground mt-1">
+                    ($15.83/month)
+                  </div>
+                )}
               </div>
             </CardHeader>
             <CardContent className="space-y-6">
@@ -141,8 +145,12 @@ const Pricing = () => {
                 ${isYearly ? '370' : '37'}
                 <span className="text-sm font-normal text-muted-foreground">
                   /{isYearly ? 'year' : 'month'}
-                  {isYearly && <span className="block text-xs mt-1">($30.83/month)</span>}
                 </span>
+                {isYearly && (
+                  <div className="text-xs text-muted-foreground mt-1">
+                    ($30.83/month)
+                  </div>
+                )}
               </div>
             </CardHeader>
             <CardContent className="space-y-6 bg-gradient-to-br from-primary/5 to-accent/5">
@@ -190,8 +198,12 @@ const Pricing = () => {
                 ${isYearly ? '900' : '90'}
                 <span className="text-sm font-normal text-muted-foreground">
                   /{isYearly ? 'year' : 'month'}
-                  {isYearly && <span className="block text-xs mt-1">($75/month)</span>}
                 </span>
+                {isYearly && (
+                  <div className="text-xs text-muted-foreground mt-1">
+                    ($75/month)
+                  </div>
+                )}
               </div>
             </CardHeader>
             <CardContent className="space-y-6">
