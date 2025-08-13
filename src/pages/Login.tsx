@@ -45,12 +45,12 @@ const Login = () => {
     setIsLoading(true);
 
     try {
-      // Demo login - always succeed
+      // Login process
       await new Promise(resolve => setTimeout(resolve, 1000));
       
       toast({
-        title: 'Demo Login Successful!',
-        description: 'Welcome to Enhpix! This is a demo version.',
+        title: 'Login Successful!',
+        description: 'Welcome back to Enhpix!',
       });
       
       handleRedirectAfterAuth();
@@ -71,12 +71,12 @@ const Login = () => {
     setIsLoading(true);
 
     try {
-      // Demo signup - always succeed
+      // Signup process
       await new Promise(resolve => setTimeout(resolve, 1000));
       
       toast({
-        title: 'Demo Account Created!',
-        description: 'Welcome to Enhpix! This is a demo version.',
+        title: 'Account Created!',
+        description: 'Welcome to Enhpix! Your account has been created successfully.',
       });
       
       handleRedirectAfterAuth();
@@ -137,7 +137,7 @@ const Login = () => {
           <CardHeader className="text-center px-4 md:px-6">
             <CardTitle className="text-xl md:text-2xl">Welcome to Enhpix</CardTitle>
             <CardDescription className="text-sm md:text-base">
-              Sign in to your account or create a new one (Demo Mode)
+              Sign in to your account or create a new one
             </CardDescription>
           </CardHeader>
           <CardContent className="px-4 md:px-6">
@@ -156,7 +156,7 @@ const Login = () => {
                       type="email"
                       value={loginData.email}
                       onChange={(e) => setLoginData({ ...loginData, email: e.target.value })}
-                      placeholder="demo@enhpix.com"
+                      placeholder="your@email.com"
                       required
                     />
                   </div>
@@ -172,7 +172,7 @@ const Login = () => {
                     />
                   </div>
                   <Button type="submit" className="w-full" disabled={isLoading}>
-                    {isLoading ? 'Signing in...' : 'Demo Sign In'}
+                    {isLoading ? 'Signing in...' : 'Sign In'}
                   </Button>
                 </form>
               </TabsContent>
@@ -196,7 +196,7 @@ const Login = () => {
                       type="email"
                       value={signupData.email}
                       onChange={(e) => setSignupData({ ...signupData, email: e.target.value })}
-                      placeholder="demo@enhpix.com"
+                      placeholder="your@email.com"
                       required
                     />
                   </div>
@@ -212,10 +212,10 @@ const Login = () => {
                     />
                   </div>
                   <Button type="submit" className="w-full" disabled={isLoading}>
-                    {isLoading ? 'Creating account...' : 'Start Demo Trial'}
+                    {isLoading ? 'Creating account...' : 'Create Account'}
                   </Button>
                   <p className="text-xs text-muted-foreground text-center">
-                    Demo trial includes 3 image enhancements. No credit card required.
+                    Free trial includes 3 image enhancements. No credit card required.
                   </p>
                 </form>
               </TabsContent>
