@@ -149,7 +149,7 @@ const Pricing = () => {
                 )}
               </div>
             </CardHeader>
-            <CardContent className="space-y-6">
+            <CardContent className="space-y-6 bg-gradient-to-br from-primary/5 to-accent/5">
               <ul className="space-y-3">
                 <li className="flex items-center gap-3">
                   <Check className="w-4 h-4 text-green-600 flex-shrink-0" />
