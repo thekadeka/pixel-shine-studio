@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '@/hooks/useAuth';
-// import { processImage } from '@/lib/api';
+import { useSmartAuth } from '@/hooks/useSmartAuth';
+import { shouldUseAuth } from '@/utils/environment';
 import { useToast } from '@/hooks/use-toast';
 import { Sparkles, Wand2, Zap, Menu, X } from 'lucide-react';
 import { EnhpixLogo } from '@/components/ui/enhpix-logo';
@@ -15,7 +15,7 @@ type AppState = 'upload' | 'processing' | 'results';
 
 const Index = () => {
   const navigate = useNavigate();
-  const { user, isAuthenticated, profile } = useAuth();
+  const { user, isAuthenticated, profile } = useSmartAuth();
   const { toast } = useToast();
   const [appState, setAppState] = useState<AppState>('upload');
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -33,8 +33,48 @@ const Index = () => {
   const [enhancedUrl, setEnhancedUrl] = useState<string | null>(null);
 
   const handleImageUpload = async (file: File) => {
-    // For now: redirect to signup
-    navigate('/login?tab=signup');
+    if (!isAuthenticated) {
+      // Not authenticated - redirect to signup
+      navigate('/login?tab=signup');
+      return;
+    }
+
+    if (!shouldUseAuth()) {
+      // Demo mode - show demo functionality
+      toast({
+        title: 'Demo Upload',
+        description: 'In production, this would process your image with AI enhancement!',
+      });
+      return;
+    }
+
+    // Production mode with authenticated user
+    setUploadedFile(file);
+    const url = URL.createObjectURL(file);
+    setPreviewUrl(url);
+    setAppState('processing');
+
+    try {
+      // Here would be the real API call to process the image
+      await new Promise(resolve => setTimeout(resolve, 3000)); // Simulate processing
+      
+      toast({
+        title: 'Enhancement Complete!',
+        description: 'Your image has been successfully enhanced.',
+      });
+      
+      // For demo purposes, use the same image as enhanced
+      setEnhancedUrl(url);
+      setAppState('results');
+    } catch (error) {
+      console.error('Processing error:', error);
+      toast({
+        title: 'Processing Error',
+        description: 'Failed to enhance image. Please try again.',
+        variant: 'destructive'
+      });
+      setAppState('upload');
+    }
   };
 
   const handleStartOver = () => {
@@ -98,9 +138,15 @@ const Index = () => {
                 >
                   Pricing
                 </Button>
-                <Button variant="outline" size="sm" onClick={() => handleNavigation('/login')}>
-                  Sign In
-                </Button>
+                {isAuthenticated ? (
+                  <Button variant="outline" size="sm" onClick={() => handleNavigation('/dashboard')}>
+                    Dashboard
+                  </Button>
+                ) : (
+                  <Button variant="outline" size="sm" onClick={() => handleNavigation('/login')}>
+                    Sign In
+                  </Button>
+                )}
               </div>
 
               {/* Mobile Menu Button */}
@@ -153,17 +199,31 @@ const Index = () => {
                   >
                     Pricing
                   </Button>
-                  <Button 
-                    variant="outline" 
-                    size="sm" 
-                    onClick={() => {
-                      handleNavigation('/login');
-                      setMobileMenuOpen(false);
-                    }}
-                    className="w-full justify-start"
-                  >
-                    Sign In
-                  </Button>
+                  {isAuthenticated ? (
+                    <Button 
+                      variant="outline" 
+                      size="sm" 
+                      onClick={() => {
+                        handleNavigation('/dashboard');
+                        setMobileMenuOpen(false);
+                      }}
+                      className="w-full justify-start"
+                    >
+                      Dashboard
+                    </Button>
+                  ) : (
+                    <Button 
+                      variant="outline" 
+                      size="sm" 
+                      onClick={() => {
+                        handleNavigation('/login');
+                        setMobileMenuOpen(false);
+                      }}
+                      className="w-full justify-start"
+                    >
+                      Sign In
+                    </Button>
+                  )}
                 </div>
               </div>
             )}

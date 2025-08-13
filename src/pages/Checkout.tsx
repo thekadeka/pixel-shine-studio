@@ -4,16 +4,27 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import { EnhpixLogo } from '@/components/ui/enhpix-logo';
-import { createCheckoutSession } from '@/lib/stripe';
 import { useToast } from '@/hooks/use-toast';
-import { useAuth } from '@/hooks/useAuth';
+import { useSmartAuth } from '@/hooks/useSmartAuth';
+import { shouldUseAuth } from '@/utils/environment';
 import { Check, Shield, AlertCircle } from 'lucide-react';
+
+// Conditional import for Stripe
+let createCheckoutSession: any = null;
+if (shouldUseAuth()) {
+  try {
+    const stripeModule = require('@/lib/stripe');
+    createCheckoutSession = stripeModule.createCheckoutSession;
+  } catch (error) {
+    console.log('Stripe module not available, using demo mode');
+  }
+}
 
 const Checkout = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const { toast } = useToast();
-  const { user, isAuthenticated, loading: authLoading } = useAuth();
+  const { user, isAuthenticated, loading: authLoading } = useSmartAuth();
   const [isLoading, setIsLoading] = useState(false);
 
   const planId = searchParams.get('plan') || 'basic';
@@ -63,6 +74,16 @@ const Checkout = () => {
         variant: 'destructive'
       });
       navigate(`/login?redirect=checkout&plan=${planId}&billing=${isYearly ? 'yearly' : 'monthly'}`);
+      return;
+    }
+
+    if (!shouldUseAuth() || !createCheckoutSession) {
+      // Demo mode
+      toast({
+        title: 'Demo Checkout',
+        description: 'In production, this would redirect to live Stripe checkout!',
+      });
+      navigate('/success?demo=true');
       return;
     }
 

@@ -6,14 +6,15 @@ import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { EnhpixLogo } from '@/components/ui/enhpix-logo';
-import { supabase } from '@/lib/supabase';
-import { useAuth } from '@/hooks/useAuth';
+import { useSmartAuth, useSmartSupabase } from '@/hooks/useSmartAuth';
+import { shouldUseAuth } from '@/utils/environment';
 import { useToast } from '@/hooks/use-toast';
 
 const Login = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
-  const { user, isAuthenticated } = useAuth();
+  const { user, isAuthenticated } = useSmartAuth();
+  const supabase = useSmartSupabase();
   const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
   const [loginData, setLoginData] = useState({ email: '', password: '' });
@@ -63,10 +64,15 @@ const Login = () => {
           variant: 'destructive'
         });
       } else {
+        const authMessage = shouldUseAuth() 
+          ? 'Welcome back! You have been successfully logged in.'
+          : 'Demo login successful! In production, this would authenticate with Supabase.';
+          
         toast({
           title: 'Welcome back!',
-          description: 'You have been successfully logged in.',
+          description: authMessage,
         });
+        
         // handleRedirectAfterAuth will be called via useEffect
       }
     } catch (error) {
@@ -103,9 +109,13 @@ const Login = () => {
           variant: 'destructive'
         });
       } else {
+        const signupMessage = shouldUseAuth()
+          ? 'Please check your email to verify your account, then sign in.'
+          : 'Demo signup successful! In production, this would require email verification.';
+
         toast({
           title: 'Account Created!',
-          description: 'Please check your email to verify your account, then sign in.',
+          description: signupMessage,
         });
         setDefaultTab('login');
       }
