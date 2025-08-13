@@ -51,20 +51,21 @@ const Pricing = () => {
             Transform your images with professional-grade AI upscaling. Start free, upgrade when you need more power.
           </p>
           
-          <div className="inline-flex items-center p-1 bg-muted rounded-lg">
+          <div className="inline-flex items-center p-1 bg-card border border-border rounded-lg shadow-sm">
             <Button 
               variant={!isYearly ? "default" : "ghost"}
               onClick={() => setIsYearly(false)}
-              className="px-6"
+              className="px-8 py-2"
             >
               Monthly
             </Button>
             <Button 
               variant={isYearly ? "default" : "ghost"}
               onClick={() => setIsYearly(true)}
-              className="px-6"
+              className="px-8 py-2"
             >
-              Yearly (Save 17%)
+              Yearly
+              <span className="ml-2 text-xs bg-green-500 text-white px-2 py-0.5 rounded">Save 17%</span>
             </Button>
           </div>
         </div>
