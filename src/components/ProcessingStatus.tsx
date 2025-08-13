@@ -1,52 +1,50 @@
 import { useState, useEffect } from 'react';
-import { Loader2, Sparkles, Zap } from 'lucide-react';
+import { Loader2, Sparkles, Zap, Brain } from 'lucide-react';
 import { Card } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
 import { Button } from '@/components/ui/button';
+import { type EnhancementProgress } from '@/services/imageEnhancement';
 
 interface ProcessingStatusProps {
   isProcessing: boolean;
+  progress?: EnhancementProgress | null;
   onCancel?: () => void;
 }
 
-export const ProcessingStatus = ({ isProcessing, onCancel }: ProcessingStatusProps) => {
-  const [progress, setProgress] = useState(0);
+export const ProcessingStatus = ({ isProcessing, progress: enhancementProgress, onCancel }: ProcessingStatusProps) => {
+  const [displayProgress, setDisplayProgress] = useState(0);
   const [currentStep, setCurrentStep] = useState(0);
 
   const steps = [
+    { name: "Initializing AI", icon: Brain },
     { name: "Analyzing image", icon: Sparkles },
     { name: "AI enhancement", icon: Zap },
-    { name: "Upscaling resolution", icon: Loader2 },
     { name: "Finalizing", icon: Sparkles },
   ];
 
   useEffect(() => {
-    if (!isProcessing) {
-      setProgress(0);
+    if (!isProcessing || !enhancementProgress) {
+      setDisplayProgress(0);
       setCurrentStep(0);
       return;
     }
 
-    const interval = setInterval(() => {
-      setProgress((prev) => {
-        const newProgress = prev + Math.random() * 15;
-        
-        // Update current step based on progress
-        if (newProgress > 75) setCurrentStep(3);
-        else if (newProgress > 50) setCurrentStep(2);
-        else if (newProgress > 25) setCurrentStep(1);
-        else setCurrentStep(0);
+    // Use real progress from enhancement service
+    const progressValue = enhancementProgress.progress || 0;
+    setDisplayProgress(progressValue);
+    
+    // Update current step based on progress
+    if (progressValue >= 90) setCurrentStep(3);
+    else if (progressValue >= 50) setCurrentStep(2);
+    else if (progressValue >= 25) setCurrentStep(1);
+    else setCurrentStep(0);
 
-        return Math.min(newProgress, 95);
-      });
-    }, 500);
-
-    return () => clearInterval(interval);
-  }, [isProcessing]);
+  }, [isProcessing, enhancementProgress]);
 
   if (!isProcessing) return null;
 
   const CurrentIcon = steps[currentStep]?.icon || Loader2;
+  const statusMessage = enhancementProgress?.message || steps[currentStep]?.name || "Processing...";
 
   return (
     <Card className="p-2 sm:p-4 md:p-8 bg-card shadow-card border-border overflow-x-hidden max-w-full">
@@ -63,7 +61,7 @@ export const ProcessingStatus = ({ isProcessing, onCancel }: ProcessingStatusPro
               Enhancing Your Image
             </h3>
             <p className="text-xs sm:text-sm md:text-base text-muted-foreground break-words overflow-wrap-anywhere max-w-full">
-              {steps[currentStep]?.name || "Processing..."}
+              {statusMessage}
             </p>
           </div>
         </div>
@@ -71,9 +69,9 @@ export const ProcessingStatus = ({ isProcessing, onCancel }: ProcessingStatusPro
         <div className="space-y-2 sm:space-y-3 overflow-x-hidden max-w-full">
           <div className="flex justify-between text-xs sm:text-sm overflow-x-hidden max-w-full">
             <span className="text-muted-foreground">Progress</span>
-            <span className="text-foreground font-medium">{Math.round(progress)}%</span>
+            <span className="text-foreground font-medium">{Math.round(displayProgress)}%</span>
           </div>
-          <Progress value={progress} className="h-2" />
+          <Progress value={displayProgress} className="h-2" />
         </div>
 
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-1 sm:gap-2 overflow-x-hidden max-w-full">

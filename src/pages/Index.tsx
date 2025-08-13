@@ -8,6 +8,7 @@ import { ImageUploader } from '@/components/ImageUploader';
 import { ProcessingStatus } from '@/components/ProcessingStatus';
 import { ResultsDisplay } from '@/components/ResultsDisplay';
 import { Button } from '@/components/ui/button';
+import { enhanceImage, type EnhancementProgress } from '@/services/imageEnhancement';
 import heroBackground from '@/assets/hero-bg.jpg';
 
 type AppState = 'upload' | 'processing' | 'results';
@@ -18,6 +19,10 @@ const Index = () => {
   const { toast } = useToast();
   const [appState, setAppState] = useState<AppState>('upload');
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [uploadedFile, setUploadedFile] = useState<File | null>(null);
+  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+  const [enhancedUrl, setEnhancedUrl] = useState<string | null>(null);
+  const [enhancementProgress, setEnhancementProgress] = useState<EnhancementProgress | null>(null);
   
   const handleNavigation = (path: string) => {
     try {
@@ -27,13 +32,37 @@ const Index = () => {
       console.error('Navigation error:', error);
     }
   };
-  const [uploadedFile, setUploadedFile] = useState<File | null>(null);
-  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
-  const [enhancedUrl, setEnhancedUrl] = useState<string | null>(null);
 
   const handleImageUpload = async (file: File) => {
-    // For now: redirect to signup
-    navigate('/login?tab=signup');
+    try {
+      setUploadedFile(file);
+      setPreviewUrl(URL.createObjectURL(file));
+      setAppState('processing');
+      setEnhancementProgress({ status: 'starting', progress: 0 });
+
+      const result = await enhanceImage(file, (progress) => {
+        setEnhancementProgress(progress);
+      });
+
+      setEnhancedUrl(result.enhancedUrl);
+      setAppState('results');
+      
+      toast({
+        title: "Enhancement Complete!",
+        description: "Your image has been successfully enhanced with AI.",
+      });
+
+    } catch (error) {
+      console.error('Enhancement failed:', error);
+      setAppState('upload');
+      setEnhancementProgress(null);
+      
+      toast({
+        title: "Enhancement Failed",
+        description: "Sorry, we couldn't enhance your image. Please try again.",
+        variant: "destructive",
+      });
+    }
   };
 
   const handleStartOver = () => {
@@ -214,7 +243,8 @@ const Index = () => {
 
           {appState === 'processing' && (
             <ProcessingStatus 
-              isProcessing={true} 
+              isProcessing={true}
+              progress={enhancementProgress}
               onCancel={handleCancelProcessing}
             />
           )}
