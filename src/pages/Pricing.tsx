@@ -1,119 +1,244 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { EnhpixLogo } from '@/components/ui/enhpix-logo';
+import { Badge } from '@/components/ui/badge';
+import { Check, Star, Zap, Crown, Sparkles, ArrowLeft } from 'lucide-react';
 
 const Pricing = () => {
   const navigate = useNavigate();
   const [isYearly, setIsYearly] = useState(false);
 
+  const handlePlanSelect = (plan: string, billing: string) => {
+    navigate(`/login?redirect=checkout&plan=${plan}&billing=${billing}`);
+  };
+
   return (
-    <div className="min-h-screen bg-background flex items-center justify-center">
-      <div className="w-full max-w-4xl mx-4">
-        <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold text-foreground mb-4">Simple Pricing</h1>
-          <p className="text-muted-foreground mb-8">Choose the plan that's right for you</p>
+    <div className="min-h-screen bg-background">
+      {/* Header */}
+      <header className="p-4 md:p-6 border-b border-border">
+        <nav className="max-w-7xl mx-auto flex items-center justify-between">
+          <div className="flex items-center gap-3 cursor-pointer" onClick={() => navigate('/')}>
+            <div className="p-2 bg-white rounded-lg">
+              <EnhpixLogo className="w-8 h-8" />
+            </div>
+            <span className="text-xl font-bold text-foreground">Enhpix</span>
+          </div>
+          <div className="flex items-center gap-3">
+            <Button variant="ghost" size="sm" onClick={() => navigate('/')}>
+              <ArrowLeft className="w-4 h-4 mr-2" />
+              Back to Home
+            </Button>
+            <Button variant="outline" size="sm" onClick={() => navigate('/login')}>
+              Sign In
+            </Button>
+          </div>
+        </nav>
+      </header>
+
+      <div className="w-full max-w-7xl mx-4 md:mx-auto py-8 md:py-16">
+        <div className="text-center mb-16">
+          <div className="inline-flex items-center gap-2 bg-accent/10 text-accent px-4 py-2 rounded-full text-sm font-medium mb-6">
+            <Sparkles className="w-4 h-4" />
+            AI-Powered Image Enhancement
+          </div>
           
-          <div className="flex items-center justify-center gap-4 mb-8">
+          <h1 className="text-4xl md:text-5xl font-bold text-foreground mb-4">
+            Choose Your <span className="bg-gradient-primary bg-clip-text text-transparent">Enhancement Plan</span>
+          </h1>
+          <p className="text-lg text-muted-foreground mb-8 max-w-2xl mx-auto">
+            Transform your images with professional-grade AI upscaling. Start free, upgrade when you need more power.
+          </p>
+          
+          <div className="inline-flex items-center p-1 bg-muted rounded-lg">
             <Button 
-              variant={!isYearly ? "default" : "outline"}
+              variant={!isYearly ? "default" : "ghost"}
               onClick={() => setIsYearly(false)}
+              className="px-6"
             >
               Monthly
             </Button>
             <Button 
-              variant={isYearly ? "default" : "outline"}
+              variant={isYearly ? "default" : "ghost"}
               onClick={() => setIsYearly(true)}
+              className="px-6"
             >
-              Yearly (Save 17%)
+              Yearly
+              <Badge className="ml-2 bg-accent text-accent-foreground">-17%</Badge>
             </Button>
           </div>
         </div>
 
-        <div className="grid md:grid-cols-3 gap-8">
+        <div className="grid md:grid-cols-3 gap-8 mb-16">
           {/* Basic Plan */}
-          <div className="bg-card p-6 rounded-lg border border-border">
-            <h3 className="text-xl font-semibold mb-2">Basic</h3>
-            <div className="text-3xl font-bold mb-4">
-              ${isYearly ? '190' : '19'}
-              <span className="text-sm font-normal text-muted-foreground">
-                /{isYearly ? 'year' : 'month'}
-              </span>
-            </div>
-            <ul className="space-y-2 mb-6 text-sm">
-              <li>• 150 images/month</li>
-              <li>• Basic quality</li>
-              <li>• 4x upscaling</li>
-              <li>• Email support</li>
-            </ul>
-            <Button 
-              className="w-full"
-              onClick={() => navigate('/login')}
-            >
-              Get Started
-            </Button>
-          </div>
+          <Card className="relative hover:shadow-lg transition-all duration-300">
+            <CardHeader className="pb-8">
+              <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mb-4">
+                <Zap className="w-6 h-6 text-blue-600" />
+              </div>
+              <CardTitle className="text-xl">Basic</CardTitle>
+              <CardDescription>Perfect for getting started with AI enhancement</CardDescription>
+              <div className="text-3xl font-bold text-foreground">
+                ${isYearly ? '190' : '19'}
+                <span className="text-sm font-normal text-muted-foreground">
+                  /{isYearly ? 'year' : 'month'}
+                </span>
+              </div>
+            </CardHeader>
+            <CardContent className="space-y-6">
+              <ul className="space-y-3">
+                <li className="flex items-center gap-3">
+                  <Check className="w-4 h-4 text-green-600 flex-shrink-0" />
+                  <span className="text-sm">150 images/month</span>
+                </li>
+                <li className="flex items-center gap-3">
+                  <Check className="w-4 h-4 text-green-600 flex-shrink-0" />
+                  <span className="text-sm">4x upscaling resolution</span>
+                </li>
+                <li className="flex items-center gap-3">
+                  <Check className="w-4 h-4 text-green-600 flex-shrink-0" />
+                  <span className="text-sm">Basic quality enhancement</span>
+                </li>
+                <li className="flex items-center gap-3">
+                  <Check className="w-4 h-4 text-green-600 flex-shrink-0" />
+                  <span className="text-sm">Email support</span>
+                </li>
+              </ul>
+              
+              <Button 
+                className="w-full"
+                variant="outline"
+                onClick={() => handlePlanSelect('basic', isYearly ? 'yearly' : 'monthly')}
+              >
+                Choose Basic
+              </Button>
+            </CardContent>
+          </Card>
 
           {/* Pro Plan */}
-          <div className="bg-card p-6 rounded-lg border-2 border-primary relative">
-            <div className="absolute -top-3 left-1/2 transform -translate-x-1/2">
-              <span className="bg-primary text-primary-foreground px-3 py-1 rounded-full text-xs font-semibold">
+          <Card className="relative border-2 border-primary shadow-lg scale-105 hover:scale-110 transition-all duration-300">
+            <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
+              <Badge className="bg-gradient-to-r from-primary to-accent text-white px-4 py-1">
+                <Star className="w-3 h-3 mr-1" />
                 Most Popular
-              </span>
+              </Badge>
             </div>
-            <h3 className="text-xl font-semibold mb-2">Pro</h3>
-            <div className="text-3xl font-bold mb-4">
-              ${isYearly ? '370' : '37'}
-              <span className="text-sm font-normal text-muted-foreground">
-                /{isYearly ? 'year' : 'month'}
-              </span>
-            </div>
-            <ul className="space-y-2 mb-6 text-sm">
-              <li>• 400 images/month</li>
-              <li>• Premium quality</li>
-              <li>• 8x upscaling</li>
-              <li>• Priority support</li>
-              <li>• Batch processing</li>
-            </ul>
-            <Button 
-              className="w-full"
-              onClick={() => navigate('/login')}
-            >
-              Get Started
-            </Button>
-          </div>
+            <CardHeader className="pb-8 bg-gradient-to-br from-primary/5 to-accent/5">
+              <div className="w-12 h-12 bg-gradient-to-br from-primary to-accent rounded-lg flex items-center justify-center mb-4">
+                <Crown className="w-6 h-6 text-white" />
+              </div>
+              <CardTitle className="text-xl">Pro</CardTitle>
+              <CardDescription>Ideal for professionals and serious creators</CardDescription>
+              <div className="text-3xl font-bold text-foreground">
+                ${isYearly ? '370' : '37'}
+                <span className="text-sm font-normal text-muted-foreground">
+                  /{isYearly ? 'year' : 'month'}
+                </span>
+              </div>
+            </CardHeader>
+            <CardContent className="space-y-6">
+              <ul className="space-y-3">
+                <li className="flex items-center gap-3">
+                  <Check className="w-4 h-4 text-green-600 flex-shrink-0" />
+                  <span className="text-sm">400 images/month</span>
+                </li>
+                <li className="flex items-center gap-3">
+                  <Check className="w-4 h-4 text-green-600 flex-shrink-0" />
+                  <span className="text-sm">8x upscaling resolution</span>
+                </li>
+                <li className="flex items-center gap-3">
+                  <Check className="w-4 h-4 text-green-600 flex-shrink-0" />
+                  <span className="text-sm">Premium quality enhancement</span>
+                </li>
+                <li className="flex items-center gap-3">
+                  <Check className="w-4 h-4 text-green-600 flex-shrink-0" />
+                  <span className="text-sm">Priority support</span>
+                </li>
+                <li className="flex items-center gap-3">
+                  <Check className="w-4 h-4 text-green-600 flex-shrink-0" />
+                  <span className="text-sm">Batch processing</span>
+                </li>
+              </ul>
+              
+              <Button 
+                className="w-full bg-gradient-to-r from-primary to-accent hover:from-primary/90 hover:to-accent/90"
+                onClick={() => handlePlanSelect('pro', isYearly ? 'yearly' : 'monthly')}
+              >
+                Choose Pro
+              </Button>
+            </CardContent>
+          </Card>
 
           {/* Premium Plan */}
-          <div className="bg-card p-6 rounded-lg border border-border">
-            <h3 className="text-xl font-semibold mb-2">Premium</h3>
-            <div className="text-3xl font-bold mb-4">
-              ${isYearly ? '900' : '90'}
-              <span className="text-sm font-normal text-muted-foreground">
-                /{isYearly ? 'year' : 'month'}
-              </span>
-            </div>
-            <ul className="space-y-2 mb-6 text-sm">
-              <li>• 1,300 images/month</li>
-              <li>• Ultra quality</li>
-              <li>• 16x upscaling</li>
-              <li>• 24/7 support</li>
-              <li>• API access</li>
-            </ul>
-            <Button 
-              className="w-full"
-              onClick={() => navigate('/login')}
-            >
-              Get Started
-            </Button>
-          </div>
+          <Card className="relative hover:shadow-lg transition-all duration-300">
+            <CardHeader className="pb-8">
+              <div className="w-12 h-12 bg-gradient-to-br from-purple-500 to-pink-500 rounded-lg flex items-center justify-center mb-4">
+                <Sparkles className="w-6 h-6 text-white" />
+              </div>
+              <CardTitle className="text-xl">Premium</CardTitle>
+              <CardDescription>Maximum power for enterprises and agencies</CardDescription>
+              <div className="text-3xl font-bold text-foreground">
+                ${isYearly ? '900' : '90'}
+                <span className="text-sm font-normal text-muted-foreground">
+                  /{isYearly ? 'year' : 'month'}
+                </span>
+              </div>
+            </CardHeader>
+            <CardContent className="space-y-6">
+              <ul className="space-y-3">
+                <li className="flex items-center gap-3">
+                  <Check className="w-4 h-4 text-green-600 flex-shrink-0" />
+                  <span className="text-sm">1,300 images/month</span>
+                </li>
+                <li className="flex items-center gap-3">
+                  <Check className="w-4 h-4 text-green-600 flex-shrink-0" />
+                  <span className="text-sm">16x upscaling resolution</span>
+                </li>
+                <li className="flex items-center gap-3">
+                  <Check className="w-4 h-4 text-green-600 flex-shrink-0" />
+                  <span className="text-sm">Ultra quality enhancement</span>
+                </li>
+                <li className="flex items-center gap-3">
+                  <Check className="w-4 h-4 text-green-600 flex-shrink-0" />
+                  <span className="text-sm">24/7 priority support</span>
+                </li>
+                <li className="flex items-center gap-3">
+                  <Check className="w-4 h-4 text-green-600 flex-shrink-0" />
+                  <span className="text-sm">API access & integrations</span>
+                </li>
+              </ul>
+              
+              <Button 
+                className="w-full"
+                variant="outline"
+                onClick={() => handlePlanSelect('premium', isYearly ? 'yearly' : 'monthly')}
+              >
+                Choose Premium
+              </Button>
+            </CardContent>
+          </Card>
         </div>
 
-        <div className="text-center mt-8">
-          <Button 
-            variant="ghost" 
-            onClick={() => navigate('/')}
-          >
-            ← Back to Home
-          </Button>
+        {/* FAQ Section */}
+        <div className="text-center">
+          <h2 className="text-2xl font-bold text-foreground mb-4">
+            Questions? We've got answers.
+          </h2>
+          <p className="text-muted-foreground mb-8">
+            All plans include our core AI enhancement technology with no hidden fees.
+          </p>
+          <div className="flex flex-wrap justify-center gap-4">
+            <Badge variant="secondary" className="px-4 py-2">
+              💳 Secure Payment
+            </Badge>
+            <Badge variant="secondary" className="px-4 py-2">
+              🔄 Cancel Anytime
+            </Badge>
+            <Badge variant="secondary" className="px-4 py-2">
+              🛡️ 30-Day Guarantee
+            </Badge>
+          </div>
         </div>
       </div>
     </div>
