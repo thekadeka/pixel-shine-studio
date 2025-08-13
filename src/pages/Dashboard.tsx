@@ -64,11 +64,11 @@ const Dashboard = () => {
   // Create user data with smart auth integration
   const user = authUser ? {
     email: authUser.email,
-    name: authUser.user_metadata?.name || authUser.name || 'User',
-    plan: shouldUseAuth() ? 'basic' : 'trial', // Demo users get trial, authenticated users get basic
+    name: authUser.name || 'User',
+    plan: 'trial', // Always trial in demo mode
     billing: 'monthly',
     subscriptionId: authUser.id,
-    createdAt: authUser.created_at || new Date().toISOString(),
+    createdAt: new Date().toISOString(),
     ...userUsageData
   } : null;
 

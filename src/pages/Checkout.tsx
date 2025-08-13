@@ -9,16 +9,7 @@ import { useSmartAuth } from '@/hooks/useSmartAuth';
 import { shouldUseAuth } from '@/utils/environment';
 import { Check, Shield, AlertCircle } from 'lucide-react';
 
-// Conditional import for Stripe
-let createCheckoutSession: any = null;
-if (shouldUseAuth()) {
-  try {
-    const stripeModule = require('@/lib/stripe');
-    createCheckoutSession = stripeModule.createCheckoutSession;
-  } catch (error) {
-    console.log('Stripe module not available, using demo mode');
-  }
-}
+// For demo mode, we'll simulate checkout
 
 const Checkout = () => {
   const navigate = useNavigate();
@@ -77,32 +68,24 @@ const Checkout = () => {
       return;
     }
 
-    if (!shouldUseAuth() || !createCheckoutSession) {
-      // Demo mode
-      toast({
-        title: 'Demo Checkout',
-        description: 'In production, this would redirect to live Stripe checkout!',
-      });
-      navigate('/success?demo=true');
-      return;
-    }
-
+    // Demo mode - simulate successful checkout
     setIsLoading(true);
     
     try {
-      await createCheckoutSession({
-        planName: planId,
-        billing: isYearly ? 'yearly' : 'monthly',
-        userId: user.id,
-        userEmail: user.email,
-        successUrl: `${window.location.origin}/success?session_id={CHECKOUT_SESSION_ID}`,
-        cancelUrl: `${window.location.origin}/pricing`
-      });
-    } catch (error) {
-      console.error('Checkout error:', error);
+      // Simulate processing time
+      await new Promise(resolve => setTimeout(resolve, 2000));
+      
       toast({
-        title: 'Checkout Error',
-        description: 'Failed to start checkout. Please try again.',
+        title: 'Demo Checkout Complete!',
+        description: 'In production, this would redirect to live Stripe checkout and process real payments.',
+      });
+      
+      navigate('/success?demo=true');
+    } catch (error) {
+      console.error('Demo checkout error:', error);
+      toast({
+        title: 'Demo Error',
+        description: 'Demo checkout simulation failed.',
         variant: 'destructive'
       });
     } finally {
