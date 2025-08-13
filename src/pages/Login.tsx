@@ -6,20 +6,24 @@ import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { EnhpixLogo } from '@/components/ui/enhpix-logo';
+import { supabase } from '@/lib/supabase';
+import { useAuth } from '@/hooks/useAuth';
+import { useToast } from '@/hooks/use-toast';
 
 const Login = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
+  const { user, isAuthenticated } = useAuth();
+  const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
   const [loginData, setLoginData] = useState({ email: '', password: '' });
   const [signupData, setSignupData] = useState({ email: '', password: '', name: '' });
   const [defaultTab, setDefaultTab] = useState('login');
 
   useEffect(() => {
-    // Check if user is already logged in
-    const user = localStorage.getItem('enhpix_user');
-    if (user) {
-      navigate('/dashboard');
+    // Check if user is already authenticated
+    if (isAuthenticated) {
+      handleRedirectAfterAuth();
       return;
     }
 
@@ -28,48 +32,50 @@ const Login = () => {
     if (tab === 'signup') {
       setDefaultTab('signup');
     }
-  }, [navigate, searchParams]);
+  }, [isAuthenticated, navigate, searchParams]);
+
+  const handleRedirectAfterAuth = () => {
+    const redirect = searchParams.get('redirect');
+    const plan = searchParams.get('plan');
+    const billing = searchParams.get('billing');
+    
+    if (redirect === 'checkout' && plan && billing) {
+      navigate(`/checkout?plan=${plan}&billing=${billing}`);
+    } else {
+      navigate('/dashboard');
+    }
+  };
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
 
     try {
-      // Simulate login process
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
-      // Get all users from localStorage
-      const usersData = localStorage.getItem('enhpix_users');
-      const users = usersData ? JSON.parse(usersData) : [];
-      
-      // Find user with matching email and password
-      const user = users.find((u: any) => 
-        u.email === loginData.email && u.password === loginData.password
-      );
-      
-      if (user) {
-        // Set current user
-        localStorage.setItem('enhpix_user', JSON.stringify(user));
-        navigate('/dashboard');
+      const { error } = await supabase.auth.signInWithPassword({
+        email: loginData.email,
+        password: loginData.password,
+      });
+
+      if (error) {
+        toast({
+          title: 'Login Failed',
+          description: error.message,
+          variant: 'destructive'
+        });
       } else {
-        // Check if user exists but with different password (checkout users)
-        const existingUser = users.find((u: any) => u.email === loginData.email);
-        if (existingUser && existingUser.password === 'checkout_user') {
-          // Update password for checkout user
-          existingUser.password = loginData.password;
-          const updatedUsers = users.map((u: any) => 
-            u.email === loginData.email ? existingUser : u
-          );
-          localStorage.setItem('enhpix_users', JSON.stringify(updatedUsers));
-          localStorage.setItem('enhpix_user', JSON.stringify(existingUser));
-          navigate('/dashboard');
-        } else {
-          alert('Invalid email or password. Please check your credentials or sign up.');
-        }
+        toast({
+          title: 'Welcome back!',
+          description: 'You have been successfully logged in.',
+        });
+        // handleRedirectAfterAuth will be called via useEffect
       }
     } catch (error) {
       console.error('Login failed:', error);
-      alert('Login failed. Please try again.');
+      toast({
+        title: 'Login Error',
+        description: 'An unexpected error occurred. Please try again.',
+        variant: 'destructive'
+      });
     } finally {
       setIsLoading(false);
     }
@@ -80,45 +86,36 @@ const Login = () => {
     setIsLoading(true);
 
     try {
-      // Simulate signup process
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
-      // Get existing users
-      const usersData = localStorage.getItem('enhpix_users');
-      const users = usersData ? JSON.parse(usersData) : [];
-      
-      // Check if email already exists
-      const existingUser = users.find((u: any) => u.email === signupData.email);
-      if (existingUser) {
-        alert('An account with this email already exists. Please sign in instead.');
-        setIsLoading(false);
-        return;
-      }
-      
-      // Create new user
-      const newUser = {
+      const { error } = await supabase.auth.signUp({
         email: signupData.email,
         password: signupData.password,
-        name: signupData.name,
-        plan: 'trial',
-        billing: 'trial',
-        subscriptionId: `trial_${Date.now()}`,
-        createdAt: new Date().toISOString(),
-        trialImages: 3,
-        usedImages: 0
-      };
-      
-      // Add to users array
-      users.push(newUser);
-      localStorage.setItem('enhpix_users', JSON.stringify(users));
-      
-      // Set current user
-      localStorage.setItem('enhpix_user', JSON.stringify(newUser));
+        options: {
+          data: {
+            name: signupData.name,
+          }
+        }
+      });
 
-      navigate('/dashboard?welcome=true');
+      if (error) {
+        toast({
+          title: 'Signup Failed',
+          description: error.message,
+          variant: 'destructive'
+        });
+      } else {
+        toast({
+          title: 'Account Created!',
+          description: 'Please check your email to verify your account, then sign in.',
+        });
+        setDefaultTab('login');
+      }
     } catch (error) {
       console.error('Signup failed:', error);
-      alert('Signup failed. Please try again.');
+      toast({
+        title: 'Signup Error',
+        description: 'An unexpected error occurred. Please try again.',
+        variant: 'destructive'
+      });
     } finally {
       setIsLoading(false);
     }

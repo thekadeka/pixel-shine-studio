@@ -35,7 +35,7 @@ export interface CheckoutSessionRequest {
   cancelUrl: string
 }
 
-export const createCheckoutSession = async (request: CheckoutSessionRequest) => {
+export const createCheckoutSession = async (request: CheckoutSessionRequest & { userEmail?: string }) => {
   const stripe = await getStripe()
   if (!stripe) throw new Error('Stripe failed to initialize')
 
@@ -47,9 +47,8 @@ export const createCheckoutSession = async (request: CheckoutSessionRequest) => 
   const priceId = plan[request.billing]
   if (!priceId) throw new Error('Invalid billing period')
 
-  // For now, redirect directly to Stripe Checkout with the price ID
-  // In production, you'd create a session through your backend
-  const { error } = await stripe.redirectToCheckout({
+  // Create checkout session with proper customer handling
+  const checkoutOptions: any = {
     lineItems: [{ price: priceId, quantity: 1 }],
     mode: 'subscription',
     successUrl: request.successUrl,
@@ -58,7 +57,19 @@ export const createCheckoutSession = async (request: CheckoutSessionRequest) => 
     allowPromotionCodes: true,
     billingAddressCollection: 'auto',
     customerCreation: 'always',
-  })
+    metadata: {
+      userId: request.userId,
+      planName: request.planName,
+      billing: request.billing,
+    }
+  }
+
+  // Pre-fill customer email if available
+  if (request.userEmail) {
+    checkoutOptions.customerEmail = request.userEmail
+  }
+
+  const { error } = await stripe.redirectToCheckout(checkoutOptions)
   
   if (error) {
     throw new Error(error.message)
