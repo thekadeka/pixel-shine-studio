@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '@/hooks/useAuth';
+// import { useAuth } from '@/hooks/useAuth';
 // import { processImage } from '@/lib/api';
 import { useToast } from '@/hooks/use-toast';
 import { Sparkles, Wand2, Zap, Menu, X } from 'lucide-react';
@@ -15,7 +15,7 @@ type AppState = 'upload' | 'processing' | 'results';
 
 const Index = () => {
   const navigate = useNavigate();
-  const { user, isAuthenticated, profile } = useAuth();
+  // const { user, isAuthenticated, profile } = useAuth();
   const { toast } = useToast();
   const [appState, setAppState] = useState<AppState>('upload');
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);

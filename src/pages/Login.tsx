@@ -6,14 +6,14 @@ import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { EnhpixLogo } from '@/components/ui/enhpix-logo';
-import { supabase } from '@/lib/supabase';
-import { useAuth } from '@/hooks/useAuth';
+// import { supabase } from '@/lib/supabase';
+// import { useAuth } from '@/hooks/useAuth';
 import { useToast } from '@/hooks/use-toast';
 
 const Login = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
-  const { user, isAuthenticated } = useAuth();
+  // const { user, isAuthenticated } = useAuth();
   const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
   const [loginData, setLoginData] = useState({ email: '', password: '' });
@@ -21,18 +21,18 @@ const Login = () => {
   const [defaultTab, setDefaultTab] = useState('login');
 
   useEffect(() => {
-    // Check if user is already authenticated
-    if (isAuthenticated) {
-      handleRedirectAfterAuth();
-      return;
-    }
+    // // Check if user is already authenticated (disabled for Lovable)
+    // if (isAuthenticated) {
+    //   handleRedirectAfterAuth();
+    //   return;
+    // }
 
     // Check for tab parameter
     const tab = searchParams.get('tab');
     if (tab === 'signup') {
       setDefaultTab('signup');
     }
-  }, [isAuthenticated, navigate, searchParams]);
+  }, [navigate, searchParams]);
 
   const handleRedirectAfterAuth = () => {
     const redirect = searchParams.get('redirect');
@@ -51,24 +51,37 @@ const Login = () => {
     setIsLoading(true);
 
     try {
-      const { error } = await supabase.auth.signInWithPassword({
-        email: loginData.email,
-        password: loginData.password,
+      // Simulate login for Lovable demo
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      
+      toast({
+        title: 'Demo Mode',
+        description: 'In production, this would authenticate with Supabase. Redirecting to dashboard...',
       });
+      
+      setTimeout(() => {
+        navigate('/dashboard?demo=true');
+      }, 1500);
 
-      if (error) {
-        toast({
-          title: 'Login Failed',
-          description: error.message,
-          variant: 'destructive'
-        });
-      } else {
-        toast({
-          title: 'Welcome back!',
-          description: 'You have been successfully logged in.',
-        });
-        // handleRedirectAfterAuth will be called via useEffect
-      }
+      // // Production code (commented for Lovable):
+      // const { error } = await supabase.auth.signInWithPassword({
+      //   email: loginData.email,
+      //   password: loginData.password,
+      // });
+
+      // if (error) {
+      //   toast({
+      //     title: 'Login Failed',
+      //     description: error.message,
+      //     variant: 'destructive'
+      //   });
+      // } else {
+      //   toast({
+      //     title: 'Welcome back!',
+      //     description: 'You have been successfully logged in.',
+      //   });
+      //   // handleRedirectAfterAuth will be called via useEffect
+      // }
     } catch (error) {
       console.error('Login failed:', error);
       toast({
@@ -86,29 +99,39 @@ const Login = () => {
     setIsLoading(true);
 
     try {
-      const { error } = await supabase.auth.signUp({
-        email: signupData.email,
-        password: signupData.password,
-        options: {
-          data: {
-            name: signupData.name,
-          }
-        }
+      // Simulate signup for Lovable demo
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      
+      toast({
+        title: 'Demo Mode',
+        description: 'In production, this would create a Supabase account with email verification.',
       });
+      setDefaultTab('login');
 
-      if (error) {
-        toast({
-          title: 'Signup Failed',
-          description: error.message,
-          variant: 'destructive'
-        });
-      } else {
-        toast({
-          title: 'Account Created!',
-          description: 'Please check your email to verify your account, then sign in.',
-        });
-        setDefaultTab('login');
-      }
+      // // Production code (commented for Lovable):
+      // const { error } = await supabase.auth.signUp({
+      //   email: signupData.email,
+      //   password: signupData.password,
+      //   options: {
+      //     data: {
+      //       name: signupData.name,
+      //     }
+      //   }
+      // });
+
+      // if (error) {
+      //   toast({
+      //     title: 'Signup Failed',
+      //     description: error.message,
+      //     variant: 'destructive'
+      //   });
+      // } else {
+      //   toast({
+      //     title: 'Account Created!',
+      //     description: 'Please check your email to verify your account, then sign in.',
+      //   });
+      //   setDefaultTab('login');
+      // }
     } catch (error) {
       console.error('Signup failed:', error);
       toast({

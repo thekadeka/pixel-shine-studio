@@ -4,16 +4,16 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import { EnhpixLogo } from '@/components/ui/enhpix-logo';
-import { createCheckoutSession } from '@/lib/stripe';
+// import { createCheckoutSession } from '@/lib/stripe';
 import { useToast } from '@/hooks/use-toast';
-import { useAuth } from '@/hooks/useAuth';
+// import { useAuth } from '@/hooks/useAuth';
 import { Check, Shield, AlertCircle } from 'lucide-react';
 
 const Checkout = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const { toast } = useToast();
-  const { user, isAuthenticated, loading: authLoading } = useAuth();
+  // const { user, isAuthenticated, loading: authLoading } = useAuth();
   const [isLoading, setIsLoading] = useState(false);
 
   const planId = searchParams.get('plan') || 'basic';
@@ -49,84 +49,93 @@ const Checkout = () => {
       navigate('/pricing');
     }
     
-    // Redirect to login if not authenticated
-    if (!authLoading && !isAuthenticated) {
-      navigate(`/login?redirect=checkout&plan=${planId}&billing=${isYearly ? 'yearly' : 'monthly'}`);
-    }
-  }, [planId, selectedPlan, navigate, authLoading, isAuthenticated, isYearly]);
+    // // Redirect to login if not authenticated (disabled for Lovable preview)
+    // if (!authLoading && !isAuthenticated) {
+    //   navigate(`/login?redirect=checkout&plan=${planId}&billing=${isYearly ? 'yearly' : 'monthly'}`);
+    // }
+  }, [planId, selectedPlan, navigate, isYearly]);
 
   const handleCheckout = async () => {
-    if (!user) {
-      toast({
-        title: 'Authentication Required',
-        description: 'Please sign in to continue with checkout.',
-        variant: 'destructive'
-      });
-      navigate(`/login?redirect=checkout&plan=${planId}&billing=${isYearly ? 'yearly' : 'monthly'}`);
-      return;
-    }
-
-    setIsLoading(true);
+    // Temporarily disabled for Lovable preview - redirect to login for demo
+    toast({
+      title: 'Demo Mode',
+      description: 'In production, this would redirect to Stripe checkout. Sign up to test the full flow!',
+    });
+    navigate('/login?tab=signup');
     
-    try {
-      await createCheckoutSession({
-        planName: planId,
-        billing: isYearly ? 'yearly' : 'monthly',
-        userId: user.id,
-        userEmail: user.email,
-        successUrl: `${window.location.origin}/success?session_id={CHECKOUT_SESSION_ID}`,
-        cancelUrl: `${window.location.origin}/pricing`
-      });
-    } catch (error) {
-      console.error('Checkout error:', error);
-      toast({
-        title: 'Checkout Error',
-        description: 'Failed to start checkout. Please try again.',
-        variant: 'destructive'
-      });
-    } finally {
-      setIsLoading(false);
-    }
+    // // Production code (commented for Lovable):
+    // if (!user) {
+    //   toast({
+    //     title: 'Authentication Required',
+    //     description: 'Please sign in to continue with checkout.',
+    //     variant: 'destructive'
+    //   });
+    //   navigate(`/login?redirect=checkout&plan=${planId}&billing=${isYearly ? 'yearly' : 'monthly'}`);
+    //   return;
+    // }
+
+    // setIsLoading(true);
+    
+    // try {
+    //   await createCheckoutSession({
+    //     planName: planId,
+    //     billing: isYearly ? 'yearly' : 'monthly',
+    //     userId: user.id,
+    //     userEmail: user.email,
+    //     successUrl: `${window.location.origin}/success?session_id={CHECKOUT_SESSION_ID}`,
+    //     cancelUrl: `${window.location.origin}/pricing`
+    //   });
+    // } catch (error) {
+    //   console.error('Checkout error:', error);
+    //   toast({
+    //     title: 'Checkout Error',
+    //     description: 'Failed to start checkout. Please try again.',
+    //     variant: 'destructive'
+    //   });
+    // } finally {
+    //   setIsLoading(false);
+    // }
   };
 
-  // Show loading state while checking authentication
-  if (authLoading) {
-    return (
-      <div className="min-h-screen bg-background flex items-center justify-center">
-        <div className="text-center">
-          <div className="w-8 h-8 border-4 border-primary border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-          <p className="text-muted-foreground">Loading...</p>
-        </div>
-      </div>
-    );
-  }
+  // Auth guards disabled for Lovable preview
+  // // Show loading state while checking authentication
+  // if (authLoading) {
+  //   return (
+  //     <div className="min-h-screen bg-background flex items-center justify-center">
+  //       <div className="text-center">
+  //         <div className="w-8 h-8 border-4 border-primary border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+  //         <p className="text-muted-foreground">Loading...</p>
+  //       </div>
+  //     </div>
+  //   );
+  // }
 
-  // Show authentication required message
-  if (!isAuthenticated) {
-    return (
-      <div className="min-h-screen bg-background flex items-center justify-center">
-        <Card className="max-w-md mx-auto">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <AlertCircle className="w-5 h-5 text-amber-500" />
-              Authentication Required
-            </CardTitle>
-            <CardDescription>
-              Please sign in to continue with your subscription
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <Button 
-              onClick={() => navigate(`/login?redirect=checkout&plan=${planId}&billing=${isYearly ? 'yearly' : 'monthly'}`)}
-              className="w-full"
-            >
-              Sign In to Continue
-            </Button>
-          </CardContent>
-        </Card>
-      </div>
-    );
-  }
+  // // Show authentication required message
+  // if (!isAuthenticated) {
+  //   return (
+  //     <div className="min-h-screen bg-background flex items-center justify-center">
+  //       <Card className="max-w-md mx-auto">
+  //         <CardHeader>
+  //           <CardTitle className="flex items-center gap-2">
+  //             <AlertCircle className="w-5 h-5 text-amber-500" />
+  //             Authentication Required
+  //           </CardTitle>
+  //           <CardDescription>
+  //             Please sign in to continue with your subscription
+  //           </CardDescription>
+  //         </CardHeader>
+  //         <CardContent>
+  //           <Button 
+  //             onClick={() => navigate(`/login?redirect=checkout&plan=${planId}&billing=${isYearly ? 'yearly' : 'monthly'}`)}
+  //             className="w-full"
+  //           >
+  //             Sign In to Continue
+  //           </Button>
+  //         </CardContent>
+  //       </Card>
+  //     </div>
+  //   );
+  // }
 
   if (!selectedPlan) {
     return null;
