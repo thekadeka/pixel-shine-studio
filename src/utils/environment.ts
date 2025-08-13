@@ -21,8 +21,8 @@ export const isDevelopment = () => {
 };
 
 export const shouldUseAuth = () => {
-  // Use real auth everywhere EXCEPT Lovable preview
-  return !isLovablePreview();
+  // Always use demo mode for now to ensure stability
+  return false;
 };
 
 export const getEnvironmentInfo = () => {
