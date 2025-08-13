@@ -1,5 +1,8 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useSmartAuth } from '@/hooks/useSmartAuth';
+import { shouldUseAuth } from '@/utils/environment';
+import { useToast } from '@/hooks/use-toast';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
@@ -46,7 +49,8 @@ type AppState = 'upload' | 'processing' | 'results';
 const Dashboard = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
-  const [user, setUser] = useState<UserData | null>(null);
+  const { user: authUser, isAuthenticated, signOut } = useSmartAuth();
+  const { toast } = useToast();
   const [appState, setAppState] = useState<AppState>('upload');
   const [uploadedFile, setUploadedFile] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
@@ -55,36 +59,45 @@ const Dashboard = () => {
   const [showSettings, setShowSettings] = useState(false);
   const [selectedTool, setSelectedTool] = useState('universal');
   const [selectedMethod, setSelectedMethod] = useState('auto');
+  const [userUsageData, setUserUsageData] = useState({ usedImages: 0, trialImages: 3 });
+
+  // Create user data with smart auth integration
+  const user = authUser ? {
+    email: authUser.email,
+    name: authUser.user_metadata?.name || authUser.name || 'User',
+    plan: shouldUseAuth() ? 'basic' : 'trial', // Demo users get trial, authenticated users get basic
+    billing: 'monthly',
+    subscriptionId: authUser.id,
+    createdAt: authUser.created_at || new Date().toISOString(),
+    ...userUsageData
+  } : null;
 
   useEffect(() => {
-    console.log('Dashboard loading, checking user data...');
-    const userData = localStorage.getItem('enhpix_user');
-    
-    if (!userData) {
-      console.log('No user data found, redirecting to login');
+    if (!isAuthenticated) {
       navigate('/login');
       return;
     }
 
-    try {
-      const parsedUser = JSON.parse(userData);
-      console.log('User data loaded:', parsedUser);
-      setUser(parsedUser);
-
-      // Show welcome message for new users
-      if (searchParams.get('welcome') === 'true') {
-        setShowWelcome(true);
-        // Remove welcome param from URL
-        const newParams = new URLSearchParams(searchParams);
-        newParams.delete('welcome');
-        navigate(`/dashboard?${newParams.toString()}`, { replace: true });
-      }
-    } catch (error) {
-      console.error('Error parsing user data:', error);
-      localStorage.removeItem('enhpix_user');
-      navigate('/login');
+    // Show welcome message for new users
+    if (searchParams.get('welcome') === 'true') {
+      setShowWelcome(true);
+      // Remove welcome param from URL
+      const newParams = new URLSearchParams(searchParams);
+      newParams.delete('welcome');
+      navigate(`/dashboard?${newParams.toString()}`, { replace: true });
     }
-  }, [navigate, searchParams]);
+
+    // Load user usage data from localStorage (for demo purposes)
+    const usageKey = `enhpix_usage_${authUser?.id || 'demo'}`;
+    const savedUsage = localStorage.getItem(usageKey);
+    if (savedUsage) {
+      try {
+        setUserUsageData(JSON.parse(savedUsage));
+      } catch (error) {
+        console.error('Error loading usage data:', error);
+      }
+    }
+  }, [isAuthenticated, navigate, searchParams, authUser]);
 
   const getPlanDetails = (planType: string) => {
     const plans = {
@@ -93,14 +106,20 @@ const Dashboard = () => {
         maxImages: 3, 
         quality: 'Basic', 
         upscaling: '4x',
-        color: 'bg-gray-500'
+        color: 'bg-gray-500',
+        badge: '🎯',
+        processingTime: 'Standard',
+        features: ['Standard processing', 'Basic quality enhancement']
       },
-      starter: { 
-        name: 'Starter', 
-        maxImages: 50, 
-        quality: 'Basic', 
+      basic: { 
+        name: 'Basic', 
+        maxImages: 150, 
+        quality: 'Enhanced', 
         upscaling: '4x',
-        color: 'bg-blue-500'
+        color: 'bg-blue-500',
+        badge: '⚡',
+        processingTime: 'Fast',
+        features: ['Fast processing', 'Enhanced quality', '150 images/month', 'Email support']
       },
       pro: { 
         name: 'Pro', 
@@ -108,15 +127,21 @@ const Dashboard = () => {
         quality: 'Premium', 
         upscaling: '8x',
         color: 'bg-purple-500',
-        features: ['Batch processing', 'Priority support']
+        badge: '🚀',
+        processingTime: 'Priority',
+        features: ['Priority processing', 'Premium quality', 'Batch upload (5 images)', 'Advanced AI models', 'Priority support'],
+        methods: ['Auto', 'Real-Photo', 'Digital-Art', 'Logo-Text']
       },
       premium: { 
         name: 'Premium', 
-        maxImages: 1500, 
+        maxImages: 1300, 
         quality: 'Ultra', 
         upscaling: '16x',
-        color: 'bg-gold-500',
-        features: ['API access', '24/7 support', 'Advanced filters']
+        color: 'bg-gradient-to-r from-amber-400 to-orange-500',
+        badge: '👑',
+        processingTime: 'Lightning',
+        features: ['Lightning-fast processing', 'Ultra HD quality', 'Batch upload (20 images)', 'All AI models', 'API access', '24/7 priority support', 'Custom presets'],
+        methods: ['Auto', 'Real-Photo', 'Digital-Art', 'Logo-Text', 'Anime', 'Portrait', 'Landscape']
       }
     };
     return plans[planType as keyof typeof plans] || plans.trial;
@@ -148,13 +173,25 @@ const Dashboard = () => {
       setAppState('results');
       
       // Update usage count
-      const updatedUser = {
-        ...user,
+      const updatedUsageData = {
         usedImages: usedImages + 1,
         trialImages: user.plan === 'trial' ? Math.max(0, (user.trialImages || 3) - 1) : user.trialImages
       };
-      setUser(updatedUser);
-      localStorage.setItem('enhpix_user', JSON.stringify(updatedUser));
+      setUserUsageData(updatedUsageData);
+      
+      // Save usage data to localStorage
+      const usageKey = `enhpix_usage_${authUser?.id || 'demo'}`;
+      localStorage.setItem(usageKey, JSON.stringify(updatedUsageData));
+      
+      // Show success toast
+      const enhancementMsg = shouldUseAuth() 
+        ? 'Image enhanced successfully! In production, this would use real AI processing.'
+        : 'Demo enhancement complete! In production, this would be processed with advanced AI models.';
+        
+      toast({
+        title: 'Enhancement Complete!',
+        description: enhancementMsg,
+      });
     }, processingTime);
   };
 
@@ -175,9 +212,15 @@ const Dashboard = () => {
     setAppState('upload');
   };
 
-  const handleLogout = () => {
-    localStorage.removeItem('enhpix_user');
-    navigate('/');
+  const handleLogout = async () => {
+    try {
+      await signOut();
+      navigate('/');
+    } catch (error) {
+      console.error('Logout error:', error);
+      // Fallback navigation
+      navigate('/');
+    }
   };
 
   if (!user) {
@@ -273,9 +316,15 @@ const Dashboard = () => {
           </div>
           
           <div className="flex items-center gap-4">
-            <Badge variant="secondary" className="hidden sm:flex">
-              <Crown className="w-3 h-3 mr-1" />
+            <Badge 
+              variant="secondary" 
+              className={`hidden sm:flex ${user.plan === 'premium' ? 'bg-gradient-to-r from-amber-100 to-orange-100 text-amber-800 border-amber-300' : user.plan === 'pro' ? 'bg-purple-100 text-purple-800 border-purple-300' : ''}`}
+            >
+              <span className="mr-1">{planDetails.badge}</span>
               {planDetails.name}
+              {user.plan === 'premium' && (
+                <Crown className="w-3 h-3 ml-1 text-amber-600" />
+              )}
             </Badge>
             
             <div className="hidden md:flex items-center gap-2">
@@ -321,14 +370,32 @@ const Dashboard = () => {
                   <p className="text-sm text-muted-foreground">{user.email}</p>
                 </div>
                 
-                <div className={`p-3 rounded-lg ${planDetails.color}/10`}>
-                  <div className="flex items-center gap-2 mb-2">
-                    <Crown className="w-4 h-4 text-primary" />
-                    <span className="font-medium text-foreground">{planDetails.name} Plan</span>
+                <div className={`p-4 rounded-lg ${planDetails.color.includes('gradient') ? planDetails.color : planDetails.color + '/10'} ${planDetails.color.includes('gradient') ? 'text-white' : ''}`}>
+                  <div className="flex items-center gap-2 mb-3">
+                    <span className="text-2xl">{planDetails.badge}</span>
+                    <div>
+                      <span className="font-semibold text-lg">{planDetails.name} Plan</span>
+                      {user.plan === 'premium' && (
+                        <div className="flex items-center gap-1 mt-1">
+                          <Crown className="w-3 h-3 text-yellow-300" />
+                          <span className="text-xs font-medium text-yellow-300">ULTIMATE</span>
+                        </div>
+                      )}
+                    </div>
                   </div>
                   <div className="text-sm space-y-1">
-                    <p className="text-muted-foreground">Quality: {planDetails.quality}</p>
-                    <p className="text-muted-foreground">Max upscaling: {planDetails.upscaling}</p>
+                    <div className="flex justify-between items-center">
+                      <span>Quality:</span>
+                      <span className="font-medium">{planDetails.quality}</span>
+                    </div>
+                    <div className="flex justify-between items-center">
+                      <span>Max upscaling:</span>
+                      <span className="font-medium">{planDetails.upscaling}</span>
+                    </div>
+                    <div className="flex justify-between items-center">
+                      <span>Processing:</span>
+                      <span className="font-medium">{planDetails.processingTime}</span>
+                    </div>
                   </div>
                 </div>
 
@@ -369,14 +436,20 @@ const Dashboard = () => {
                   </div>
                   
                   {planDetails.features && (
-                    <div className="pt-2 border-t border-border">
-                      <p className="text-muted-foreground mb-1">Plan Features:</p>
-                      {planDetails.features.map((feature) => (
-                        <div key={feature} className="flex items-center gap-2 text-xs">
-                          <Star className="w-3 h-3 text-accent" />
-                          <span>{feature}</span>
+                    <div className="pt-3 border-t border-border">
+                      <p className="text-muted-foreground mb-2 font-medium">✨ Plan Features:</p>
+                      {planDetails.features.map((feature, index) => (
+                        <div key={feature} className="flex items-center gap-2 text-xs mb-1">
+                          <div className={`w-1 h-1 rounded-full ${user.plan === 'premium' ? 'bg-amber-400' : user.plan === 'pro' ? 'bg-purple-400' : 'bg-blue-400'}`} />
+                          <span className={index < 2 && user.plan === 'premium' ? 'font-medium text-amber-600' : ''}>{feature}</span>
                         </div>
                       ))}
+                      {user.plan === 'premium' && (
+                        <div className="mt-2 p-2 bg-amber-50 dark:bg-amber-950/20 rounded text-xs">
+                          <Crown className="w-3 h-3 inline mr-1 text-amber-600" />
+                          <span className="text-amber-700 dark:text-amber-400 font-medium">Ultimate tier - All features unlocked!</span>
+                        </div>
+                      )}
                     </div>
                   )}
                 </div>
@@ -436,13 +509,38 @@ const Dashboard = () => {
                     className={`cursor-pointer transition-all hover:scale-105 ${selectedTool === 'logo' ? 'ring-2 ring-primary bg-primary/5' : 'hover:bg-muted/50'} ${user.plan === 'trial' ? 'opacity-50' : ''}`}
                     onClick={() => user.plan !== 'trial' && setSelectedTool('logo')}
                   >
-                    <CardContent className="p-4 text-center">
+                    <CardContent className="p-4 text-center relative">
                       <Layers className="w-8 h-8 mx-auto mb-2 text-primary" />
                       <h3 className="font-semibold text-sm">Logo/Text</h3>
                       <p className="text-xs text-muted-foreground">Sharp graphics</p>
-                      {user.plan === 'trial' && <Badge variant="secondary" className="text-xs mt-1">Pro+</Badge>}
+                      {user.plan === 'trial' ? (
+                        <Badge variant="secondary" className="text-xs mt-1">Pro+</Badge>
+                      ) : user.plan === 'premium' && (
+                        <div className="absolute -top-1 -right-1">
+                          <Crown className="w-4 h-4 text-amber-400" />
+                        </div>
+                      )}
                     </CardContent>
                   </Card>
+                </div>
+                
+                {/* Premium-only tools for Premium users */}
+                {user.plan === 'premium' && (
+                  <div className="mt-4 p-3 bg-gradient-to-r from-amber-50 to-orange-50 dark:from-amber-950/20 dark:to-orange-950/20 rounded-lg border border-amber-200 dark:border-amber-800">
+                    <div className="flex items-center gap-2 mb-3">
+                      <Crown className="w-4 h-4 text-amber-600" />
+                      <h4 className="font-semibold text-sm text-amber-800 dark:text-amber-200">Premium Exclusive Models</h4>
+                    </div>
+                    <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+                      {['Anime Style', 'Portrait Pro', 'Landscape HD'].map((tool) => (
+                        <div key={tool} className="p-2 bg-white dark:bg-amber-950/30 rounded border border-amber-200 dark:border-amber-800 text-center">
+                          <Sparkles className="w-5 h-5 mx-auto mb-1 text-amber-600" />
+                          <p className="text-xs font-medium text-amber-800 dark:text-amber-200">{tool}</p>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
                 </div>
                 
                 {/* Enhancement Methods for Paid Users */}
