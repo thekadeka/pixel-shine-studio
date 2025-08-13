@@ -51,21 +51,23 @@ const Pricing = () => {
             Transform your images with professional-grade AI upscaling. Start free, upgrade when you need more power.
           </p>
           
-          <div className="inline-flex items-center p-1 bg-muted rounded-lg">
+          <div className="inline-flex items-center p-1 bg-card border border-border rounded-xl shadow-sm">
             <Button 
               variant={!isYearly ? "default" : "ghost"}
               onClick={() => setIsYearly(false)}
-              className="px-6"
+              className="px-8 py-3 rounded-lg font-medium transition-all duration-200"
             >
               Monthly
             </Button>
             <Button 
               variant={isYearly ? "default" : "ghost"}
               onClick={() => setIsYearly(true)}
-              className="px-6"
+              className="px-8 py-3 rounded-lg font-medium transition-all duration-200 relative"
             >
               Yearly
-              <Badge className="ml-2 bg-accent text-accent-foreground">-17%</Badge>
+              <Badge className="ml-2 bg-green-500 text-white text-xs px-2 py-0.5 rounded-full">
+                Save 17%
+              </Badge>
             </Button>
           </div>
         </div>
@@ -83,6 +85,7 @@ const Pricing = () => {
                 ${isYearly ? '190' : '19'}
                 <span className="text-sm font-normal text-muted-foreground">
                   /{isYearly ? 'year' : 'month'}
+                  {isYearly && <span className="block text-xs mt-1">($15.83/month)</span>}
                 </span>
               </div>
             </CardHeader>
@@ -104,6 +107,10 @@ const Pricing = () => {
                   <Check className="w-4 h-4 text-green-600 flex-shrink-0" />
                   <span className="text-sm">Email support</span>
                 </li>
+                <li className="flex items-center gap-3">
+                  <Check className="w-4 h-4 text-green-600 flex-shrink-0" />
+                  <span className="text-sm">Standard processing speed</span>
+                </li>
               </ul>
               
               <Button 
@@ -124,7 +131,7 @@ const Pricing = () => {
                 Most Popular
               </Badge>
             </div>
-            <CardHeader className="pb-8 bg-gradient-to-br from-primary/5 to-accent/5">
+            <CardHeader className="pb-8">
               <div className="w-12 h-12 bg-gradient-to-br from-primary to-accent rounded-lg flex items-center justify-center mb-4">
                 <Crown className="w-6 h-6 text-white" />
               </div>
@@ -134,10 +141,11 @@ const Pricing = () => {
                 ${isYearly ? '370' : '37'}
                 <span className="text-sm font-normal text-muted-foreground">
                   /{isYearly ? 'year' : 'month'}
+                  {isYearly && <span className="block text-xs mt-1">($30.83/month)</span>}
                 </span>
               </div>
             </CardHeader>
-            <CardContent className="space-y-6">
+            <CardContent className="space-y-6 bg-gradient-to-br from-primary/5 to-accent/5">
               <ul className="space-y-3">
                 <li className="flex items-center gap-3">
                   <Check className="w-4 h-4 text-green-600 flex-shrink-0" />
@@ -182,6 +190,7 @@ const Pricing = () => {
                 ${isYearly ? '900' : '90'}
                 <span className="text-sm font-normal text-muted-foreground">
                   /{isYearly ? 'year' : 'month'}
+                  {isYearly && <span className="block text-xs mt-1">($75/month)</span>}
                 </span>
               </div>
             </CardHeader>
@@ -264,7 +273,7 @@ const Pricing = () => {
                 onClick={() => window.open('mailto:enterprise@enhpix.com?subject=Enterprise Plan Inquiry', '_blank')}
               >
                 <Phone className="w-4 h-4 mr-2" />
-                Contact Sales
+                Contact Us
               </Button>
             </CardContent>
           </Card>
