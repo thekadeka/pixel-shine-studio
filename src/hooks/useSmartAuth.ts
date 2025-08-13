@@ -5,20 +5,32 @@ import { shouldUseAuth } from '@/utils/environment';
 let useAuth: any = null;
 let supabase: any = null;
 
-if (shouldUseAuth()) {
-  try {
-    const authModule = require('@/hooks/useAuth');
-    const supabaseModule = require('@/lib/supabase');
-    useAuth = authModule.useAuth;
-    supabase = supabaseModule.supabase;
-  } catch (error) {
-    console.log('Auth modules not available, using demo mode');
+// Load auth modules dynamically when needed
+const loadAuthModules = async () => {
+  if (shouldUseAuth() && !useAuth) {
+    try {
+      const [authModule, supabaseModule] = await Promise.all([
+        import('@/hooks/useAuth').catch(() => null),
+        import('@/lib/supabase').catch(() => null)
+      ]);
+      
+      if (authModule) useAuth = authModule.useAuth;
+      if (supabaseModule) supabase = supabaseModule.supabase;
+    } catch (error) {
+      console.log('Auth modules not available, using demo mode');
+    }
   }
-}
+};
 
 export const useSmartAuth = () => {
   const [demoUser, setDemoUser] = useState<any>(null);
   const [loading, setLoading] = useState(false);
+  const [authLoaded, setAuthLoaded] = useState(false);
+
+  // Load auth modules on mount
+  useEffect(() => {
+    loadAuthModules().finally(() => setAuthLoaded(true));
+  }, []);
 
   // Use real auth if available, otherwise demo mode
   const realAuth = useAuth ? useAuth() : null;
@@ -34,6 +46,17 @@ export const useSmartAuth = () => {
       return () => window.removeEventListener('demoAuthChange', handleDemoAuthChange);
     }
   }, []);
+
+  // Show loading while auth modules are loading
+  if (shouldUseAuth() && !authLoaded) {
+    return {
+      user: null,
+      loading: true,
+      signOut: async () => {},
+      isAuthenticated: false,
+      profile: null
+    };
+  }
 
   if (shouldUseAuth() && realAuth) {
     // Return real authentication
@@ -61,10 +84,13 @@ export const useSmartAuth = () => {
 };
 
 export const useSmartSupabase = () => {
-  // This hook is used in Login.tsx, so we need to provide a way to set demo user
-  const [, setDemoUser] = useState<any>(null);
+  const [authLoaded, setAuthLoaded] = useState(false);
 
-  if (shouldUseAuth() && supabase) {
+  useEffect(() => {
+    loadAuthModules().finally(() => setAuthLoaded(true));
+  }, []);
+
+  if (shouldUseAuth() && authLoaded && supabase) {
     return supabase;
   }
 
@@ -75,7 +101,6 @@ export const useSmartSupabase = () => {
         // Demo login - always succeeds and sets demo user
         await new Promise(resolve => setTimeout(resolve, 1000));
         const demoUserData = { email, id: 'demo_user' };
-        setDemoUser(demoUserData);
         
         // Trigger a custom event to update the demo user state
         window.dispatchEvent(new CustomEvent('demoAuthChange', { 
@@ -93,7 +118,6 @@ export const useSmartSupabase = () => {
         return { error: null, data: { user: demoUserData } };
       },
       signOut: async () => {
-        setDemoUser(null);
         window.dispatchEvent(new CustomEvent('demoAuthChange', { 
           detail: { user: null, type: 'logout' }
         }));
