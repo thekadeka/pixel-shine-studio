@@ -132,7 +132,7 @@ const Pricing = () => {
                 Most Popular
               </span>
             </div>
-            <CardHeader className="pb-8">
+            <CardHeader className="pb-8 bg-gradient-to-br from-primary/5 to-accent/5">
               <div className="w-12 h-12 bg-gradient-to-br from-primary to-accent rounded-lg flex items-center justify-center mb-4">
                 <Crown className="w-6 h-6 text-white" />
               </div>
