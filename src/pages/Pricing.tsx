@@ -2,8 +2,8 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { EnhpixLogo } from '@/components/ui/enhpix-logo';
 import { Badge } from '@/components/ui/badge';
+import { EnhpixLogo } from '@/components/ui/enhpix-logo';
 import { Check, Star, Zap, Crown, Sparkles, ArrowLeft, Building2, Phone } from 'lucide-react';
 
 const Pricing = () => {
@@ -51,23 +51,18 @@ const Pricing = () => {
             Transform your images with professional-grade AI upscaling. Start free, upgrade when you need more power.
           </p>
           
-          <div className="inline-flex items-center p-1 bg-card border border-border rounded-xl shadow-sm">
+          <div className="inline-flex items-center gap-4">
             <Button 
-              variant={!isYearly ? "default" : "ghost"}
+              variant={!isYearly ? "default" : "outline"}
               onClick={() => setIsYearly(false)}
-              className="px-8 py-3 rounded-lg font-medium transition-all duration-200"
             >
               Monthly
             </Button>
             <Button 
-              variant={isYearly ? "default" : "ghost"}
+              variant={isYearly ? "default" : "outline"}
               onClick={() => setIsYearly(true)}
-              className="px-8 py-3 rounded-lg font-medium transition-all duration-200 relative"
             >
-              Yearly
-              <Badge className="ml-2 bg-green-500 text-white text-xs px-2 py-0.5 rounded-full">
-                Save 17%
-              </Badge>
+              Yearly (Save 17%)
             </Button>
           </div>
         </div>
@@ -129,11 +124,10 @@ const Pricing = () => {
 
           {/* Pro Plan */}
           <Card className="relative border-2 border-primary shadow-lg hover:shadow-xl transition-all duration-300">
-            <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
-              <Badge className="bg-gradient-to-r from-primary to-accent text-white px-4 py-1">
-                <Star className="w-3 h-3 mr-1" />
+            <div className="absolute -top-3 left-1/2 transform -translate-x-1/2">
+              <span className="bg-primary text-primary-foreground px-3 py-1 rounded-full text-xs font-semibold">
                 Most Popular
-              </Badge>
+              </span>
             </div>
             <CardHeader className="pb-8">
               <div className="w-12 h-12 bg-gradient-to-br from-primary to-accent rounded-lg flex items-center justify-center mb-4">
@@ -153,7 +147,7 @@ const Pricing = () => {
                 )}
               </div>
             </CardHeader>
-            <CardContent className="space-y-6 bg-gradient-to-br from-primary/5 to-accent/5">
+            <CardContent className="space-y-6">
               <ul className="space-y-3">
                 <li className="flex items-center gap-3">
                   <Check className="w-4 h-4 text-green-600 flex-shrink-0" />
