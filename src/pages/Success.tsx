@@ -6,6 +6,7 @@ import { EnhpixLogo } from '@/components/ui/enhpix-logo';
 import { useToast } from '@/hooks/use-toast';
 import { verifyPaymentSession, getPlanById, isRealStripe } from '@/services/stripe';
 import { updateSubscriptionAfterPayment } from '@/services/subscriptionManager';
+import { trackPaymentEvent, trackConversionStep, trackSubscriptionEvent } from '@/services/analytics';
 import { CheckCircle, Sparkles, ArrowRight, Mail, Crown } from 'lucide-react';
 
 const Success = () => {
@@ -52,6 +53,15 @@ const Success = () => {
             billing as 'monthly' | 'yearly',
             'sub_demo_' + Math.random().toString(36).substr(2, 9)
           );
+          
+          // Track demo payment completion
+          const plan = getPlanById(planId);
+          const amount = billing === 'yearly' ? plan?.priceYearly : plan?.priceMonthly;
+          if (plan && amount) {
+            trackPaymentEvent('payment_succeeded', planId, amount);
+            trackConversionStep('payment_completed', planId);
+            trackSubscriptionEvent('subscription_started', planId, billing as 'monthly' | 'yearly', amount);
+          }
         }
         
         setIsLoading(false);
@@ -76,6 +86,13 @@ const Success = () => {
             billing as 'monthly' | 'yearly',
             subscriptionId
           );
+          
+          // Track real payment completion
+          const plan = getPlanById(planId);
+          const amount = data.amount_total / 100; // Stripe amounts are in cents
+          trackPaymentEvent('payment_succeeded', planId, amount);
+          trackConversionStep('payment_completed', planId);
+          trackSubscriptionEvent('subscription_started', planId, billing as 'monthly' | 'yearly', amount);
         }
       } catch (err) {
         console.error('Payment verification failed:', err);

@@ -1,4 +1,5 @@
 import { loadStripe } from '@stripe/stripe-js';
+import { trackPaymentEvent, trackConversionStep, trackSubscriptionEvent } from './analytics';
 
 // Environment detection
 const isProduction = import.meta.env.NODE_ENV === 'production';
@@ -148,6 +149,10 @@ export const createCheckoutSession = async (data: CheckoutData) => {
 
 // Redirect to Stripe Checkout
 export const redirectToCheckout = async (checkoutData: CheckoutData) => {
+  // Track checkout started
+  trackConversionStep('checkout_started', checkoutData.planId);
+  trackPaymentEvent('payment_started', checkoutData.planId, checkoutData.amount);
+
   try {
     // Create checkout session
     const session = await createCheckoutSession(checkoutData);

@@ -63,7 +63,8 @@
     "@supabase/supabase-js": "^2.48.0",
     "replicate": "^1.0.0",
     "@stripe/stripe-js": "^5.7.0",
-    "stripe": "^17.6.0"
+    "stripe": "^17.6.0",
+    "posthog-js": "^1.165.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.32.0",

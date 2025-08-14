@@ -1,6 +1,7 @@
 import Replicate from 'replicate';
 import { getCurrentPlanLimits, getUserSubscription } from './subscriptionManager';
 import { recordApiUsage, MODEL_COSTS } from './costTracker';
+import { trackImageEnhancement, trackApiCost } from './analytics';
 
 // Initialize Replicate client
 // Use environment variable with Vite prefix for frontend
@@ -137,6 +138,8 @@ export const enhanceImage = async (
   file: File,
   onProgress: (progress: EnhancementProgress) => void
 ): Promise<EnhancementResult> => {
+  const startTime = Date.now();
+  
   try {
     onProgress({ status: 'starting', progress: 0, message: 'Starting enhancement...' });
     
@@ -200,6 +203,21 @@ export const enhanceImage = async (
     
     onProgress({ status: 'completed', progress: 100, message: 'Enhancement completed!' });
     
+    // Track successful enhancement
+    const processingTime = Date.now() - startTime;
+    const fileSizeMB = file.size / 1024 / 1024;
+    
+    trackImageEnhancement(
+      planLimits.quality,
+      planLimits.maxScale,
+      fileSizeMB,
+      processingTime,
+      true
+    );
+    
+    // Track API cost
+    trackApiCost(planLimits.quality, MODEL_COSTS[planLimits.quality]);
+    
     return {
       originalUrl: URL.createObjectURL(file),
       enhancedUrl,
@@ -208,6 +226,21 @@ export const enhanceImage = async (
     
   } catch (error) {
     console.error('Enhancement failed:', error);
+    
+    // Track failed enhancement
+    const processingTime = Date.now() - startTime;
+    const fileSizeMB = file.size / 1024 / 1024;
+    const planLimits = getCurrentPlanLimits();
+    
+    trackImageEnhancement(
+      planLimits.quality,
+      planLimits.maxScale,
+      fileSizeMB,
+      processingTime,
+      false,
+      error instanceof Error ? error.message : 'Unknown error'
+    );
+    
     onProgress({ 
       status: 'failed', 
       message: `Enhancement failed: ${error instanceof Error ? error.message : 'Unknown error'}` 
