@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { EnhpixLogo } from '@/components/ui/enhpix-logo';
 import { useToast } from '@/hooks/use-toast';
-import { verifyPaymentSession, getPlanById } from '@/services/stripe';
+import { verifyPaymentSession, getPlanById, isRealStripe } from '@/services/stripe';
 import { CheckCircle, Sparkles, ArrowRight, Mail, Crown } from 'lucide-react';
 
 const Success = () => {
@@ -68,7 +68,7 @@ const Success = () => {
   }, [sessionId, isDemoMode]);
 
   const handleGetStarted = () => {
-    if (isDemoMode) {
+    if (!isRealStripe) {
       toast({
         title: "Demo Mode",
         description: "In production, you would have full access to the app!",
@@ -133,7 +133,7 @@ const Success = () => {
           <p className="text-lg text-muted-foreground mb-2">
             Your {selectedPlan?.name || 'subscription'} plan is now active
           </p>
-          {isDemoMode && (
+          {!isRealStripe && (
             <p className="text-sm text-amber-600 bg-amber-50 px-4 py-2 rounded-lg inline-block">
               Demo Mode - In production, your payment would be processed by Stripe
             </p>

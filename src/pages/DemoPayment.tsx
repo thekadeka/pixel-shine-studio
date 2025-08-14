@@ -6,7 +6,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { EnhpixLogo } from '@/components/ui/enhpix-logo';
 import { useToast } from '@/hooks/use-toast';
-import { getPlanById } from '@/services/stripe';
+import { getPlanById, isRealStripe } from '@/services/stripe';
 import { ArrowLeft, CreditCard, Lock, CheckCircle } from 'lucide-react';
 
 const DemoPayment = () => {
@@ -145,14 +145,16 @@ const DemoPayment = () => {
         </nav>
       </header>
 
-      {/* Demo Notice */}
-      <div className="bg-amber-50 border-b border-amber-200 p-3">
-        <div className="max-w-7xl mx-auto text-center">
-          <p className="text-sm text-amber-800">
-            <strong>Demo Mode:</strong> This is a simulated Stripe checkout. No real payment will be processed.
-          </p>
+      {/* Demo Notice - only show if in demo mode */}
+      {!isRealStripe && (
+        <div className="bg-amber-50 border-b border-amber-200 p-3">
+          <div className="max-w-7xl mx-auto text-center">
+            <p className="text-sm text-amber-800">
+              <strong>Demo Mode:</strong> This is a simulated Stripe checkout. No real payment will be processed.
+            </p>
+          </div>
         </div>
-      </div>
+      )}
 
       <div className="max-w-6xl mx-auto px-4 py-8">
         <div className="grid lg:grid-cols-2 gap-8">
@@ -225,7 +227,7 @@ const DemoPayment = () => {
                 Payment Information
               </CardTitle>
               <CardDescription>
-                Secure payment powered by Stripe (Demo Mode)
+                Secure payment powered by Stripe {!isRealStripe && '(Demo Mode)'}
               </CardDescription>
             </CardHeader>
             <CardContent>
@@ -263,9 +265,11 @@ const DemoPayment = () => {
                       disabled={isLoading}
                       maxLength={19}
                     />
-                    <p className="text-xs text-muted-foreground mt-1">
-                      <strong>Demo only:</strong> Use 4242 4242 4242 4242 (no real charge)
-                    </p>
+                    {!isRealStripe && (
+                      <p className="text-xs text-muted-foreground mt-1">
+                        <strong>Demo only:</strong> Use 4242 4242 4242 4242 (no real charge)
+                      </p>
+                    )}
                   </div>
 
                   <div className="grid grid-cols-2 gap-4">
