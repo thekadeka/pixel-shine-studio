@@ -15,9 +15,9 @@ const DemoPayment = () => {
   const { toast } = useToast();
   
   const [isLoading, setIsLoading] = useState(false);
-  const [cardNumber, setCardNumber] = useState('4242 4242 4242 4242');
-  const [expiryDate, setExpiryDate] = useState('12/28');
-  const [cvv, setCvv] = useState('123');
+  const [cardNumber, setCardNumber] = useState('');
+  const [expiryDate, setExpiryDate] = useState('');
+  const [cvv, setCvv] = useState('');
   const [nameOnCard, setNameOnCard] = useState('');
   
   // Get plan details from URL params
@@ -45,6 +45,53 @@ const DemoPayment = () => {
 
   const handlePayment = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    // Validate demo card number
+    const validCardNumber = '4242 4242 4242 4242';
+    const validCardNumberNoSpaces = '4242424242424242';
+    
+    if (cardNumber !== validCardNumber && cardNumber !== validCardNumberNoSpaces) {
+      toast({
+        title: "Demo Mode - Invalid Card",
+        description: `Please use the demo card number: ${validCardNumber}`,
+        variant: "destructive"
+      });
+      return;
+    }
+
+    // Validate expiry date (must be future date)
+    const currentYear = new Date().getFullYear() % 100; // Get last 2 digits
+    const currentMonth = new Date().getMonth() + 1;
+    
+    const [month, year] = expiryDate.split('/').map(num => parseInt(num));
+    if (!month || !year || month < 1 || month > 12) {
+      toast({
+        title: "Invalid Expiry Date",
+        description: "Please enter a valid expiry date (MM/YY)",
+        variant: "destructive"
+      });
+      return;
+    }
+    
+    if (year < currentYear || (year === currentYear && month < currentMonth)) {
+      toast({
+        title: "Card Expired",
+        description: "Please enter a future expiry date",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    // Validate CVV
+    if (cvv.length !== 3 || !/^\d{3}$/.test(cvv)) {
+      toast({
+        title: "Invalid CVV",
+        description: "Please enter a valid 3-digit CVV",
+        variant: "destructive"
+      });
+      return;
+    }
+
     setIsLoading(true);
 
     try {
@@ -203,13 +250,21 @@ const DemoPayment = () => {
                       id="card"
                       type="text"
                       value={cardNumber}
-                      onChange={(e) => setCardNumber(e.target.value)}
+                      onChange={(e) => {
+                        // Auto-format card number with spaces
+                        let value = e.target.value.replace(/\s/g, '').replace(/\D/g, '');
+                        value = value.replace(/(\d{4})(?=\d)/g, '$1 ');
+                        if (value.length <= 19) { // 16 digits + 3 spaces
+                          setCardNumber(value);
+                        }
+                      }}
                       placeholder="4242 4242 4242 4242"
                       required
                       disabled={isLoading}
+                      maxLength={19}
                     />
                     <p className="text-xs text-muted-foreground mt-1">
-                      Demo card number (no real charge)
+                      <strong>Demo only:</strong> Use 4242 4242 4242 4242 (no real charge)
                     </p>
                   </div>
 
@@ -220,10 +275,18 @@ const DemoPayment = () => {
                         id="expiry"
                         type="text"
                         value={expiryDate}
-                        onChange={(e) => setExpiryDate(e.target.value)}
-                        placeholder="MM/YY"
+                        onChange={(e) => {
+                          // Auto-format expiry date
+                          let value = e.target.value.replace(/\D/g, '');
+                          if (value.length >= 2) {
+                            value = value.substring(0,2) + '/' + value.substring(2,4);
+                          }
+                          setExpiryDate(value);
+                        }}
+                        placeholder="12/28"
                         required
                         disabled={isLoading}
+                        maxLength={5}
                       />
                     </div>
                     <div>
@@ -232,10 +295,15 @@ const DemoPayment = () => {
                         id="cvv"
                         type="text"
                         value={cvv}
-                        onChange={(e) => setCvv(e.target.value)}
+                        onChange={(e) => {
+                          // Only allow 3 digits
+                          const value = e.target.value.replace(/\D/g, '').substring(0, 3);
+                          setCvv(value);
+                        }}
                         placeholder="123"
                         required
                         disabled={isLoading}
+                        maxLength={3}
                       />
                     </div>
                   </div>
