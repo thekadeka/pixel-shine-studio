@@ -4,17 +4,50 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { EnhpixLogo } from '@/components/ui/enhpix-logo';
 import { ImageUploader } from '@/components/ImageUploader';
+import { ProcessingStatus } from '@/components/ProcessingStatus';
+import { ResultsDisplay } from '@/components/ResultsDisplay';
+import { enhanceImage, EnhancementProgress, EnhancementResult } from '@/services/imageEnhancement';
 import { Sparkles, Crown, Settings, LogOut, Upload, History } from 'lucide-react';
+
+type ProcessingState = 'idle' | 'processing' | 'completed';
 
 const Dashboard = () => {
   const navigate = useNavigate();
-  const [imagesRemaining] = useState(3);
+  const [imagesRemaining, setImagesRemaining] = useState(3);
   const [userPlan] = useState('Free Trial');
   const [totalImages] = useState(3);
+  const [processingState, setProcessingState] = useState<ProcessingState>('idle');
+  const [currentFile, setCurrentFile] = useState<File | null>(null);
+  const [progress, setProgress] = useState<EnhancementProgress | null>(null);
+  const [result, setResult] = useState<EnhancementResult | null>(null);
 
   const handleImageUpload = async (file: File) => {
-    // Redirect to upgrade since trial has limitations
-    navigate('/pricing');
+    if (imagesRemaining <= 0) {
+      navigate('/pricing');
+      return;
+    }
+
+    setCurrentFile(file);
+    setProcessingState('processing');
+    setProgress(null);
+    setResult(null);
+
+    try {
+      const enhancementResult = await enhanceImage(file, setProgress);
+      setResult(enhancementResult);
+      setProcessingState('completed');
+      setImagesRemaining(prev => Math.max(0, prev - 1));
+    } catch (error) {
+      console.error('Enhancement failed:', error);
+      setProcessingState('idle');
+    }
+  };
+
+  const handleStartOver = () => {
+    setProcessingState('idle');
+    setCurrentFile(null);
+    setProgress(null);
+    setResult(null);
   };
 
   return (
@@ -123,70 +156,98 @@ const Dashboard = () => {
 
           {/* Main Dashboard */}
           <div className="lg:col-span-3 space-y-8">
-            {/* Upload Section */}
-            <Card className="border-2 border-dashed border-primary/30 bg-gradient-to-br from-primary/5 to-transparent">
-              <CardContent className="p-8">
-                <div className="text-center">
-                  <div className="w-20 h-20 bg-gradient-to-br from-primary to-accent rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg">
-                    <Upload className="w-8 h-8 text-white" />
-                  </div>
-                  
-                  <h3 className="text-xl font-bold text-foreground mb-3">
-                    Ready to Enhance?
-                  </h3>
-                  <p className="text-muted-foreground mb-8 max-w-md mx-auto">
-                    Upload your image and watch our AI transform it into stunning high-resolution quality
-                  </p>
-                  
-                  <div className="max-w-md mx-auto">
-                    <ImageUploader onImageUpload={handleImageUpload} />
-                  </div>
-
-                  {imagesRemaining <= 0 && (
-                    <div className="mt-6 p-4 bg-accent/10 rounded-lg">
-                      <p className="text-sm text-muted-foreground">
-                        No credits remaining.{' '}
-                        <Button 
-                          variant="link" 
-                          className="p-0 h-auto text-accent font-semibold"
-                          onClick={() => navigate('/pricing')}
-                        >
-                          Upgrade your plan
-                        </Button>{' '}
-                        to continue enhancing images
-                      </p>
+            
+            {/* Upload Section - Show when idle */}
+            {processingState === 'idle' && (
+              <Card className="border-2 border-dashed border-primary/30 bg-gradient-to-br from-primary/5 to-transparent">
+                <CardContent className="p-8">
+                  <div className="text-center">
+                    <div className="w-20 h-20 bg-gradient-to-br from-primary to-accent rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg">
+                      <Upload className="w-8 h-8 text-white" />
                     </div>
-                  )}
-                </div>
-              </CardContent>
-            </Card>
+                    
+                    <h3 className="text-xl font-bold text-foreground mb-3">
+                      Ready to Enhance?
+                    </h3>
+                    <p className="text-muted-foreground mb-8 max-w-md mx-auto">
+                      Upload your image and watch our AI transform it into stunning high-resolution quality
+                    </p>
+                    
+                    <div className="max-w-md mx-auto">
+                      <ImageUploader 
+                        onImageUpload={handleImageUpload} 
+                        isProcessing={processingState === 'processing'} 
+                      />
+                    </div>
 
-            {/* Recent Activity */}
-            <Card>
-              <CardHeader>
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-2">
-                    <History className="w-5 h-5 text-primary" />
-                    <CardTitle className="text-xl">Recent Enhancements</CardTitle>
+                    {imagesRemaining <= 0 && (
+                      <div className="mt-6 p-4 bg-accent/10 rounded-lg">
+                        <p className="text-sm text-muted-foreground">
+                          No credits remaining.{' '}
+                          <Button 
+                            variant="link" 
+                            className="p-0 h-auto text-accent font-semibold"
+                            onClick={() => navigate('/pricing')}
+                          >
+                            Upgrade your plan
+                          </Button>{' '}
+                          to continue enhancing images
+                        </p>
+                      </div>
+                    )}
                   </div>
-                  <Button variant="outline" size="sm" disabled>
-                    View All
-                  </Button>
-                </div>
-                <CardDescription>
-                  Your enhanced images will appear here once you start processing
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="text-center py-12 text-muted-foreground">
-                  <div className="w-16 h-16 bg-muted rounded-full flex items-center justify-center mx-auto mb-4">
-                    <Sparkles className="w-6 h-6" />
+                </CardContent>
+              </Card>
+            )}
+
+            {/* Processing Section - Show while processing */}
+            {processingState === 'processing' && currentFile && (
+              <ProcessingStatus
+                isProcessing={true}
+                progress={progress}
+                onCancel={handleStartOver}
+              />
+            )}
+
+            {/* Results Section - Show when completed */}
+            {processingState === 'completed' && result && currentFile && (
+              <ResultsDisplay
+                originalImage={result.originalUrl}
+                enhancedImage={result.enhancedUrl}
+                originalFile={currentFile}
+                onStartOver={handleStartOver}
+                planType="trial"
+              />
+            )}
+
+            {/* Recent Activity - Show only when idle */}
+            {processingState === 'idle' && (
+              <Card>
+                <CardHeader>
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <History className="w-5 h-5 text-primary" />
+                      <CardTitle className="text-xl">Recent Enhancements</CardTitle>
+                    </div>
+                    <Button variant="outline" size="sm" disabled>
+                      View All
+                    </Button>
                   </div>
-                  <h4 className="font-medium text-foreground mb-2">No enhancements yet</h4>
-                  <p className="text-sm">Upload your first image to get started!</p>
-                </div>
-              </CardContent>
-            </Card>
+                  <CardDescription>
+                    Your enhanced images will appear here once you start processing
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <div className="text-center py-12 text-muted-foreground">
+                    <div className="w-16 h-16 bg-muted rounded-full flex items-center justify-center mx-auto mb-4">
+                      <Sparkles className="w-6 h-6" />
+                    </div>
+                    <h4 className="font-medium text-foreground mb-2">No enhancements yet</h4>
+                    <p className="text-sm">Upload your first image to get started!</p>
+                  </div>
+                </CardContent>
+              </Card>
+            )}
           </div>
         </div>
       </div>

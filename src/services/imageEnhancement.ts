@@ -1,10 +1,9 @@
 import Replicate from 'replicate';
 
 // Initialize Replicate client
-// For development, we'll use a placeholder API key
-// In production, this should be set via environment variables
+// Use environment variable with Vite prefix for frontend
 const replicate = new Replicate({
-  auth: process.env.REPLICATE_API_TOKEN || 'r8_demo_key', // Will work in demo mode without real key
+  auth: import.meta.env.VITE_REPLICATE_API_TOKEN || 'r8_demo_key',
 });
 
 export interface EnhancementProgress {
@@ -63,8 +62,8 @@ export const enhanceImage = async (
     onProgress({ status: 'starting', progress: 0, message: 'Starting enhancement...' });
     
     // Check if we have a real API key
-    const hasRealKey = process.env.REPLICATE_API_TOKEN && 
-                      process.env.REPLICATE_API_TOKEN !== 'r8_demo_key';
+    const hasRealKey = import.meta.env.VITE_REPLICATE_API_TOKEN && 
+                      import.meta.env.VITE_REPLICATE_API_TOKEN !== 'r8_demo_key';
     
     let enhancedUrl: string;
     
@@ -74,9 +73,9 @@ export const enhanceImage = async (
       
       onProgress({ status: 'processing', progress: 25, message: 'Uploading to AI model...' });
       
-      // Use Real-ESRGAN model for upscaling
+      // Use Real-ESRGAN model for upscaling (updated to latest version)
       const output = await replicate.run(
-        "nightmareai/real-esrgan:42fed1c4974146d4d2414e2be2c5277c7fcf05fcc972b45e742b2e545d53c5e", 
+        "nightmareai/real-esrgan:42fed1c4974146d4d2414e2be2c5277c7fcf05fcc972f1a6c68ad1d9f7a55dc2", 
         {
           input: {
             image: imageDataUrl,
