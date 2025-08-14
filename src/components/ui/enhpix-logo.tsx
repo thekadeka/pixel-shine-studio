@@ -6,10 +6,55 @@ interface EnhpixLogoProps {
 
 export const EnhpixLogo: React.FC<EnhpixLogoProps> = ({ className = "w-8 h-8" }) => {
   return (
-    <img 
-      src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMgAAADICAYAAACtWK6eAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAPPSURBVHgB7d1BjtowFAbgPye3ybWRKjE5Aq+7ZMNVmjNw1VqKWHNEZtfp20a6QUmIHdvv/T9pNpUQsZ3P7+fYJMQAAAAAAAAAAAAAAAAAAAAAAAAAAAAA4M/s2rdvYzs8HNm2Pdo2sjNLKTb0bT3m8f6/z7fvfPvOD3/1Lz/b9vPt6/ffb7/P/7i/bN3ZDnbYWJp2ZNTDtJRfbfvVts+9+BrRtrF3bZvbt729vYfHNhZrKJrZiPa/1dJu3w3toJJ5DQQ70pGZ3+uNZcyKb7C9vr6P7MhMRlnbkUl85z8j6HdtLNZQ5Bg6MJNRbHQ6HZ5u3nKJOhKJZK4T/Wz8zE4z8p8D2GEnfkYTXoJU+cUAAJSggQgLVKAEAB5GI3xGBTONELZdxvGGHRhPB1ACAA+jAyI8SJVfAABA1BEBEJOoEQEAV4g6IgAA3zH1L1B+AQAAIQElAPAwOiDCg1T5BQAAxCSajxIAeJhE85ECAICYRPNRAgAAMYnmowQAAGISzUcJAADEJJqPEgAAiEk0HyUAABCTaD5KAAAgJtF8lAAAQEyi+SgBAICYRPNRAgAAMYnmowQAAGISzUcJAADEJJqPEgAAiEk0HyUAABCTaD5KAAAgJtF8lAAAQEyi+SgBAICYRPNRAgAAMYnmowQAAGISzUcJAADEJJqPEgAAiEk0HyUAABCTaD5KAAAgJtF8lAAAQEyi+SgBAICYRPNRAgAAMYnmowQAAGISzUcJAADEJJqPEgAAiEk0HyUAABCTaD5KAAAgJtF8lAAAQEyi+SgBAICYRPNRAgAAMYnmowQAAGISzUcJAADEJJqPEgAAiEk0HyUAABCTaD5KAAAgJtF8lAAAQEyi+SgBAICYRPNRAgAAMYnmowQAAGISzUcJAADEJJqPEgAAiEk0HyUAABCTaD5KAAAgJtF8lAAAQEyi+SgBAICYRPNRAgAAMYnmowQAAGISzUcJAADEJJqPEgAAiEk0HyUAABCTaD5KAAAgJtF8lAAAQEyi+SgBAICYRPNRAgAAMYnmowQAAGISzUcJAADEJJqPEgAAiEk0HyUAABCTaD5KAAAgJtF8lAAAQEyi+SgBAICYRPNRAgAAMYnmowQAAGISzUcJAADEJJqPEgAAiEk0HyUAABCTaD5KAAAgJtF8lAAAQEyi+SgBAICYRPNRAgAAMYnmowQAAGISzUcJAADEJJqPEgAAiEk0HyUAABCTaD5KAAAgJtF8lAAAQEyi+SgBAICYRPNRAgAAMYnmowQAAGISzUcJAADEJJqPEgAAiEk0HyUAABCTaD5KAAAgJtF8lAAAQEyi+SgBAICYRPNRAgAAMYnmowQAAGISzUcJAADEJJqPEgAAiEk0HyUAABCTaD5KAAAgJtF8lAAAQEyi+SgBAICYRPNRAgAAMYnmowQAAGISzUcJAADEJJqPEgAAiEk0HyUAABCTaD5KAAAgJtF8lAAAQEyi+SgBAICYRPNRAgAAMYnmowQAAGISzUcJAADEJJqPEgAAiEk0HyUAABCTaD5KAAAgJtF8lAAAQEyi+SgBAICYRPNRAgAAMYnmowQAAGISzUcJAADEJJqPEgAAiEk0HyUAABCTaD5KAAAgJtF8lAAAQEyi+SgBAICYRPNRAgAAMYnmowQAAGISzUcJAADEJJqPEgAAiEk0HyUAABCTaD5KAAAgJtF8lAAAQEyi+SgBAICYRPNRAgAAAAAAAAAAAAAAAAAAAAAA4JF+A70WSZT/VW3kAAAAAElFTkSuQmCC" 
-      alt="Enhpix Logo" 
+    <svg
+      viewBox="0 0 200 120"
       className={className}
-    />
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      {/* Left side - stepped cross matching your exact design */}
+      <path
+        d="M 10 10 
+           L 40 10 
+           L 40 25 
+           L 55 25 
+           L 55 40 
+           L 70 40 
+           L 70 55 
+           L 55 55 
+           L 55 70 
+           L 40 70 
+           L 40 85 
+           L 25 85 
+           L 25 70 
+           L 10 70 
+           L 10 55 
+           L 25 55 
+           L 25 40 
+           L 10 40 
+           Z"
+        fill="#5CB3F5"
+      />
+      
+      {/* Right side - rotated diamond with hollow center */}
+      <path
+        d="M 130 20 
+           L 170 60 
+           L 130 100 
+           L 90 60 
+           Z"
+        fill="#5CB3F5"
+      />
+      
+      {/* White hollow center of diamond */}
+      <path
+        d="M 130 35 
+           L 155 60 
+           L 130 85 
+           L 105 60 
+           Z"
+        fill="white"
+      />
+    </svg>
   );
 };
