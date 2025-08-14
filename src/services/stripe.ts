@@ -93,10 +93,11 @@ export const createCheckoutSession = async (data: CheckoutData) => {
     }
 
     // In a real implementation, this would call your backend
-    // For now, we'll simulate the response structure
+    // For demo mode, we'll simulate successful payment and redirect to success
+    const demoSessionId = 'cs_demo_' + Math.random().toString(36).substr(2, 9);
     const checkoutSession = {
-      id: 'cs_demo_' + Math.random().toString(36).substr(2, 9),
-      url: `${window.location.origin}/checkout/demo?plan=${data.planId}&billing=${data.billing}`,
+      id: demoSessionId,
+      url: `${window.location.origin}/success?demo=true&session_id=${demoSessionId}`,
       customer_email: data.customerEmail,
       success_url: `${window.location.origin}/success?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${window.location.origin}/pricing`,
@@ -126,8 +127,8 @@ export const redirectToCheckout = async (checkoutData: CheckoutData) => {
     // Create checkout session
     const session = await createCheckoutSession(checkoutData);
     
-    // In demo mode, redirect to our demo checkout
-    if (session.url.includes('/demo')) {
+    // In demo mode, redirect directly to success page
+    if (session.url.includes('demo=true')) {
       window.location.href = session.url;
       return;
     }
