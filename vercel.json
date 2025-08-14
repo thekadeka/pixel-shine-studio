@@ -1,0 +1,36 @@
+{
+  "functions": {
+    "api/create-checkout-session.js": {
+      "maxDuration": 10
+    },
+    "api/verify-payment.js": {
+      "maxDuration": 10
+    },
+    "api/webhook.js": {
+      "maxDuration": 30
+    }
+  },
+  "env": {
+    "STRIPE_SECRET_KEY": "@stripe-secret-key",
+    "STRIPE_WEBHOOK_SECRET": "@stripe-webhook-secret",
+    "VITE_SUPABASE_URL": "@supabase-url", 
+    "SUPABASE_SERVICE_ROLE_KEY": "@supabase-service-role-key"
+  },
+  "build": {
+    "env": {
+      "VITE_STRIPE_PUBLISHABLE_KEY": "@stripe-publishable-key",
+      "VITE_REPLICATE_API_TOKEN": "@replicate-api-token",
+      "VITE_SUPABASE_URL": "@supabase-url",
+      "VITE_SUPABASE_ANON_KEY": "@supabase-anon-key",
+      "VITE_APP_URL": "https://enhpix.com",
+      "VITE_POSTHOG_API_KEY": "@posthog-api-key",
+      "VITE_POSTHOG_HOST": "https://app.posthog.com",
+      "VITE_STRIPE_PRICE_BASIC_MONTHLY": "@stripe-price-basic-monthly",
+      "VITE_STRIPE_PRICE_BASIC_YEARLY": "@stripe-price-basic-yearly",
+      "VITE_STRIPE_PRICE_PRO_MONTHLY": "@stripe-price-pro-monthly",
+      "VITE_STRIPE_PRICE_PRO_YEARLY": "@stripe-price-pro-yearly",
+      "VITE_STRIPE_PRICE_PREMIUM_MONTHLY": "@stripe-price-premium-monthly",
+      "VITE_STRIPE_PRICE_PREMIUM_YEARLY": "@stripe-price-premium-yearly"
+    }
+  }
+}
