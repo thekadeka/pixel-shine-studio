@@ -2,15 +2,24 @@ import posthog from 'posthog-js';
 
 // Initialize PostHog
 const initializePostHog = () => {
-  const apiKey = import.meta.env.VITE_POSTHOG_API_KEY;
-  const host = import.meta.env.VITE_POSTHOG_HOST;
+  try {
+    const apiKey = import.meta.env.VITE_POSTHOG_API_KEY;
+    const host = import.meta.env.VITE_POSTHOG_HOST;
 
-  if (apiKey && host) {
-    posthog.init(apiKey, {
-      api_host: host,
-      capture_pageview: false, // We'll handle this manually
-      capture_pageleave: true,
-    });
+    if (apiKey && host) {
+      posthog.init(apiKey, {
+        api_host: host,
+        capture_pageview: false, // We'll handle this manually
+        capture_pageleave: true,
+        loaded: (posthog) => {
+          console.log('PostHog loaded successfully');
+        }
+      });
+    } else {
+      console.log('PostHog not initialized - missing API key or host');
+    }
+  } catch (error) {
+    console.error('PostHog initialization failed:', error);
   }
 };
 
