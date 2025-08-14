@@ -1,11 +1,26 @@
 import Replicate from 'replicate';
-import { getCurrentPlanLimits } from './subscriptionManager';
+import { getCurrentPlanLimits, getUserSubscription } from './subscriptionManager';
+import { recordApiUsage, MODEL_COSTS } from './costTracker';
 
 // Initialize Replicate client
 // Use environment variable with Vite prefix for frontend
 const replicate = new Replicate({
   auth: import.meta.env.VITE_REPLICATE_API_TOKEN || 'r8_demo_key',
 });
+
+// Log API usage with comprehensive tracking
+const logApiUsage = (quality: string, scale: number, fileSize: number) => {
+  const subscription = getUserSubscription();
+  
+  // Record usage in cost tracker
+  recordApiUsage(
+    quality as 'basic' | 'premium' | 'ultra',
+    scale,
+    fileSize,
+    subscription.userId,
+    subscription.planId
+  );
+};
 
 export interface EnhancementProgress {
   status: 'starting' | 'processing' | 'completed' | 'failed';
@@ -26,6 +41,52 @@ const fileToDataURL = (file: File): Promise<string> => {
     reader.onload = () => resolve(reader.result as string);
     reader.onerror = reject;
     reader.readAsDataURL(file);
+  });
+};
+
+// Optimize image size for API cost efficiency
+const optimizeImageForAPI = (file: File): Promise<File> => {
+  return new Promise((resolve) => {
+    const canvas = document.createElement('canvas');
+    const ctx = canvas.getContext('2d');
+    const img = new Image();
+    
+    img.onload = () => {
+      // Calculate optimal dimensions (max 2048px on either side for cost efficiency)
+      const maxDimension = 2048;
+      let { width, height } = img;
+      
+      if (width > maxDimension || height > maxDimension) {
+        const ratio = Math.min(maxDimension / width, maxDimension / height);
+        width = Math.floor(width * ratio);
+        height = Math.floor(height * ratio);
+      }
+      
+      canvas.width = width;
+      canvas.height = height;
+      
+      // Draw and compress
+      ctx?.drawImage(img, 0, 0, width, height);
+      
+      canvas.toBlob(
+        (blob) => {
+          if (blob) {
+            const optimizedFile = new File([blob], file.name, { 
+              type: 'image/jpeg',
+              lastModified: Date.now() 
+            });
+            resolve(optimizedFile);
+          } else {
+            resolve(file); // Fallback to original
+          }
+        },
+        'image/jpeg',
+        0.9 // 90% quality for good balance
+      );
+    };
+    
+    img.onerror = () => resolve(file); // Fallback to original
+    img.src = URL.createObjectURL(file);
   });
 };
 
@@ -90,25 +151,46 @@ export const enhanceImage = async (
     
     if (hasRealKey) {
       // Real Replicate API implementation
-      const imageDataUrl = await fileToDataURL(file);
+      onProgress({ status: 'processing', progress: 10, message: 'Preparing image for AI processing...' });
+      
+      // Optimize image size for cost efficiency (max 5MB)
+      const optimizedFile = await optimizeImageForAPI(file);
+      const imageDataUrl = await fileToDataURL(optimizedFile);
       
       onProgress({ status: 'processing', progress: 25, message: 'Uploading to AI model...' });
       
       // Choose model and scale based on plan
       const modelVersion = getModelForQuality(planLimits.quality);
-      const scale = Math.min(4, planLimits.maxScale); // Cap at 4x for Real-ESRGAN
+      const scale = Math.min(4, planLimits.maxScale); // Cap at 4x for most models
       
-      onProgress({ status: 'processing', progress: 50, message: `Applying ${planLimits.quality} quality enhancement...` });
+      // Log usage for cost tracking
+      logApiUsage(planLimits.quality, scale, optimizedFile.size);
       
-      const output = await replicate.run(modelVersion, {
-        input: {
-          image: imageDataUrl,
-          scale: scale,
+      onProgress({ status: 'processing', progress: 40, message: `Applying ${planLimits.quality} quality enhancement...` });
+      
+      try {
+        const output = await replicate.run(modelVersion, {
+          input: {
+            image: imageDataUrl,
+            scale: scale,
+          }
+        }) as string;
+        
+        if (!output) {
+          throw new Error('No output received from AI model');
         }
-      }) as string;
-      
-      enhancedUrl = output;
-      onProgress({ status: 'processing', progress: 90, message: 'Finalizing...' });
+        
+        enhancedUrl = output;
+        onProgress({ status: 'processing', progress: 90, message: 'Processing complete, downloading result...' });
+        
+      } catch (apiError: any) {
+        console.error('Replicate API error:', apiError);
+        
+        // Fallback to demo mode if API fails
+        console.log('API failed, falling back to demo mode');
+        onProgress({ status: 'processing', progress: 60, message: 'API unavailable, using demo processing...' });
+        enhancedUrl = await simulateEnhancement(file, onProgress, planLimits);
+      }
       
     } else {
       // Demo mode - simulate the process with plan-specific messaging
