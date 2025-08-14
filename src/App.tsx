@@ -8,6 +8,7 @@ import Pricing from "./pages/Pricing";
 import About from "./pages/About";
 import Login from "./pages/Login";
 import Checkout from "./pages/Checkout";
+import DemoPayment from "./pages/DemoPayment";
 import Dashboard from "./pages/Dashboard";
 import DashboardTest from "./pages/DashboardTest";
 import DashboardSimple from "./pages/DashboardSimple";
@@ -33,6 +34,7 @@ const App = () => {
             <Route path="/about" element={<About />} />
             <Route path="/login" element={<Login />} />
             <Route path="/checkout" element={<Checkout />} />
+            <Route path="/demo-payment" element={<DemoPayment />} />
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/dashboard-simple" element={<DashboardSimple />} />
             <Route path="/privacy" element={<Privacy />} />

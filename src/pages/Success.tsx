@@ -4,8 +4,8 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { EnhpixLogo } from '@/components/ui/enhpix-logo';
 import { useToast } from '@/hooks/use-toast';
-import { verifyPaymentSession } from '@/services/stripe';
-import { CheckCircle, Sparkles, ArrowRight, Mail } from 'lucide-react';
+import { verifyPaymentSession, getPlanById } from '@/services/stripe';
+import { CheckCircle, Sparkles, ArrowRight, Mail, Crown } from 'lucide-react';
 
 const Success = () => {
   const navigate = useNavigate();
@@ -18,21 +18,29 @@ const Success = () => {
 
   const sessionId = searchParams.get('session_id');
   const isDemoMode = searchParams.get('demo') === 'true';
+  const planId = searchParams.get('plan');
+  const billing = searchParams.get('billing');
+  const customerNameFromUrl = searchParams.get('name');
+  const customerEmailFromUrl = searchParams.get('email');
+  
+  const selectedPlan = planId ? getPlanById(planId) : null;
 
   useEffect(() => {
     const verifyPayment = async () => {
       if (isDemoMode) {
-        // Demo mode - simulate successful payment
+        // Demo mode - simulate successful payment with real customer data
         setPaymentData({
           id: 'demo_session',
           payment_status: 'paid',
           customer: {
-            email: 'demo@enhpix.com',
-            name: 'Demo Customer'
+            email: customerEmailFromUrl || 'demo@enhpix.com',
+            name: customerNameFromUrl || 'Demo Customer'
           },
           subscription: {
             id: 'sub_demo',
-            status: 'active'
+            status: 'active',
+            plan: planId,
+            billing: billing
           }
         });
         setIsLoading(false);
@@ -123,7 +131,7 @@ const Success = () => {
             Welcome to Enhpix! 🎉
           </h1>
           <p className="text-lg text-muted-foreground mb-2">
-            Your subscription is now active
+            Your {selectedPlan?.name || 'subscription'} plan is now active
           </p>
           {isDemoMode && (
             <p className="text-sm text-amber-600 bg-amber-50 px-4 py-2 rounded-lg inline-block">
@@ -151,6 +159,21 @@ const Success = () => {
                   <span className="text-sm text-muted-foreground">Email:</span>
                   <span className="text-sm font-medium">{paymentData?.customer?.email}</span>
                 </div>
+                {selectedPlan && (
+                  <>
+                    <div className="flex justify-between">
+                      <span className="text-sm text-muted-foreground">Plan:</span>
+                      <span className="text-sm font-medium flex items-center gap-1">
+                        <Crown className="w-3 h-3 text-primary" />
+                        {selectedPlan.name}
+                      </span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-sm text-muted-foreground">Billing:</span>
+                      <span className="text-sm font-medium capitalize">{billing}</span>
+                    </div>
+                  </>
+                )}
                 <div className="flex justify-between">
                   <span className="text-sm text-muted-foreground">Status:</span>
                   <span className="text-sm font-medium capitalize text-green-600">
