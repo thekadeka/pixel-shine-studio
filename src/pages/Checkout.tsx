@@ -2,144 +2,87 @@ import { useState, useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Separator } from '@/components/ui/separator';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 import { EnhpixLogo } from '@/components/ui/enhpix-logo';
 import { useToast } from '@/hooks/use-toast';
-import { useSmartAuth } from '@/hooks/useSmartAuth';
-import { shouldUseAuth } from '@/utils/environment';
-import { Check, Shield, AlertCircle } from 'lucide-react';
-
-// For demo mode, we'll simulate checkout
+import { redirectToCheckout, getPlanById, type CheckoutData } from '@/services/stripe';
+import { ArrowLeft, CreditCard, Shield, CheckCircle } from 'lucide-react';
 
 const Checkout = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const { toast } = useToast();
-  const { user, isAuthenticated, loading: authLoading } = useSmartAuth();
+  
   const [isLoading, setIsLoading] = useState(false);
-
-  const planId = searchParams.get('plan') || 'basic';
-  const isYearly = searchParams.get('billing') === 'yearly';
-
-  const plans = {
-    basic: {
-      name: 'Basic',
-      monthlyPrice: 19,
-      yearlyPrice: 190,
-      features: ['150 images/month', 'Basic quality', '4x upscaling', 'Email support', 'Fast processing']
-    },
-    pro: {
-      name: 'Pro',
-      monthlyPrice: 37,
-      yearlyPrice: 370,
-      features: ['400 images/month', 'Premium quality', 'Priority support', '8x upscaling', 'Batch processing']
-    },
-    premium: {
-      name: 'Premium',
-      monthlyPrice: 90,
-      yearlyPrice: 900,
-      features: ['1,300 images/month', 'Ultra quality', '24/7 support', '16x upscaling', 'API access']
-    }
-  };
-
-  const selectedPlan = plans[planId as keyof typeof plans] || plans.basic;
-  const price = isYearly ? selectedPlan.yearlyPrice : selectedPlan.monthlyPrice;
-  const pricePerMonth = isYearly ? (selectedPlan.yearlyPrice / 12).toFixed(2) : selectedPlan.monthlyPrice;
+  const [customerEmail, setCustomerEmail] = useState('');
+  const [customerName, setCustomerName] = useState('');
+  
+  // Get plan and billing from URL params
+  const planId = searchParams.get('plan') || 'pro';
+  const billing = (searchParams.get('billing') as 'monthly' | 'yearly') || 'monthly';
+  
+  const selectedPlan = getPlanById(planId);
 
   useEffect(() => {
-    if (!planId || !selectedPlan) {
+    if (!selectedPlan) {
+      toast({
+        title: "Invalid Plan",
+        description: "The selected plan was not found. Redirecting to pricing.",
+        variant: "destructive"
+      });
       navigate('/pricing');
     }
-    
-    // Redirect to login if not authenticated
-    if (!authLoading && !isAuthenticated) {
-      navigate(`/login?redirect=checkout&plan=${planId}&billing=${isYearly ? 'yearly' : 'monthly'}`);
-    }
-  }, [planId, selectedPlan, navigate, authLoading, isAuthenticated, isYearly]);
+  }, [selectedPlan, navigate, toast]);
 
-  const handleCheckout = async () => {
-    if (!user) {
+  const handleCheckout = async (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    if (!customerEmail.trim() || !customerName.trim()) {
       toast({
-        title: 'Authentication Required',
-        description: 'Please sign in to continue with checkout.',
-        variant: 'destructive'
+        title: "Missing Information", 
+        description: "Please enter your name and email address.",
+        variant: "destructive"
       });
-      navigate(`/login?redirect=checkout&plan=${planId}&billing=${isYearly ? 'yearly' : 'monthly'}`);
       return;
     }
 
-    // Demo mode - simulate successful checkout
+    if (!selectedPlan) return;
+
     setIsLoading(true);
-    
+
     try {
-      // Simulate processing time
-      await new Promise(resolve => setTimeout(resolve, 2000));
+      const checkoutData: CheckoutData = {
+        planId: selectedPlan.id,
+        billing,
+        customerEmail: customerEmail.trim(),
+        customerName: customerName.trim()
+      };
+
+      await redirectToCheckout(checkoutData);
       
-      toast({
-        title: 'Demo Checkout Complete!',
-        description: 'In production, this would redirect to live Stripe checkout and process real payments.',
-      });
-      
-      navigate('/success?demo=true');
     } catch (error) {
-      console.error('Demo checkout error:', error);
+      console.error('Checkout failed:', error);
       toast({
-        title: 'Demo Error',
-        description: 'Demo checkout simulation failed.',
-        variant: 'destructive'
+        title: "Checkout Failed",
+        description: "Something went wrong. Please try again.",
+        variant: "destructive"
       });
-    } finally {
       setIsLoading(false);
     }
   };
 
-  // Show loading state while checking authentication
-  if (authLoading) {
-    return (
-      <div className="min-h-screen bg-background flex items-center justify-center">
-        <div className="text-center">
-          <div className="w-8 h-8 border-4 border-primary border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-          <p className="text-muted-foreground">Loading...</p>
-        </div>
-      </div>
-    );
-  }
-
-  // Show authentication required message
-  if (!isAuthenticated) {
-    return (
-      <div className="min-h-screen bg-background flex items-center justify-center">
-        <Card className="max-w-md mx-auto">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <AlertCircle className="w-5 h-5 text-amber-500" />
-              Authentication Required
-            </CardTitle>
-            <CardDescription>
-              Please sign in to continue with your subscription
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <Button 
-              onClick={() => navigate(`/login?redirect=checkout&plan=${planId}&billing=${isYearly ? 'yearly' : 'monthly'}`)}
-              className="w-full"
-            >
-              Sign In to Continue
-            </Button>
-          </CardContent>
-        </Card>
-      </div>
-    );
-  }
-
   if (!selectedPlan) {
-    return null;
+    return null; // Loading or will redirect
   }
+
+  const price = billing === 'yearly' ? selectedPlan.priceYearly : selectedPlan.priceMonthly;
+  const monthlyEquivalent = billing === 'yearly' ? (selectedPlan.priceYearly / 12).toFixed(2) : null;
 
   return (
     <div className="min-h-screen bg-background">
       {/* Header */}
-      <header className="p-6 border-b border-border">
+      <header className="p-4 md:p-6 border-b border-border">
         <nav className="max-w-7xl mx-auto flex items-center justify-between">
           <div className="flex items-center gap-3 cursor-pointer" onClick={() => navigate('/')}>
             <div className="p-2 bg-white rounded-lg">
@@ -147,103 +90,144 @@ const Checkout = () => {
             </div>
             <span className="text-xl font-bold text-foreground">Enhpix</span>
           </div>
-          <div className="flex items-center gap-2 text-sm text-muted-foreground">
-            <Shield className="w-4 h-4" />
-            <span>Secure Checkout</span>
-          </div>
+          <Button variant="ghost" size="sm" onClick={() => navigate('/pricing')}>
+            <ArrowLeft className="w-4 h-4 mr-2" />
+            Back to Pricing
+          </Button>
         </nav>
       </header>
 
-      <div className="px-6 py-12">
-        <div className="max-w-2xl mx-auto">
-          <div className="text-center mb-8">
-            <h1 className="text-3xl font-bold text-foreground mb-4">Complete Your Purchase</h1>
-            <p className="text-muted-foreground">
-              You're about to subscribe to the {selectedPlan.name} plan
-            </p>
-          </div>
+      <div className="max-w-4xl mx-auto px-4 py-8 md:py-16">
+        <div className="text-center mb-8">
+          <h1 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
+            Complete Your Purchase
+          </h1>
+          <p className="text-muted-foreground">
+            You're just one step away from AI-powered image enhancement
+          </p>
+        </div>
 
-          {/* Plan Summary */}
-          <Card className="mb-8">
-            <CardContent className="p-6">
-              <div className="flex items-center justify-between mb-4">
-                <div>
-                  <h3 className="text-xl font-semibold text-foreground">{selectedPlan.name} Plan</h3>
-                  <p className="text-muted-foreground">{selectedPlan.features[0]}</p>
-                </div>
-                <div className="text-right">
-                  <div className="text-2xl font-bold text-foreground">
-                    ${price}
-                    <span className="text-base font-normal text-muted-foreground">
-                      /{isYearly ? 'year' : 'month'}
-                    </span>
+        <div className="grid md:grid-cols-2 gap-8">
+          {/* Order Summary */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <CheckCircle className="w-5 h-5 text-green-600" />
+                Order Summary
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-6">
+              {/* Plan Details */}
+              <div className="space-y-4">
+                <div className="flex justify-between items-start">
+                  <div>
+                    <h3 className="font-semibold text-lg">{selectedPlan.name} Plan</h3>
+                    <p className="text-sm text-muted-foreground capitalize">
+                      {billing} billing
+                    </p>
                   </div>
-                  {isYearly && (
-                    <div className="text-sm text-muted-foreground">
-                      (${pricePerMonth}/month)
-                    </div>
-                  )}
+                  <div className="text-right">
+                    <div className="text-2xl font-bold">${price}</div>
+                    {monthlyEquivalent && (
+                      <div className="text-sm text-muted-foreground">
+                        ${monthlyEquivalent}/month
+                      </div>
+                    )}
+                  </div>
+                </div>
+                
+                <div className="border-t pt-4">
+                  <h4 className="font-medium mb-3">What's included:</h4>
+                  <ul className="space-y-2">
+                    {selectedPlan.features.map((feature, index) => (
+                      <li key={index} className="flex items-center gap-2 text-sm">
+                        <CheckCircle className="w-4 h-4 text-green-600 flex-shrink-0" />
+                        <span>{feature}</span>
+                      </li>
+                    ))}
+                  </ul>
                 </div>
               </div>
-              
-              {isYearly && (
-                <div className="bg-primary/10 border border-primary/20 rounded-lg p-3 mb-4">
-                  <p className="text-sm text-primary font-medium">
-                    💰 Save 17% with yearly billing
-                  </p>
+
+              {/* Security Info */}
+              <div className="bg-muted/30 p-4 rounded-lg">
+                <div className="flex items-center gap-2 mb-2">
+                  <Shield className="w-4 h-4 text-green-600" />
+                  <span className="font-medium text-sm">Secure Payment</span>
                 </div>
-              )}
-
-              <Separator className="my-4" />
-
-              <div className="space-y-2">
-                <h4 className="font-medium text-foreground">What's included:</h4>
-                <ul className="space-y-1">
-                  {selectedPlan.features.map((feature) => (
-                    <li key={feature} className="flex items-center gap-2 text-sm">
-                      <Check className="w-4 h-4 text-accent" />
-                      <span className="text-muted-foreground">{feature}</span>
-                    </li>
-                  ))}
-                </ul>
+                <p className="text-xs text-muted-foreground">
+                  Your payment is secured by Stripe. We never store your payment information.
+                </p>
               </div>
             </CardContent>
           </Card>
 
-          {/* Checkout Button */}
-          <div className="text-center">
-            <Button
-              onClick={handleCheckout}
-              disabled={isLoading}
-              className="w-full max-w-md mx-auto text-lg py-6"
-              size="lg"
-            >
-              {isLoading ? 'Processing...' : `Subscribe for $${price}/${isYearly ? 'year' : 'month'}`}
-            </Button>
-            
-            <p className="text-xs text-muted-foreground mt-4">
-              Secure payment powered by Stripe. Cancel anytime.
-            </p>
-            
-            <p className="text-xs text-muted-foreground text-center mt-2">
-              By completing this purchase, you agree to our{' '}
-              <button 
-                type="button"
-                onClick={() => navigate('/terms')}
-                className="text-primary hover:underline"
-              >
-                Terms of Service
-              </button>{' '}
-              and{' '}
-              <button 
-                type="button"
-                onClick={() => navigate('/privacy')}
-                className="text-primary hover:underline"
-              >
-                Privacy Policy
-              </button>
-            </p>
-          </div>
+          {/* Payment Form */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <CreditCard className="w-5 h-5" />
+                Payment Details
+              </CardTitle>
+              <CardDescription>
+                Enter your information to complete the purchase
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <form onSubmit={handleCheckout} className="space-y-6">
+                <div className="space-y-4">
+                  <div>
+                    <Label htmlFor="name">Full Name</Label>
+                    <Input
+                      id="name"
+                      type="text"
+                      value={customerName}
+                      onChange={(e) => setCustomerName(e.target.value)}
+                      placeholder="Enter your full name"
+                      required
+                      disabled={isLoading}
+                    />
+                  </div>
+
+                  <div>
+                    <Label htmlFor="email">Email Address</Label>
+                    <Input
+                      id="email"
+                      type="email"
+                      value={customerEmail}
+                      onChange={(e) => setCustomerEmail(e.target.value)}
+                      placeholder="Enter your email address"
+                      required
+                      disabled={isLoading}
+                    />
+                  </div>
+                </div>
+
+                <div className="space-y-4">
+                  <Button 
+                    type="submit" 
+                    className="w-full" 
+                    size="lg"
+                    disabled={isLoading}
+                  >
+                    {isLoading ? (
+                      "Processing..."
+                    ) : (
+                      <>
+                        <CreditCard className="w-4 h-4 mr-2" />
+                        Continue to Payment - ${price}
+                      </>
+                    )}
+                  </Button>
+
+                  <p className="text-xs text-center text-muted-foreground">
+                    By continuing, you agree to our Terms of Service and Privacy Policy.
+                    You can cancel anytime.
+                  </p>
+                </div>
+              </form>
+            </CardContent>
+          </Card>
         </div>
       </div>
     </div>
