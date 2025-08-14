@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -7,22 +7,31 @@ import { ImageUploader } from '@/components/ImageUploader';
 import { ProcessingStatus } from '@/components/ProcessingStatus';
 import { ResultsDisplay } from '@/components/ResultsDisplay';
 import { enhanceImage, EnhancementProgress, EnhancementResult } from '@/services/imageEnhancement';
+import { 
+  getUserSubscription, 
+  useImage, 
+  formatSubscriptionInfo,
+  getCurrentPlanLimits 
+} from '@/services/subscriptionManager';
 import { Sparkles, Crown, Settings, LogOut, Upload, History } from 'lucide-react';
 
 type ProcessingState = 'idle' | 'processing' | 'completed';
 
 const Dashboard = () => {
   const navigate = useNavigate();
-  const [imagesRemaining, setImagesRemaining] = useState(3);
-  const [userPlan] = useState('Free Trial');
-  const [totalImages] = useState(3);
   const [processingState, setProcessingState] = useState<ProcessingState>('idle');
   const [currentFile, setCurrentFile] = useState<File | null>(null);
   const [progress, setProgress] = useState<EnhancementProgress | null>(null);
   const [result, setResult] = useState<EnhancementResult | null>(null);
+  const [subscriptionInfo, setSubscriptionInfo] = useState(formatSubscriptionInfo());
+
+  // Update subscription info when component mounts
+  useEffect(() => {
+    setSubscriptionInfo(formatSubscriptionInfo());
+  }, []);
 
   const handleImageUpload = async (file: File) => {
-    if (imagesRemaining <= 0) {
+    if (subscriptionInfo.imagesRemaining <= 0) {
       navigate('/pricing');
       return;
     }
@@ -36,7 +45,12 @@ const Dashboard = () => {
       const enhancementResult = await enhanceImage(file, setProgress);
       setResult(enhancementResult);
       setProcessingState('completed');
-      setImagesRemaining(prev => Math.max(0, prev - 1));
+      
+      // Use image credit
+      const usage = useImage();
+      if (usage.success) {
+        setSubscriptionInfo(formatSubscriptionInfo());
+      }
     } catch (error) {
       console.error('Enhancement failed:', error);
       setProcessingState('idle');
@@ -65,7 +79,7 @@ const Dashboard = () => {
           <div className="flex items-center gap-3">
             <div className="hidden md:flex items-center gap-2 px-3 py-1 bg-accent/10 rounded-full">
               <Crown className="w-4 h-4 text-accent" />
-              <span className="text-sm font-medium text-foreground">{userPlan}</span>
+              <span className="text-sm font-medium text-foreground">{subscriptionInfo.planName}</span>
             </div>
             <Button variant="ghost" size="sm">
               <Settings className="w-4 h-4" />
@@ -105,27 +119,39 @@ const Dashboard = () => {
                 <div className="space-y-3">
                   <div className="flex justify-between items-center">
                     <span className="text-sm text-muted-foreground">Plan:</span>
-                    <span className="text-sm font-semibold text-foreground">{userPlan}</span>
+                    <span className="text-sm font-semibold text-foreground">{subscriptionInfo.planName}</span>
                   </div>
                   <div className="flex justify-between items-center">
                     <span className="text-sm text-muted-foreground">Images left:</span>
-                    <span className="text-sm font-bold text-primary">{imagesRemaining}</span>
+                    <span className="text-sm font-bold text-primary">{subscriptionInfo.imagesRemaining}</span>
+                  </div>
+                  <div className="flex justify-between items-center text-xs text-muted-foreground">
+                    <span>Used: {subscriptionInfo.imagesTotal - subscriptionInfo.imagesRemaining}</span>
+                    <span>Total: {subscriptionInfo.imagesTotal}</span>
                   </div>
                   <div className="w-full bg-border rounded-full h-2">
                     <div 
                       className="bg-gradient-to-r from-primary to-accent h-2 rounded-full transition-all" 
-                      style={{ width: `${(imagesRemaining / totalImages) * 100}%` }}
+                      style={{ width: `${(subscriptionInfo.imagesRemaining / subscriptionInfo.imagesTotal) * 100}%` }}
                     />
                   </div>
                 </div>
                 
-                <Button 
-                  className="w-full bg-gradient-to-r from-primary to-accent hover:from-primary/90 hover:to-accent/90 transition-all"
-                  onClick={() => navigate('/pricing')}
-                >
-                  <Sparkles className="w-4 h-4 mr-2" />
-                  Upgrade Plan
-                </Button>
+                {subscriptionInfo.canUpgrade && (
+                  <Button 
+                    className="w-full bg-gradient-to-r from-primary to-accent hover:from-primary/90 hover:to-accent/90 transition-all"
+                    onClick={() => navigate('/pricing')}
+                  >
+                    <Sparkles className="w-4 h-4 mr-2" />
+                    Upgrade Plan
+                  </Button>
+                )}
+                
+                {subscriptionInfo.daysRemaining > 0 && subscriptionInfo.status === 'active' && (
+                  <div className="text-xs text-center text-muted-foreground">
+                    {subscriptionInfo.daysRemaining} days remaining in {subscriptionInfo.billing} cycle
+                  </div>
+                )}
               </CardContent>
             </Card>
 
@@ -139,16 +165,16 @@ const Dashboard = () => {
               </CardHeader>
               <CardContent className="space-y-3">
                 <div className="flex justify-between items-center">
-                  <span className="text-sm text-muted-foreground">Total Enhanced:</span>
-                  <span className="text-sm font-semibold">0</span>
-                </div>
-                <div className="flex justify-between items-center">
                   <span className="text-sm text-muted-foreground">This Month:</span>
-                  <span className="text-sm font-semibold">0</span>
+                  <span className="text-sm font-semibold">{subscriptionInfo.imagesTotal - subscriptionInfo.imagesRemaining}</span>
                 </div>
                 <div className="flex justify-between items-center">
-                  <span className="text-sm text-muted-foreground">Success Rate:</span>
-                  <span className="text-sm font-semibold text-green-600">100%</span>
+                  <span className="text-sm text-muted-foreground">Max Scale:</span>
+                  <span className="text-sm font-semibold text-primary">{subscriptionInfo.maxScale}x</span>
+                </div>
+                <div className="flex justify-between items-center">
+                  <span className="text-sm text-muted-foreground">Quality:</span>
+                  <span className="text-sm font-semibold text-accent capitalize">{subscriptionInfo.quality}</span>
                 </div>
               </CardContent>
             </Card>
@@ -180,7 +206,7 @@ const Dashboard = () => {
                       />
                     </div>
 
-                    {imagesRemaining <= 0 && (
+                    {subscriptionInfo.imagesRemaining <= 0 && (
                       <div className="mt-6 p-4 bg-accent/10 rounded-lg">
                         <p className="text-sm text-muted-foreground">
                           No credits remaining.{' '}
@@ -216,7 +242,7 @@ const Dashboard = () => {
                 enhancedImage={result.enhancedUrl}
                 originalFile={currentFile}
                 onStartOver={handleStartOver}
-                planType="trial"
+                planType={subscriptionInfo.planName.toLowerCase()}
               />
             )}
 

@@ -5,6 +5,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { EnhpixLogo } from '@/components/ui/enhpix-logo';
 import { useToast } from '@/hooks/use-toast';
 import { verifyPaymentSession, getPlanById, isRealStripe } from '@/services/stripe';
+import { updateSubscriptionAfterPayment } from '@/services/subscriptionManager';
 import { CheckCircle, Sparkles, ArrowRight, Mail, Crown } from 'lucide-react';
 
 const Success = () => {
@@ -43,6 +44,16 @@ const Success = () => {
             billing: billing
           }
         });
+        
+        // Update subscription for demo mode too
+        if (planId && billing) {
+          updateSubscriptionAfterPayment(
+            planId as 'basic' | 'pro' | 'premium',
+            billing as 'monthly' | 'yearly',
+            'sub_demo_' + Math.random().toString(36).substr(2, 9)
+          );
+        }
+        
         setIsLoading(false);
         return;
       }
@@ -56,6 +67,16 @@ const Success = () => {
       try {
         const data = await verifyPaymentSession(sessionId);
         setPaymentData(data);
+        
+        // Update subscription after successful payment verification
+        if (data.payment_status === 'paid' && planId && billing) {
+          const subscriptionId = data.subscription?.id || 'demo_subscription';
+          updateSubscriptionAfterPayment(
+            planId as 'basic' | 'pro' | 'premium',
+            billing as 'monthly' | 'yearly',
+            subscriptionId
+          );
+        }
       } catch (err) {
         console.error('Payment verification failed:', err);
         setError('Failed to verify payment. Please contact support.');
