@@ -12,24 +12,25 @@ export const EnhpixLogo: React.FC<EnhpixLogoProps> = ({ className = "w-8 h-8" })
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
     >
-      {/* Modern gradient cross design */}
+      {/* Your custom logo design */}
       <defs>
         <linearGradient id="logoGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" stopColor="#4facfe" />
-          <stop offset="100%" stopColor="#43e7ff" />
+          <stop offset="0%" stopColor="#5CB3F5" />
+          <stop offset="100%" stopColor="#4A9EF2" />
         </linearGradient>
       </defs>
       
-      {/* Cross shape - more refined and professional */}
+      {/* Cross shape matching your logo */}
       {/* Vertical bar */}
-      <rect x="40" y="20" width="20" height="60" rx="4" fill="url(#logoGradient)" />
+      <rect x="38" y="10" width="24" height="80" fill="url(#logoGradient)" />
       
       {/* Horizontal bar */}
-      <rect x="20" y="40" width="60" height="20" rx="4" fill="url(#logoGradient)" />
+      <rect x="10" y="38" width="80" height="24" fill="url(#logoGradient)" />
       
-      {/* Center highlight circle */}
-      <circle cx="50" cy="50" r="12" fill="white" fillOpacity="0.2" />
-      <circle cx="50" cy="50" r="8" fill="white" fillOpacity="0.3" />
+      {/* Diamond/square shape in the center */}
+      <g transform="translate(50, 50) rotate(45)">
+        <rect x="-12" y="-12" width="24" height="24" fill="white" stroke="url(#logoGradient)" strokeWidth="3" />
+      </g>
     </svg>
   );
 };
