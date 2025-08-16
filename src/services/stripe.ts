@@ -80,6 +80,7 @@ export interface CheckoutData {
   billing: 'monthly' | 'yearly';
   customerEmail?: string;
   customerName?: string;
+  amount?: number;
 }
 
 // Create Stripe checkout session

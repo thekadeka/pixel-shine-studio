@@ -172,12 +172,12 @@ export const enhanceImage = async (
       onProgress({ status: 'processing', progress: 40, message: `Applying ${planLimits.quality} quality enhancement...` });
       
       try {
-        const output = await replicate.run(modelVersion, {
+        const output = await replicate.run(modelVersion as `${string}/${string}:${string}`, {
           input: {
             image: imageDataUrl,
             scale: scale,
           }
-        }) as string;
+        }) as unknown as string;
         
         if (!output) {
           throw new Error('No output received from AI model');

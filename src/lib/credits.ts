@@ -30,8 +30,7 @@ export const deductCredits = async (userId: string, amount: number = 1): Promise
     const { error } = await supabase
       .from('profiles')
       .update({ 
-        credits_remaining: currentCredits - amount,
-        total_uploads: supabase.sql`total_uploads + 1`
+        credits_remaining: currentCredits - amount
       })
       .eq('id', userId)
 

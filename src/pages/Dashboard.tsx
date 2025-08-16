@@ -202,7 +202,7 @@ const Dashboard = () => {
                     <div className="max-w-md mx-auto">
                       <ImageUploader 
                         onImageUpload={handleImageUpload} 
-                        isProcessing={processingState === 'processing'} 
+                        isProcessing={processingState !== 'idle'} 
                       />
                     </div>
 

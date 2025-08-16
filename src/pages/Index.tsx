@@ -95,7 +95,7 @@ const Index = () => {
           <header className="p-4 md:p-6 relative">
             <nav className="max-w-7xl mx-auto flex items-center justify-between overflow-x-hidden w-full">
               <div className="flex items-center gap-3 cursor-pointer" onClick={() => handleNavigation('/')}>
-                <div className="p-2 bg-white rounded-lg">
+                <div className="p-2">
                   <EnhpixLogo className="w-8 h-8" />
                 </div>
                 <span className="text-xl font-bold text-foreground">Enhpix</span>
@@ -312,7 +312,7 @@ const Index = () => {
       <footer className="px-2 sm:px-3 md:px-6 py-4 sm:py-6 md:py-8 border-t border-border overflow-x-hidden max-w-full">
         <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-2 sm:gap-3 md:gap-4 overflow-x-hidden w-full">
           <div className="flex items-center gap-1 sm:gap-2">
-            <div className="p-1 bg-white rounded">
+            <div className="p-1">
               <EnhpixLogo className="w-3 h-3 sm:w-4 sm:h-4" />
             </div>
             <span className="text-sm sm:text-base font-medium text-foreground">Enhpix</span>
